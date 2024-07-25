@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>lecturesList</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id="container">
+    <ion-item
+      *ngFor="let lec of isite.lecturesList"
+      [routerLink]="['/lectures-view']"
+      [queryParams]="{id: lec._id}"
+    >
+      <ion-img [src]="lec.imageURL"> </ion-img>
+      <ion-label>{{ lec.description }}</ion-label>
+    </ion-item>
+  </div>
+</ion-content>

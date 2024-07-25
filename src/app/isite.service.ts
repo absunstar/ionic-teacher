@@ -10,8 +10,12 @@ export class IsiteService {
   setting: any;
   userSession: any;
   lecturesList: [any] | undefined;
-  baseURL: string = 'http://shared.localhost';
-  constructor(public http: HttpClient) {}
+  lecture: any;
+  baseURL: string = 'https://me.teacher.egytag.com';
+  constructor(public http: HttpClient) {
+    this.setting = { siteName: '' };
+    this.lecture = {};
+  }
 
   api(options: any) {
     if (typeof options == 'string') {
@@ -81,44 +85,13 @@ export class IsiteService {
     this.api('/api/get-site-setting').subscribe((res: any) => {
       if (res.done) {
         this.setting = res.doc;
-        // this.db.setting.teacher = res.doc.teacher || {};
-        // this.db.setting.email = res.doc.email || '';
-        // this.db.setting.host = 'shared.localhost';
-        // this.db.setting.whatsapp = res.doc.whatsapp || '';
-        // this.db.setting.supportEmail = res.doc.supportEmail || '';
-        // this.db.setting.phone = res.doc.phone || '';
-        // this.db.setting.facebookAccount = res.doc.facebookAccount || '';
-        // this.db.setting.instagramAccouunt = res.doc.instagramAccouunt || '';
-        // this.db.setting.youTubeAccouunt = res.doc.youTubeAccouunt || '';
-        // this.db.setting.twitterAccouunt = res.doc.twitterAccouunt || '';
-        // this.db.setting.snapAccouunt = res.doc.snapAccouunt || '';
-        // this.db.setting.linkedinAccouunt = res.doc.linkedinAccouunt || '';
-        // this.db.setting.telegramAccouunt = res.doc.telegramAccouunt || '';
-        // this.db.setting.skypeAccouunt = res.doc.skypeAccouunt || '';
-        // this.db.setting.siteName = res.doc.siteName || '';
-        // this.db.setting.titleSeparator = res.doc.titleSeparator || '';
-        // this.db.setting.siteSlogan = res.doc.siteSlogan || '';
-        // this.db.setting.description = res.doc.description || '';
-        // this.db.setting.textPurchaseByBook = res.doc.textPurchaseByBook || '';
-        // this.db.setting.textPurchaseByCode = res.doc.textPurchaseByCode || '';
-        // this.db.setting.logo = res.doc.logo ? this.baseURL +  res.doc.logo.url : '';
-        // this.db.setting.footerLogo = res.doc.footerLogo ? this.baseURL +  res.doc.footerLogo.url : '';
-        // this.db.setting.banner = res.doc.banner ? this.baseURL +  res.doc.banner.url : '';
-        // this.db.setting.codeCard = res.doc.codeCard || '';
-        // this.db.setting.isShared = res.doc.isShared || false;
-        // this.db.setting.citiesAndAreasShow = res.doc.citiesAndAreasShow || false;
-        // this.db.setting.nationalitiesShow = res.doc.nationalitiesShow || false;
-        // this.db.setting.nameBesidLogoShow = res.doc.nameBesidLogoShow || false;
-        // this.db.setting.showParent = res.doc.showParent || false;
-        // this.db.setting.showPackages = res.doc.showPackages || false;
-        // this.db.setting.showLectures = res.doc.showLectures || false;
-        // this.db.setting.showBooks = res.doc.showBooks || false;
-        // this.db.setting.showBanner = res.doc.showBanner || false;
+        console.log(this.setting);
       }
     });
   }
 
   async getLectures() {
+    this.lecturesList = undefined;
     this.api({
       url: '/api/lectures/all',
       body: {
@@ -135,9 +108,28 @@ export class IsiteService {
       },
     }).subscribe((res: any) => {
       if (res.done) {
+        res.list.forEach(
+          (element: { imageURL: string; image: { url: string } }) => {
+            element.imageURL = this.baseURL + element.image.url;
+          }
+        );
         this.lecturesList = res.list;
         console.log(this.lecturesList);
-        
+      }
+    });
+  }
+  async getLecture(_id: string) {
+    this.lecture = {};
+    this.api({
+      url: '/api/lectures/view',
+      body: {
+        _id: _id,
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {
+        res.doc.imageURL = this.baseURL + res.doc.image.url;
+        this.lecture = res.doc;
+        console.log(this.lecture);
       }
     });
   }
