@@ -1,48 +1,187 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-content>
-        <ion-list id="inbox-list">
-          <ion-list-header>Teacher</ion-list-header>
-          <ion-note>admin&#64;teacher.egytag.com</ion-note>
+  <ion-header [translucent]="true" dir="rtl">
+    <ion-toolbar [routerLink]="['/welcome']">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-img class="logo" [src]="isite.setting.logoUrl"></ion-img>
+      <ion-title class="siteName">{{ isite.setting.siteName }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
-              <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
+  <ion-split-pane contentId="main-content">
+    <ion-menu
+      class="menu-main"
+      contentId="main-content"
+      side="end"
+      type="overlay"
+    >
+      <ion-content dir="rtl">
+        <ion-row class="contain-register-login" *ngIf="!isite.userSession">
+          <ion-button color="primary" (click)="login();hideMenu()">
+            دخول
+            <ion-icon name="log-in-outline"></ion-icon>
+          </ion-button>
+          <ion-button color="secondary" (click)="hideMenu()" [routerLink]="['/register']">
+            تسجيل
+            <ion-icon name="person-add-outline"></ion-icon>
+          </ion-button>
+        </ion-row>
+       
+        <div *ngIf="isite.userSession && isite.userSession.id">
+          <ion-list-header
+            ><ion-img
+              class="user-logo"
+              [src]="isite.userSession.imageUrl"
+            ></ion-img>
+            <ion-text class="user-name">{{
+              isite.userSession.firstName
+            }}</ion-text>
+          </ion-list-header>
+          <ion-note>{{ isite.userSession.email }}</ion-note>
+        </div>
+        <ion-row class="contain-register-login" *ngIf="isite.userSession && isite.userSession.id">
+          <ion-button
+            color="light"
+            (click)="hideMenu()"
+            
+            [routerLink]="['/user-manage']"
+          >
+          <ion-label> إدارة حسابي </ion-label>
+            <ion-icon name="settings-outline"></ion-icon>
+          </ion-button>
+          <ion-button
+            color="danger"
+            
+            (click)="logout();hideMenu()"
+          >
+            <ion-label> تسجيل خروج </ion-label>
+            <ion-icon name="log-out-outline"></ion-icon>
+          </ion-button>
+        </ion-row>
+        <ion-list
+          id="inbox-list"
+          *ngIf="isite.userSession && isite.userSession.id"
+        >
+          <ion-menu-toggle auto-hide="false">
+            <ion-item
+              routerDirection="root"
+              [routerLink]="['/packages']"
+              [queryParams]="{ id: isite.userSession.id }"
+              lines="none"
+              detail="false"
+              routerLinkActive="selected"
+            >
+              <ion-icon name="layers-outline"></ion-icon>
+
+              <ion-label class="my-menu">مجموعاتي</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item
+              routerDirection="root"
+              [routerLink]="['/lectures']"
+              [queryParams]="{ id: isite.userSession.id }"
+              lines="none"
+              detail="false"
+              routerLinkActive="selected"
+            >
+              <ion-icon name="desktop-outline"></ion-icon>
+
+              <ion-label class="my-menu">محاضراتي</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle auto-hide="false">
+            <ion-item
+              routerDirection="root"
+              [routerLink]="['/books']"
+              [queryParams]="{ id: isite.userSession.id }"
+              lines="none"
+              detail="false"
+              routerLinkActive="selected"
+            >
+              <ion-icon name="library"></ion-icon>
+              <ion-label class="my-menu">كتبي</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
 
-        <ion-list id="labels-list">
-          <ion-list-header>Labels</ion-list-header>
-
-          <ion-item *ngFor="let label of labels" lines="none">
-            <ion-icon aria-hidden="true" slot="start" ios="bookmark-outline" md="bookmark-sharp"></ion-icon>
-            <ion-label>{{ label }}</ion-label>
+        <!-- <ion-list id="labels-list">
+           <ion-list-header>Labels</ion-list-header>
+           <ion-icon
+              aria-hidden="true"
+              slot="start"
+              ios="bookmark-outline"
+              md="bookmark-sharp"
+            ></ion-icon>
+          <ion-item
+            class="list-menu"
+            lines="none"
+            [routerLink]="['/pages-content']"
+            [queryParams]="{
+              type: 'inviteFriends'
+            }"
+          >
+            <ion-label>أدع أصدقاءك</ion-label>
+          </ion-item>
+          <ion-item
+            class="list-menu"
+            lines="none"
+            [routerLink]="['/pages-content']"
+            [queryParams]="{
+              type: 'joinUs'
+            }"
+          >
+            <ion-label>إنضم إلينا</ion-label>
+          </ion-item>
+          <ion-item
+            class="list-menu"
+            lines="none"
+            [routerLink]="['/pages-content']"
+            [queryParams]="{
+              type: 'usageAgreement'
+            }"
+          >
+            <ion-label>إتفاقية الإستخدام</ion-label>
+          </ion-item>
+          <ion-item
+            class="list-menu"
+            lines="none"
+            [routerLink]="['/pages-content']"
+            [queryParams]="{
+              type: 'privacyPolicy'
+            }"
+          >
+            <ion-label>سياسة الخصوصية</ion-label>
           </ion-item>
         </ion-list>
+     -->
       </ion-content>
     </ion-menu>
 
     <ion-router-outlet id="main-content"></ion-router-outlet>
-    <ion-tabs>
+    <ion-tabs dir="rtl">
       <ion-tab-bar slot="bottom">
-        <ion-tab-button [routerLink]="['/lectures']">
-          <ion-icon name="play-circle"></ion-icon>
-          Lectures
+        <ion-tab-button [routerLink]="['/welcome']">
+          <ion-icon name="home-outline"></ion-icon>
+          الرئيسية
+        </ion-tab-button>
+        <ion-tab-button [routerLink]="['/packages']">
+          <ion-icon name="layers-outline"></ion-icon>
+          المجموعات
         </ion-tab-button>
         <ion-tab-button [routerLink]="['/lectures']">
-          <ion-icon name="radio"></ion-icon>
-          Radio
+          <ion-icon name="desktop-outline"></ion-icon>
+          المحاضرات
         </ion-tab-button>
-        <ion-tab-button [routerLink]="['/lectures']">
+
+        <ion-tab-button [routerLink]="['/books']">
           <ion-icon name="library"></ion-icon>
-          Library
+          الكتب
         </ion-tab-button>
-        <ion-tab-button [routerLink]="['/lectures']">
-          <ion-icon name="search"></ion-icon>
-          Search
+        <ion-tab-button [routerLink]="['/notifications']">
+          <ion-icon name="notifications-outline"></ion-icon>
+          الإشعارات
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>

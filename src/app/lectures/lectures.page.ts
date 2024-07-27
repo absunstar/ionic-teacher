@@ -2,8 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
-
 import {
+  IonCol,
+  IonRow,
+  IonButton,
+  IonInput,
   IonImg,
   IonButtons,
   IonMenuButton,
@@ -32,6 +35,10 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./lectures.page.scss'],
   standalone: true,
   imports: [
+    IonCol,
+    IonButton,
+    IonRow,
+    IonInput,
     IonImg,
     IonHeader,
     IonToolbar,
@@ -54,14 +61,54 @@ import { IsiteService } from '../isite.service';
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
+    FormsModule,
   ],
 })
 export class LecturesPage implements OnInit {
-
-  constructor(public isite: IsiteService) { }
+  search: String | undefined;
+  lecturesList: [any] | undefined;
+  constructor(public isite: IsiteService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.isite.getLectures();
+    this.search = '';
+    this.getLectures();
   }
-
+  async getLectures() {
+    this.route.queryParams.subscribe(async (params) => {
+      this.lecturesList = undefined;
+      let type ='';
+      if(params['id']) {
+        type = 'myStudent'
+      } else {
+        type = 'toStudent'
+      }
+      this.isite
+        .api({
+          url: '/api/lectures/all',
+          body: {
+            type: type,
+            select: {
+              id: 1,
+              _id: 1,
+              name: 1,
+              price: 1,
+              description: 1,
+              image: 1,
+            },
+            search: this.search,
+            where: {},
+          },
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            res.list.forEach(
+              (element: { imageURL: string; image: { url: string } }) => {
+                element.imageURL = this.isite.baseURL + element.image.url;
+              }
+            );
+            this.lecturesList = res.list;
+          }
+        });
+    });
+  }
 }

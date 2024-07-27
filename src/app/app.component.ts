@@ -1,10 +1,48 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import {IonTabs,IonTabBar,IonTabButton, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterOutlet, IonRouterLink } from '@ionic/angular/standalone';
+import { RouterLink, Router, RouterLinkActive } from '@angular/router';
+import { ModalController } from '@ionic/angular/standalone';
+import { LoginPage } from './login/login.page';
+import { ActivatedRoute } from '@angular/router';
+import { menuController } from '@ionic/core';
+
+import {
+  NavController,
+  MenuController,
+  AlertController,
+  ToastController,
+  LoadingController,
+} from '@ionic/angular';
+import {
+  IonText,
+  IonRow,
+  IonHeader,
+  IonButton,
+  IonButtons,
+  IonMenuButton,
+  IonImg,
+  IonTitle,
+  IonToolbar,
+  IonTabs,
+  IonTabBar,
+  IonTabButton,
+  IonApp,
+  IonSplitPane,
+  IonMenu,
+  IonContent,
+  IonList,
+  IonListHeader,
+  IonNote,
+  IonMenuToggle,
+  IonItem,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonRouterLink,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { library, playCircle, radio, search } from 'ionicons/icons';
-import { mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp } from 'ionicons/icons';
+import * as icons from 'ionicons/icons';
+
 import { IsiteService } from './isite.service';
 
 @Component({
@@ -12,22 +50,96 @@ import { IsiteService } from './isite.service';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: true,
-  imports: [IonTabs,IonTabBar,IonTabButton,RouterLink, RouterLinkActive, CommonModule, IonApp, IonSplitPane, IonMenu, IonContent, IonList, IonListHeader, IonNote, IonMenuToggle, IonItem, IonIcon, IonLabel, IonRouterLink, IonRouterOutlet],
+  imports: [
+    IonText,
+    IonRow,
+    IonHeader,
+    IonButton,
+    IonButtons,
+    IonMenuButton,
+    IonImg,
+    IonTitle,
+    IonToolbar,
+    IonTabs,
+    IonTabBar,
+    IonTabButton,
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    IonApp,
+    IonSplitPane,
+    IonMenu,
+    IonContent,
+    IonList,
+    IonListHeader,
+    IonNote,
+    IonMenuToggle,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonRouterLink,
+    IonRouterOutlet,
+  ],
 })
 export class AppComponent {
-  public appPages = [
-    { title: 'Lectures', url: '/lectures', icon: 'mail' },
-    { title: 'Videos', url: '/folder/Videos', icon: 'paper-plane' },
-    { title: 'Packages', url: '/folder/Packages', icon: 'heart' },
-    { title: 'Lessons', url: '/folder/Lessons', icon: 'archive' },
-    { title: 'Fav', url: '/folder/Fav', icon: 'trash' },
-    { title: 'Messages', url: '/folder/Messages', icon: 'warning' },
-  ];
-  public labels = ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6'];
-  constructor(public isite: IsiteService) {
-    addIcons({ library, playCircle, radio, search ,mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, heartOutline, heartSharp, archiveOutline, archiveSharp, trashOutline, trashSharp, warningOutline, warningSharp, bookmarkOutline, bookmarkSharp });
-
+  constructor(
+    private modalCtrl: ModalController,
+    public isite: IsiteService,
+    private router: Router,
+    private alertController: AlertController
+  ) {
+    addIcons({ ...icons });
 
     this.isite.getSetting();
+  }
+  async login() {
+    const modal = await this.modalCtrl.create({
+      component: LoginPage,
+      initialBreakpoint: 0.5,
+    });
+    await modal.present();
+  }
+
+  async logout() {
+    const alert = await this.alertController.create({
+      header: 'تأكيد تسجيل الخروج',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {},
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+            this.isite
+              .api({
+                url: '/api/user/logout',
+              })
+              .subscribe((resUser: any) => {
+                if (resUser.accessToken) {
+                  this.isite.accessToken = '';
+                }
+                if (resUser.done) {
+                  this.isite.userSession = null;
+                  this.isite.getUserSession(() => {
+                    this.router.navigateByUrl('/', { replaceUrl: true });
+                  });
+                } else {
+                }
+              });
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+
+    const { role } = await alert.onDidDismiss();
+  }
+
+  async hideMenu() {
+    await menuController.toggle();
   }
 }

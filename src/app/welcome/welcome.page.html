@@ -1,13 +1,96 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Welcome {{isite.setting.siteName}}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-
-  <h1>{{isite.setting.siteSlogan}}</h1>
+  <ion-img
+    class=""
+    *ngIf="isite.setting.showBanner"
+    [src]="isite.setting.bannerUrl"
+  ></ion-img>
+  <div
+    class="phone-call cbh-phone cbh-green cbh-show cbh-static"
+    *ngIf="isite.setting.whatsapp"
+  >
+    <a
+      id="WhatsApp-button"
+      href="https://wa.me/{{isite.setting.whatsapp}}"
+      target="_blank"
+      class="phoneJs"
+      title="WhatsApp 360imagem"
+    >
+      <p>التواصل مع الدعم</p>
+      <div class="cbh-ph-circle"></div>
+      <div class="cbh-ph-circle-fill"></div>
+      <div class="cbh-ph-img-circle1 whatsappLogo"></div
+    ></a>
+  </div>
+  <ion-img class="" [src]="isite.setting.footerLogoUrl"></ion-img>
+  <p class="center">
+    <a
+      class="pages"
+      [routerLink]="['/pages-content']"
+      [queryParams]="{
+        type: 'inviteFriends'
+      }"
+      >أدع أصدقاءك</a
+    >
+    <a
+      class="pages"
+      [routerLink]="['/pages-content']"
+      [queryParams]="{
+        type: 'joinUs'
+      }"
+      >إنضم إلينا</a
+    >
+    <a
+      class="pages"
+      [routerLink]="['/pages-content']"
+      [queryParams]="{
+      type: 'usageAgreement'
+    }"
+      >إتفاقية الإستخدام</a
+    >
+    <a
+      class="pages"
+      [routerLink]="['/pages-content']"
+      [queryParams]="{
+    type: 'privacyPolicy'
+  }"
+      >سياسة الخصوصية</a
+    >
+  </p>
+  <p class="center">
+    <a
+      *ngIf="isite.setting.facebookAccount"
+      class="social-logo facebook-logo"
+      href="https://www.facebook.com/{{ isite.setting.facebookAccount }}"
+      ><ion-icon name="logo-facebook"></ion-icon
+    ></a>
+    <a
+      *ngIf="isite.setting.twitterAccouunt"
+      class="social-logo twitter-logo"
+      href="https://www.twitter.com/{{ isite.setting.twitterAccouunt }}"
+      ><ion-icon name="logo-twitter"></ion-icon
+    ></a>
+    <a
+      *ngIf="isite.setting.instagramAccouunt"
+      class="social-logo instagram-logo"
+      href="https://www.instagram.com/{{
+          isite.setting.instagramAccouunt
+        }}"
+      ><ion-icon name="logo-instagram"></ion-icon
+    ></a>
+    <a
+      *ngIf="isite.setting.linkedinAccouunt"
+      class="social-logo linkedin-logo"
+      href="https://www.linkedin.com/in/{{
+          isite.setting.linkedinAccouunt
+        }}"
+      ><ion-icon name="logo-linkedin"></ion-icon
+    ></a>
+    <a
+      *ngIf="isite.setting.youTubeAccouunt"
+      class="social-logo youtube-logo"
+      href="https://www.youtube.com/{{ isite.setting.youTubeAccouunt }}"
+      ><ion-icon name="logo-youtube"></ion-icon
+    ></a>
+  </p>
+  
 </ion-content>

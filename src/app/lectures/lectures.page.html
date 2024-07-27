@@ -1,21 +1,49 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>lecturesList</ion-title>
-  </ion-toolbar>
-</ion-header>
+
 
 <ion-content [fullscreen]="true">
+  <ion-row class="main-row">
+
+  <ion-row>
+    <ion-col size="9">
+      <ion-list>
+        <ion-item>
+          <ion-input
+            label="بحث شامل"
+            [clearInput]="true"
+            labelPlacement="stacked"
+            placeholder="بحث"
+            [(ngModel)]="search"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+    <ion-col size="2">
+      <br>
+      <ion-button (click)="getLectures()" color="secondary">بحث</ion-button>
+    </ion-col>
+  </ion-row>
+
   <div id="container">
-    <ion-item
-      *ngFor="let lec of isite.lecturesList"
-      [routerLink]="['/lectures-view']"
-      [queryParams]="{id: lec._id}"
-    >
-      <ion-img [src]="lec.imageURL"> </ion-img>
-      <ion-label>{{ lec.description }}</ion-label>
-    </ion-item>
+
+    <a
+    *ngFor="let lecture of lecturesList"
+    [routerLink]="['/lectures-view']"
+    [queryParams]="{id: lecture._id}"
+  >
+    <figure class="image-block">
+      <p class="name">{{lecture.name}}</p>
+      <ion-img [src]="lecture.imageURL"> </ion-img>
+      
+      <figcaption>
+        <p>{{lecture.description}}</p>
+        <div class="row price-more-card">
+          <i class="price">ج.م {{lecture.price}} </i>
+          <span class="more-card"> المزيد..</span>
+        </div>
+      </figcaption>
+    </figure>
+  </a>
   </div>
+</ion-row>
+
 </ion-content>

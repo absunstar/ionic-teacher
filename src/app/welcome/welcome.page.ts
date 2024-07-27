@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { addIcons } from 'ionicons';
+import * as icons from 'ionicons/icons';
 import {
   IonImg,
   IonButtons,
@@ -56,7 +58,9 @@ import { IsiteService } from '../isite.service';
 })
 export class WelcomePage implements OnInit {
 
-  constructor(public isite: IsiteService) { }
+  constructor(public isite: IsiteService) {
+    addIcons({ ...icons });
+   }
 
   ngOnInit() {
   }

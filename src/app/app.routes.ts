@@ -22,5 +22,21 @@ export const routes: Routes = [
   {
     path: 'lectures-view',
     loadComponent: () => import('./lectures-view/lectures-view.page').then( m => m.LecturesViewPage)
+  },  {
+    path: 'packages',
+    loadComponent: () => import('./packages/packages.page').then( m => m.PackagesPage)
   },
+  {
+    path: 'books',
+    loadComponent: () => import('./books/books.page').then( m => m.BooksPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./register/register.page').then( m => m.RegisterPage)
+  },
+
 ];

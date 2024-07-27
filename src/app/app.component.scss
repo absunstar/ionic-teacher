@@ -29,17 +29,13 @@ ion-menu.md ion-list#inbox-list {
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
-
   min-height: 20px;
 }
 
 ion-menu.md ion-list#labels-list ion-list-header {
   font-size: 16px;
-
   margin-bottom: 18px;
-
   color: #757575;
-
   min-height: 26px;
 }
 
@@ -110,10 +106,71 @@ ion-menu.ios ion-note {
 ion-note {
   display: inline-block;
   font-size: 16px;
-
   color: var(--ion-color-medium-shade);
 }
 
 ion-item.selected {
   --color: var(--ion-color-primary);
+}
+
+ion-menu::part(backdrop) {
+  background-color: rgb(0 53 255 / 70%);
+}
+
+ion-menu::part(container) {
+  border-radius: 0 20px 20px 0;
+  box-shadow: 4px 0px 16px rgb(0 53 255 / 70%);
+}
+
+.list-menu {
+  height: 35px;
+}
+
+.menu-main {
+  top : 100px
+}
+.center {
+  text-align: center;
+}
+
+.my-menu {
+  margin-right: 10px;
+}
+
+.logo {
+  object-fit: fill;
+  height: 80px;
+  display: inline;
+  border-radius: 5px;
+  float: left;
+  max-width: 180px;
+}
+.siteName {
+  background-image: linear-gradient(to left, #aa9526, #1475cf, #aa9526, #aa9526);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 28px;
+  font-weight: bold;
+  text-wrap: pretty;
+  font-family: fangsong;
+  text-align: right;
+  right: -40px;
+}
+
+.contain-register-login {
+  place-content: center;
+}
+.user-logo {
+  height: 50px;
+  width: 50px;
+  display: inline-table;
+
+}
+.user-logo::part(image) {
+border-radius: 50%;
+}
+.user-name {
+  bottom: 15px;
+  position: sticky;
+  margin: 10px;
 }

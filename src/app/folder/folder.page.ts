@@ -21,6 +21,5 @@ export class FolderPage implements OnInit {
   ) {}
 
   ngOnInit() {
-   this.isite.getLectures();
   }
 }

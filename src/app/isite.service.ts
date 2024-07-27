@@ -9,11 +9,46 @@ export class IsiteService {
   accessToken: string = '';
   setting: any;
   userSession: any;
-  lecturesList: [any] | undefined;
+  
   lecture: any;
-  baseURL: string = 'https://me.teacher.egytag.com';
+  baseURL: string = 'http://abdo.localhost';
   constructor(public http: HttpClient) {
-    this.setting = { siteName: '' };
+    this.setting = {
+      teacher: {},
+      email: '',
+      host: '',
+      whatsapp: '',
+      supportEmail: '',
+      phone: '',
+      facebookAccount: '',
+      instagramAccouunt: '',
+      youTubeAccouunt: '',
+      twitterAccouunt: '',
+      snapAccouunt: '',
+      linkedinAccouunt: '',
+      telegramAccouunt: '',
+      skypeAccouunt: '',
+      siteName: '',
+      titleSeparator: '',
+      siteSlogan: '',
+      registerAlert: '',
+      description: '',
+      textPurchaseByBook: '',
+      textPurchaseByCode: '',
+      logo: '',
+      footerLogo: '',
+      banner: '',
+      codeCard: '',
+      isShared: false,
+      citiesAndAreasShow: false,
+      nationalitiesShow: false,
+      nameBesidLogoShow: false,
+      showParent: false,
+      showPackages: false,
+      showLectures: false,
+      showBooks: false,
+      showBanner: false,
+    };
     this.lecture = {};
   }
 
@@ -63,7 +98,9 @@ export class IsiteService {
             mobile: resUserSession.session.user.mobile,
             firstName: resUserSession.session.user.firstName,
             lastName: resUserSession.session.user.lastName,
-            image: resUserSession.session.user.image.url,
+            imageUrl: resUserSession.session.user.image
+              ? this.baseURL + resUserSession.session.user.image.url
+              : '',
             type: resUserSession.session.user.type,
             notificationsCount: resUserSession.session.user.notificationsCount,
             notificationsList: resUserSession.session.user.notificationsList,
@@ -73,9 +110,7 @@ export class IsiteService {
             schoolYear: resUserSession.session.user.schoolYear,
             educationalLevel: resUserSession.session.user.educationalLevel,
           };
-          this.userSession.image = this.baseURL + this.userSession.image;
-          /*           this.updateVisit();
-           */
+          
         }
       }
     });
@@ -85,39 +120,21 @@ export class IsiteService {
     this.api('/api/get-site-setting').subscribe((res: any) => {
       if (res.done) {
         this.setting = res.doc;
-        console.log(this.setting);
+        this.setting.logoUrl = this.setting.logo
+          ? this.baseURL + this.setting.logo.url
+          : '';
+        this.setting.footerLogoUrl = this.setting.footerLogo
+          ? this.baseURL + this.setting.footerLogo.url
+          : '';
+        this.setting.bannerUrl = this.setting.banner
+          ? this.baseURL + this.setting.banner.url
+          : '';
+          
       }
     });
   }
 
-  async getLectures() {
-    this.lecturesList = undefined;
-    this.api({
-      url: '/api/lectures/all',
-      body: {
-        type: 'toStudent',
-        select: {
-          id: 1,
-          _id: 1,
-          name: 1,
-          price: 1,
-          description: 1,
-          image: 1,
-        },
-        where: {},
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.list.forEach(
-          (element: { imageURL: string; image: { url: string } }) => {
-            element.imageURL = this.baseURL + element.image.url;
-          }
-        );
-        this.lecturesList = res.list;
-        console.log(this.lecturesList);
-      }
-    });
-  }
+
   async getLecture(_id: string) {
     this.lecture = {};
     this.api({
@@ -129,7 +146,6 @@ export class IsiteService {
       if (res.done) {
         res.doc.imageURL = this.baseURL + res.doc.image.url;
         this.lecture = res.doc;
-        console.log(this.lecture);
       }
     });
   }
