@@ -18,16 +18,16 @@
     >
       <ion-content dir="rtl">
         <ion-row class="contain-register-login" *ngIf="!isite.userSession">
-          <ion-button color="primary" (click)="login();hideMenu()">
+          <ion-button color="primary"  (click)="login(); hideMenu()">
             دخول
             <ion-icon name="log-in-outline"></ion-icon>
           </ion-button>
-          <ion-button color="secondary" (click)="hideMenu()" [routerLink]="['/register']">
+          <ion-button color="secondary" [routerLink]="['/register']">
             تسجيل
             <ion-icon name="person-add-outline"></ion-icon>
           </ion-button>
         </ion-row>
-       
+
         <div *ngIf="isite.userSession && isite.userSession.id">
           <ion-list-header
             ><ion-img
@@ -40,21 +40,19 @@
           </ion-list-header>
           <ion-note>{{ isite.userSession.email }}</ion-note>
         </div>
-        <ion-row class="contain-register-login" *ngIf="isite.userSession && isite.userSession.id">
+        <ion-row
+          class="contain-register-login"
+          *ngIf="isite.userSession && isite.userSession.id"
+        >
           <ion-button
             color="light"
             (click)="hideMenu()"
-            
             [routerLink]="['/user-manage']"
           >
-          <ion-label> إدارة حسابي </ion-label>
+            <ion-label> إدارة حسابي </ion-label>
             <ion-icon name="settings-outline"></ion-icon>
           </ion-button>
-          <ion-button
-            color="danger"
-            
-            (click)="logout();hideMenu()"
-          >
+          <ion-button color="danger" (click)="logout(); hideMenu()">
             <ion-label> تسجيل خروج </ion-label>
             <ion-icon name="log-out-outline"></ion-icon>
           </ion-button>
@@ -105,11 +103,10 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
-
+ 
         <!-- <ion-list id="labels-list">
            <ion-list-header>Labels</ion-list-header>
            <ion-icon
-              aria-hidden="true"
               slot="start"
               ios="bookmark-outline"
               md="bookmark-sharp"

@@ -84,6 +84,7 @@ import { IsiteService } from './isite.service';
 export class AppComponent {
   constructor(
     private modalCtrl: ModalController,
+    private menuCtrl: MenuController,
     public isite: IsiteService,
     private router: Router,
     private alertController: AlertController
@@ -140,6 +141,7 @@ export class AppComponent {
   }
 
   async hideMenu() {
-    await menuController.toggle();
+   
+    this.menuCtrl.enable(false);
   }
 }

@@ -12,6 +12,7 @@ import {
 } from '@angular/router';
 import {
   IonCol,
+  IonInputPasswordToggle,
   IonRow,
   IonButton,
   IonInput,
@@ -44,6 +45,7 @@ import { IsiteService } from '../isite.service';
   standalone: true,
   imports: [
     IonCol,
+    IonInputPasswordToggle,
     IonButton,
     IonRow,
     IonInput,

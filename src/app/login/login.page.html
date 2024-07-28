@@ -8,24 +8,38 @@
   <ion-list>
     <ion-item>
       <ion-input
+        label-placement="floating"
+        fill="outline"
         label="الإيميل أو الموبايل"
         [(ngModel)]="user.email"
-        [clearInput]="true"
-        placeholder="الإيميل أو الموبايل"
+        placeholder="أدخل الإيميل أو الموبايل لتسجيل الدخول"
       ></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-input
         label="كلمة السر"
-        type="password"
-        [clearInput]="true"
+        label-placement="floating"
+        fill="outline"
         [(ngModel)]="user.password"
         value="password"
+      >
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle
       ></ion-input>
     </ion-item>
   </ion-list>
   <ion-button expand="block" color="primary" (click)="loginUser(user)">
     <ion-icon name="log-in-outline"></ion-icon> دخول
+  </ion-button>
+
+  <ion-button
+  (click)="close()"
+  [routerLink]="['/register']"
+    type="button"
+    expand="block"
+    color="medium"
+    fill="clear"
+  >
+    <ion-label class="main-color"> تسجيل حساب جديد </ion-label>
   </ion-button>
 </ion-content>
