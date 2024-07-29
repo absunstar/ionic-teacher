@@ -76,6 +76,7 @@ import { IsiteService } from '../isite.service';
 })
 export class LoginPage implements OnInit {
   user;
+  error : string | undefined
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
@@ -113,7 +114,7 @@ export class LoginPage implements OnInit {
             this.router.navigateByUrl('/welcome', { replaceUrl: true });
           });
         } else {
-          user.$error = resUser.error;
+          this.error = resUser.error;
         }
       });
   }

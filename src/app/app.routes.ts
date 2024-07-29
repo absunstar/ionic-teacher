@@ -42,5 +42,9 @@ export const routes: Routes = [
     path: 'user-manage',
     loadComponent: () => import('./user-manage/user-manage.page').then( m => m.UserManagePage)
   },
+  {
+    path: 'package-view',
+    loadComponent: () => import('./package-view/package-view.page').then( m => m.PackageViewPage)
+  },
 
 ];

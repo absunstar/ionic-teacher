@@ -23,7 +23,7 @@
     <div id="container">
       <a
         *ngFor="let package of packagesList"
-        [routerLink]="['/packages-view']"
+        [routerLink]="['/package-view']"
         [queryParams]="{id: package._id}"
       >
         <figure class="image-block">

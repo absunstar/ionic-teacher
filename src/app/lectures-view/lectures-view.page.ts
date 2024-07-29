@@ -60,10 +60,6 @@ export class LecturesViewPage implements OnInit {
   constructor(public isite: IsiteService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.queryParams.forEach((p) => {
-      if (p['id']) {
-        this.isite.getLecture(p['id']);
-      }
-    });
+  
   }
 }

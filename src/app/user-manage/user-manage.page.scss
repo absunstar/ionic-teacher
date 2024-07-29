@@ -2,6 +2,12 @@
     margin-bottom: 90px;
     display: flow;
   }
+  .error {
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: larger;
+  }
   ion-list {
     width: 95%;
   }
@@ -43,11 +49,6 @@
     width: 100%;
     text-align: center;
   }
-  .error {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-    font-size: larger;
-  }
+
  
   

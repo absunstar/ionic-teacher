@@ -10,8 +10,7 @@ export class IsiteService {
   setting: any;
   userSession: any;
   
-  lecture: any;
-  baseURL: string = 'http://abdo.localhost';
+  baseURL: string = 'http://tareklotfy.localhost';
   constructor(public http: HttpClient) {
     this.setting = {
       teacher: {},
@@ -49,7 +48,6 @@ export class IsiteService {
       showBooks: false,
       showBanner: false,
     };
-    this.lecture = {};
   }
 
   api(options: any) {
@@ -135,18 +133,5 @@ export class IsiteService {
   }
 
 
-  async getLecture(_id: string) {
-    this.lecture = {};
-    this.api({
-      url: '/api/lectures/view',
-      body: {
-        _id: _id,
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.doc.imageURL = this.baseURL + res.doc.image.url;
-        this.lecture = res.doc;
-      }
-    });
-  }
+ 
 }

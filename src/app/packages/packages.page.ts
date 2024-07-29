@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { addIcons } from 'ionicons';
+import * as icons from 'ionicons/icons';
 import {
   IonCol,
   IonRow,
@@ -68,7 +70,10 @@ import { IsiteService } from '../isite.service';
 export class PackagesPage implements OnInit {
   search : String | undefined ;
   packagesList: [any] | undefined;
-   constructor(public isite: IsiteService) { }
+   constructor(public isite: IsiteService) {
+    addIcons({ ...icons });
+
+    }
 
   ngOnInit() {
     this.search = '';
