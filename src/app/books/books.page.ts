@@ -68,18 +68,26 @@ import { IsiteService } from '../isite.service';
 export class BooksPage implements OnInit {
   search : String | undefined ;
   booksList: [any] | undefined;
-   constructor(public isite: IsiteService) { }
+  type: string | undefined;
+   constructor(public isite: IsiteService,private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.search = '';
+    this.type = '';
+    this.route.queryParams.forEach((p) => {
+      this.type = 'toStudent';
+      if(p && p['id']) {
+        this.type = 'myStudent';
+      }
     this.getBooks();
+    })
   }
   async getBooks() {
     this.booksList = undefined;
     this.isite.api({
       url: '/api/books/all',
       body: {
-        type: 'toStudent',
+        type: this.type,
         select: {
           id: 1,
           _id: 1,

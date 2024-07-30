@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
+  IonTextarea,
   IonCardTitle,
   IonInput,
   IonModal,
@@ -36,11 +37,12 @@ import {
 import { IsiteService } from '../isite.service';
 
 @Component({
-  selector: 'app-package-view',
-  templateUrl: './package-view.page.html',
-  styleUrls: ['./package-view.page.scss'],
+  selector: 'app-book-view',
+  templateUrl: './book-view.page.html',
+  styleUrls: ['./book-view.page.scss'],
   standalone: true,
   imports: [
+    IonTextarea,
     FormsModule,
     IonInput,
     IonCardTitle,
@@ -75,34 +77,27 @@ import { IsiteService } from '../isite.service';
     IonRouterOutlet,
   ],
 })
-export class PackageViewPage implements OnInit {
-  package: any;
-  code: string | undefined;
+export class BookViewPage implements OnInit {
+  book: any;
+  address: string | undefined;
   error: string | undefined;
   buyModal: any;
-  quizModal: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
-    this.package = {
+    this.book = {
       lecturesList: [],
     };
     this.buyModal = false;
     this.route.queryParams.forEach((p) => {
-      this.getPackage(p['id']);
+      this.getBook(p['id']);
     });
   }
 
-  ngOnInit() {
-    // this.route.queryParams.forEach((p) => {
-    //   if (p['id']) {
-    //     this.isite.getPackage(p['id']);
-    //   }
-    // });
-  }
-  async getPackage(_id: string) {
-    this.package = {};
+  ngOnInit() {}
+  async getBook(_id: string) {
+    this.book = {};
     this.isite
       .api({
-        url: '/api/packages/view',
+        url: '/api/books/view',
         body: {
           _id: _id,
         },
@@ -112,46 +107,33 @@ export class PackageViewPage implements OnInit {
           res.doc.imageUrl = res.doc.image
             ? this.isite.baseURL + res.doc.image.url
             : '';
-          res.doc.lecturesList = res.doc.lecturesList || [];
 
-          res.doc.lecturesList.forEach(
-            (_element: {
-              lecture: any;
-              imageUrl: string;
-              imageURL: string;
-            }) => {
-              _element.imageUrl =
-                _element.lecture && _element.lecture.image
-                  ? this.isite.baseURL + _element.lecture.image.url
-                  : '';
-            }
-          );
-          this.package = res.doc;
+          this.book = res.doc;
         }
       });
   }
 
   setOpen(type: any, id: string) {
     if (id == 'buyModal') {
-      this.buyModal = type;
-      
+      this.buyModal = type;      
+      this.address = this.isite.userSession.address
     }
     // this[id] = type;
   }
 
-  async buyPackage() {
+  async buyBook() {
     this.error = '';
-    if (!this.code) {
-      this.error = 'يجب إدخال كود الشراء';
+    if (!this.address) {
+      this.error = 'يجب إدخال عنوان التوصيل';
       return;
     }
     this.isite
       .api({
-        url: '/api/packages/buyCode',
+        url: '/api/books/buyCode',
         body: {
-          code: this.code,
-          packageId: this.package.id,
-          packagePrice: this.package.price,
+          address: this.address,
+          bookId: this.book._id,
+          bookPrice: this.book.price,
         },
       })
       .subscribe((res: any) => {
@@ -159,23 +141,9 @@ export class PackageViewPage implements OnInit {
           res.doc.imageUrl = res.doc.image
             ? this.isite.baseURL + res.doc.image.url
             : '';
-          res.doc.lecturesList = res.doc.lecturesList || [];
 
-          res.doc.lecturesList.forEach(
-            (_element: {
-              lecture: any;
-              imageUrl: string;
-              imageURL: string;
-            }) => {
-              _element.imageUrl =
-                _element.lecture && _element.lecture.image
-                  ? this.isite.baseURL + _element.lecture.image.url
-                  : '';
-            }
-          );
-          this.package = res.doc;
-          this.quizModal = false;
-          
+          this.book = res.doc;
+          this.buyModal = false;
         } else {
           this.error = res.error;
         }

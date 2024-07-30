@@ -20,9 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./lectures/lectures.page').then( m => m.LecturesPage)
   },
   {
-    path: 'lectures-view',
-    loadComponent: () => import('./lectures-view/lectures-view.page').then( m => m.LecturesViewPage)
-  },  {
+    path: 'lecture-view',
+    loadComponent: () => import('./lecture-view/lecture-view.page').then( m => m.LectureViewPage)
+  },
+  {
     path: 'packages',
     loadComponent: () => import('./packages/packages.page').then( m => m.PackagesPage)
   },
@@ -45,6 +46,10 @@ export const routes: Routes = [
   {
     path: 'package-view',
     loadComponent: () => import('./package-view/package-view.page').then( m => m.PackageViewPage)
+  },
+  {
+    path: 'book-view',
+    loadComponent: () => import('./book-view/book-view.page').then( m => m.BookViewPage)
   },
 
 ];

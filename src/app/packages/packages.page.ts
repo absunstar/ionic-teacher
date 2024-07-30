@@ -70,21 +70,31 @@ import { IsiteService } from '../isite.service';
 export class PackagesPage implements OnInit {
   search : String | undefined ;
   packagesList: [any] | undefined;
-   constructor(public isite: IsiteService) {
+  type: string | undefined;
+   constructor(public isite: IsiteService, private route: ActivatedRoute) {
     addIcons({ ...icons });
 
     }
 
   ngOnInit() {
     this.search = '';
+    this.type = '';
+    this.route.queryParams.forEach((p) => {
+      this.type = 'toStudent';
+      if(p && p['id']) {
+        
+        this.type = 'myStudent';
+      }
+      
     this.getPackages();
+    })
   }
   async getPackages() {
     this.packagesList = undefined;
     this.isite.api({
       url: '/api/packages/all',
       body: {
-        type: 'toStudent',
+        type: this.type,
         select: {
           id: 1,
           _id: 1,

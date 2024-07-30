@@ -1,58 +1,61 @@
-<ion-content [fullscreen]="true">
-  <ion-row class="main-row">
-    <div id="container" class="container">
-      <ion-text><p class="main-name">{{package.name}}</p></ion-text>
-      <div class="bg-data">
-        <ion-text
-          ><p class="main-time">
-            <ion-icon name="time-outline"></ion-icon> {{package.$time}}
-          </p></ion-text
-        >
-        <ion-text class="main-price">
-          <span>السعر</span>
-          <span class="green"> {{package.price}} ج.م</span>
-          <s class="red"> {{package.totalLecturesPrice}} </s>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="div-main">
+    <ion-row class="main-row">
+      <div id="container" class="container">
+        <ion-text><p class="main-name">{{package.name}}</p></ion-text>
+        <div class="bg-data">
+          <ion-text
+            ><p class="main-time">
+              <ion-icon name="time-outline"></ion-icon> {{package.$time}}
+            </p></ion-text
+          >
+          <ion-text class="main-price">
+            <span>السعر</span>
+            <span class="green"> {{package.price}} ج.م</span>
+            <s class="red"> {{package.totalLecturesPrice}} </s>
+          </ion-text>
+        </div>
+        <ion-text>
+          <p class="text-description">{{package.description}}</p>
         </ion-text>
       </div>
-      <ion-text>
-        <p class="text-description">{{package.description}}</p>
-      </ion-text>
-    </div>
 
-    <ion-card>
-      <ion-card-title>المحاضرات</ion-card-title>
-      <ion-card-content>
-        <ion-list>
-          <ion-item
-            *ngFor="let lec of package.lecturesList"
-            [routerLink]="['/lecture-view']"
-            [queryParams]="{id: lec._id}"
-          >
-            <ion-thumbnail slot="start">
-              <img alt="Silhouette of mountains" [src]="lec.imageUrl" />
-            </ion-thumbnail>
-            <ion-label>{{lec.lecture.name}}</ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-  </ion-row>
-  <ion-button
-    *ngIf="!package.$buy || (isite.userSession && isite.userSession.type =='student')"
-    id="open-modal"
-    class="buy-button"
-    expand="block"
-    >شراء
-    <ion-icon name="bag-check-outline"></ion-icon>
-  </ion-button>
+      <ion-card>
+        <ion-card-title>المحاضرات</ion-card-title>
+        <ion-card-content>
+          <ion-list>
+            <ion-item
+              *ngFor="let lec of package.lecturesList"
+              [routerLink]="['/lecture-view']"
+              [queryParams]="{id: lec._id}"
+            >
+              <ion-thumbnail slot="start">
+                <img alt="Silhouette of mountains" [src]="lec.imageUrl" />
+              </ion-thumbnail>
+              <ion-label>{{lec.lecture.name}}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+    </ion-row>
 
-  <ion-modal #modal trigger="open-modal">
+    <ion-button
+    *ngIf="!package.$buy && isite.userSession && isite.userSession.type =='student'"
+      (click)="setOpen(true,'buyModal')"
+      class="buy-button"
+      expand="block"
+      >شراء
+      <ion-icon name="bag-check-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <ion-modal #modal [isOpen]="buyModal">
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-title>كود الشراء</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="modal.dismiss()">إغلاق</ion-button>
+            <ion-button (click)="setOpen(false,'buyModal')">إغلاق</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>

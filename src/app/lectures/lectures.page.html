@@ -27,7 +27,7 @@
 
     <a
     *ngFor="let lecture of lecturesList"
-    [routerLink]="['/lectures-view']"
+    [routerLink]="['/lecture-view']"
     [queryParams]="{id: lecture._id}"
   >
     <figure class="image-block">

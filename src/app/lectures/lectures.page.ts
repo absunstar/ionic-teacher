@@ -67,26 +67,28 @@ import { IsiteService } from '../isite.service';
 export class LecturesPage implements OnInit {
   search: String | undefined;
   lecturesList: [any] | undefined;
+  type: string | undefined;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.search = '';
+    
+    this.type = '';
+    this.route.queryParams.forEach((p) => {
+      this.type = 'toStudent';
+      if(p && p['id']) {
+        this.type = 'myStudent';
+      }
     this.getLectures();
+    })
   }
   async getLectures() {
-    this.route.queryParams.subscribe(async (params) => {
       this.lecturesList = undefined;
-      let type ='';
-      if(params['id']) {
-        type = 'myStudent'
-      } else {
-        type = 'toStudent'
-      }
       this.isite
         .api({
           url: '/api/lectures/all',
           body: {
-            type: type,
+            type: this.type,
             select: {
               id: 1,
               _id: 1,
@@ -109,6 +111,6 @@ export class LecturesPage implements OnInit {
             this.lecturesList = res.list;
           }
         });
-    });
+    
   }
 }

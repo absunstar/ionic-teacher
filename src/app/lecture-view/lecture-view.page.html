@@ -1,0 +1,164 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="div-main">
+    <ion-row class="main-row">
+      <div id="container" class="container">
+        <ion-text><p class="main-name">{{lecture.name}}</p></ion-text>
+        <div class="bg-data">
+          <ion-text
+            ><p class="main-time">
+              <ion-icon name="time-outline"></ion-icon> {{lecture.$time}}
+            </p></ion-text
+          >
+          <ion-text class="main-price">
+            <span>السعر</span>
+            <span class="green"> {{lecture.price}} ج.م</span>
+          </ion-text>
+        </div>
+        <ion-text>
+          <p class="text-description">{{lecture.description}}</p>
+        </ion-text>
+        <div *ngIf="lecture.filesList && lecture.filesList.length > 0">
+          <a *ngFor="let file of lecture.filesList" href="{{file.$url}}">
+            <p class="file">
+              <span>{{file.url.name}}</span>
+              <span class="left"
+                >تنزيل الملف<ion-icon name="download-outline"></ion-icon
+              ></span>
+            </p>
+          </a>
+        </div>
+
+        <ion-card *ngIf="lecture.linksList && lecture.linksList.length > 0">
+          <ion-card-title>الفيديوهات المسجلة</ion-card-title>
+          <ion-card-content>
+            <ion-list>
+              <ion-item
+                class="item-link"
+                *ngFor="let link of lecture.linksList"
+              >
+                <ion-button expand="block"
+                  >{{link.name}} <ion-icon name="eye-outline"></ion-icon>
+                </ion-button>
+                <ion-label *ngIf="lecture.typeExpiryView.name == 'number'"
+                  >المشاهدات المتبقية {{link.remainNumber}}</ion-label
+                >
+                <ion-label *ngIf="lecture.typeExpiryView.name == 'day'"
+                  >الأيام المتبقية {{link.remainDay}}</ion-label
+                >
+                <ion-label *ngIf="lecture.typeExpiryView.name == 'date'">
+                  إنتهاء المشاهدات في {{link.remainDate | date : ' dd / MM
+                  /yyyy'}}</ion-label
+                >
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+
+        <div *ngIf="quiz && quiz.id">
+          <p class="file">
+            درجة الإختبار
+            <span class="degree bg-green" *ngIf="quiz.userDegree >= 50"
+              >{{quiz.userDegree}}</span
+            >
+            <span class="degree bg-red" *ngIf=" 50 > quiz.userDegree "
+              >{{quiz.userDegree}}</span
+            >
+            %
+          </p>
+          <p class="file">
+            إتاحة إعادة الإختبار
+            <span class="degree bg-main"
+              >{{lecture.timesEnterQuiz - quiz.timesEnterQuiz}}</span
+            >
+          </p>
+        </div>
+      </div>
+    </ion-row>
+    <p class="error">{{error}}</p>
+    <ion-button
+      *ngIf="lecture.$buy && lecture.activateQuiz && (!quiz.id || lecture.timesEnterQuiz > quiz.timesEnterQuiz) "
+      (click)="startQuiz()"
+      class="buy-button"
+      expand="block"
+      >بدأ الإختبار
+      <ion-icon name="bag-check-outline"></ion-icon>
+    </ion-button>
+    <ion-button
+      *ngIf="!lecture.$buy && isite.userSession && isite.userSession.type =='student'"
+      (click)="setOpen(true,'buyModal')"
+      class="buy-button"
+      expand="block"
+      >شراء
+      <ion-icon name="bag-check-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content>
+
+<ion-modal  [isOpen]="buyModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>كود الشراء</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="setOpen(false,'buyModal')">إغلاق</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <p class="buy-text">{{isite.setting.textPurchaseByCode}}</p>
+      <ion-list>
+        <ion-item>
+          <ion-input
+            label-placement="floating"
+            fill="outline"
+            label="كود الشراء"
+            [(ngModel)]="code"
+            [clearInput]="true"
+            placeholder="أدخل كود الشراء"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+      <p class="error">{{error}}</p>
+
+      <ion-button (click)="buyLecture()" class="buy-button" expand="block">
+        <ion-icon name="checkmark-done-outline"></ion-icon>
+        تأكيد الشراء
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+<ion-modal [isOpen]="quizModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>إجراء إختبار</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="setOpen(false,'quizModal')">إغلاق</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-item *ngFor="let question of quiz.questionsList">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{question.numbering}}</ion-card-title>
+            <ion-card-subtitle *ngIf="question.questionType.name=='text'"
+              >{{question.name}}</ion-card-subtitle
+            >
+          </ion-card-header>
+
+          <ion-card-content>
+            Here's a small text description for the card content. Nothing more,
+            nothing less.
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+      <p class="error">{{error}}</p>
+
+      <ion-button (click)="buyLecture()" class="buy-button" expand="block">
+        <ion-icon name="checkmark-done-outline"></ion-icon>
+        إنهاء الإختبار
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>

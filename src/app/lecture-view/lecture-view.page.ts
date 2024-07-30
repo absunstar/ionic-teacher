@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
   IonCardTitle,
+  IonCardSubtitle,
+  IonCardHeader,
   IonInput,
   IonModal,
   IonThumbnail,
@@ -36,13 +38,15 @@ import {
 import { IsiteService } from '../isite.service';
 
 @Component({
-  selector: 'app-package-view',
-  templateUrl: './package-view.page.html',
-  styleUrls: ['./package-view.page.scss'],
+  selector: 'app-lecture-view',
+  templateUrl: './lecture-view.page.html',
+  styleUrls: ['./lecture-view.page.scss'],
   standalone: true,
   imports: [
     FormsModule,
     IonInput,
+    IonCardHeader,
+    IonCardSubtitle,
     IonCardTitle,
     IonModal,
     IonButton,
@@ -75,34 +79,38 @@ import { IsiteService } from '../isite.service';
     IonRouterOutlet,
   ],
 })
-export class PackageViewPage implements OnInit {
-  package: any;
+export class LectureViewPage implements OnInit {
+  lecture: any;
+  quiz: any;
   code: string | undefined;
   error: string | undefined;
-  buyModal: any;
-  quizModal: any;
+  quizModal: Boolean | undefined;
+  buyModal: Boolean;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
-    this.package = {
+    this.lecture = {
       lecturesList: [],
     };
     this.buyModal = false;
     this.route.queryParams.forEach((p) => {
-      this.getPackage(p['id']);
+      this.getLecture(p['id']);
+      this.quizView(p['id']);
     });
   }
 
   ngOnInit() {
+    this.error = '';
     // this.route.queryParams.forEach((p) => {
     //   if (p['id']) {
-    //     this.isite.getPackage(p['id']);
+    //     this.isite.getLecture(p['id']);
     //   }
     // });
   }
-  async getPackage(_id: string) {
-    this.package = {};
+  async getLecture(_id: string) {
+    this.error = '';
+    this.lecture = {};
     this.isite
       .api({
-        url: '/api/packages/view',
+        url: '/api/lectures/view',
         body: {
           _id: _id,
         },
@@ -112,34 +120,73 @@ export class PackageViewPage implements OnInit {
           res.doc.imageUrl = res.doc.image
             ? this.isite.baseURL + res.doc.image.url
             : '';
-          res.doc.lecturesList = res.doc.lecturesList || [];
-
-          res.doc.lecturesList.forEach(
-            (_element: {
-              lecture: any;
-              imageUrl: string;
-              imageURL: string;
-            }) => {
-              _element.imageUrl =
-                _element.lecture && _element.lecture.image
-                  ? this.isite.baseURL + _element.lecture.image.url
-                  : '';
+          res.doc.filesList = res.doc.filesList || [];
+          res.doc.filesList.forEach((_file: { $url: string; url: any }) => {
+            if (_file.url) {
+              _file.$url = this.isite.baseURL + _file.url.url;
             }
-          );
-          this.package = res.doc;
+          });
+
+          this.lecture = res.doc;
         }
       });
+  }
+
+  async quizView(_id: string) {
+    this.error = '';
+    if (this.isite.userSession && this.isite.userSession.id) {
+      this.quiz = {};
+      this.isite
+        .api({
+          url: '/api/quizzes/viewByUserLecture',
+          body: {
+            'user.id': this.isite.userSession.id,
+            'lecture._id': _id,
+          },
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            this.quiz = res.doc;
+          }
+        });
+    }
+  }
+
+  async startQuiz() {
+    this.error = '';
+    if (this.isite.userSession && this.isite.userSession.id) {
+      this.quiz = {};
+      this.isite
+        .api({
+          url: '/api/quizzes/startQuiz',
+          body: {
+            where: {
+              'lecture.id': this.lecture.id,
+              'user.id': this.isite.userSession.id,
+            },
+            lectureId: this.lecture.id,
+          },
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            this.quiz = res.doc;
+            this.quizModal = true;
+          } else {
+            this.error = res.error;
+          }
+        });
+    }
   }
 
   setOpen(type: any, id: string) {
     if (id == 'buyModal') {
       this.buyModal = type;
-      
+    } else if (id == 'quizModal') {
+      this.quizModal = type;
     }
-    // this[id] = type;
   }
 
-  async buyPackage() {
+  async buyLecture() {
     this.error = '';
     if (!this.code) {
       this.error = 'يجب إدخال كود الشراء';
@@ -147,35 +194,19 @@ export class PackageViewPage implements OnInit {
     }
     this.isite
       .api({
-        url: '/api/packages/buyCode',
+        url: '/api/lectures/buyCode',
         body: {
           code: this.code,
-          packageId: this.package.id,
-          packagePrice: this.package.price,
+          lectureId: this.lecture.id,
+          lecturePrice: this.lecture.price,
         },
       })
       .subscribe((res: any) => {
         if (res.done) {
-          res.doc.imageUrl = res.doc.image
-            ? this.isite.baseURL + res.doc.image.url
-            : '';
-          res.doc.lecturesList = res.doc.lecturesList || [];
-
-          res.doc.lecturesList.forEach(
-            (_element: {
-              lecture: any;
-              imageUrl: string;
-              imageURL: string;
-            }) => {
-              _element.imageUrl =
-                _element.lecture && _element.lecture.image
-                  ? this.isite.baseURL + _element.lecture.image.url
-                  : '';
-            }
-          );
-          this.package = res.doc;
-          this.quizModal = false;
-          
+          this.route.queryParams.forEach((p) => {
+            this.getLecture(p['id']);
+          });
+          this.buyModal = false;
         } else {
           this.error = res.error;
         }

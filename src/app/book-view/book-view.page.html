@@ -1,0 +1,54 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="div-main">
+    <ion-row class="main-row">
+      <div id="container" class="container">
+        <ion-text><p class="main-name">{{book.name}}</p></ion-text>
+        <div class="bg-data">
+          <ion-text class="main-price">
+            <span>السعر</span>
+            <span class="green"> {{book.price}} ج.م</span>
+          </ion-text>
+        </div>
+        <ion-text>
+          <p class="text-description">{{book.description}}</p>
+        </ion-text>
+      </div>
+    </ion-row>
+
+    <ion-button
+      *ngIf="!book.$buy && isite.userSession && isite.userSession.type =='student'"
+      (click)="setOpen(true,'buyModal')"
+      class="buy-button"
+      expand="block"
+      >شراء
+      <ion-icon name="bag-check-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <ion-modal #modal [isOpen]="buyModal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>كود الشراء</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpen(false,'buyModal')">إغلاق</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <p class="buy-text">{{isite.setting.textPurchaseByBook}}</p>
+        <ion-list>
+          <ion-item>
+            <ion-textarea label="Outline textarea" [(ngModel)]="address" labelPlacement="floating" fill="outline" placeholder="أكتب العنوان الذي تريد توصيل الكتاب إليه"></ion-textarea>
+          </ion-item>
+        </ion-list>
+        <p class="error">{{error}}</p>
+
+        <ion-button (click)="buyBook()" class="buy-button" expand="block">
+          <ion-icon name="checkmark-done-outline"></ion-icon>
+          تأكيد الشراء
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

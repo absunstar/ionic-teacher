@@ -10,7 +10,7 @@ export class IsiteService {
   setting: any;
   userSession: any;
   
-  baseURL: string = 'http://tareklotfy.localhost';
+  baseURL: string = 'http://professional.localhost';
   constructor(public http: HttpClient) {
     this.setting = {
       teacher: {},
@@ -107,6 +107,7 @@ export class IsiteService {
             packagesList: resUserSession.session.user.packagesList,
             schoolYear: resUserSession.session.user.schoolYear,
             educationalLevel: resUserSession.session.user.educationalLevel,
+            address: resUserSession.session.user.address,
           };
           
         }
