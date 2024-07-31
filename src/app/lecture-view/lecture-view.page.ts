@@ -7,11 +7,12 @@ import {
   IonCardTitle,
   IonCardSubtitle,
   IonCardHeader,
+  IonCardContent,
+  IonCard,
+  IonCheckbox,
   IonInput,
   IonModal,
   IonThumbnail,
-  IonCardContent,
-  IonCard,
   IonText,
   IonImg,
   IonRow,
@@ -45,14 +46,15 @@ import { IsiteService } from '../isite.service';
   imports: [
     FormsModule,
     IonInput,
+    IonCheckbox,
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
+    IonCardContent,
+    IonCard,
     IonModal,
     IonButton,
     IonThumbnail,
-    IonCardContent,
-    IonCard,
     IonText,
     IonImg,
     IonRow,
@@ -86,11 +88,15 @@ export class LectureViewPage implements OnInit {
   error: string | undefined;
   quizModal: Boolean | undefined;
   buyModal: Boolean;
+  minute!: number;
+  secound!: number;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
     this.lecture = {
       lecturesList: [],
     };
     this.buyModal = false;
+    this.minute = 0;
+    this.secound = 0;
     this.route.queryParams.forEach((p) => {
       this.getLecture(p['id']);
       this.quizView(p['id']);
@@ -151,7 +157,6 @@ export class LectureViewPage implements OnInit {
         });
     }
   }
-
   async startQuiz() {
     this.error = '';
     if (this.isite.userSession && this.isite.userSession.id) {
@@ -169,13 +174,71 @@ export class LectureViewPage implements OnInit {
         })
         .subscribe((res: any) => {
           if (res.done) {
+            res.doc.questionsList = res.doc.questionsList || [];
+            res.doc.questionsList.forEach(
+              (_q: {
+                questionType: { name: string };
+                imageUrl: string;
+                image: { url: string };
+              }) => {
+                if (_q.questionType.name == 'photo') {
+                  _q.imageUrl = _q.image
+                    ? this.isite.baseURL + _q.image.url
+                    : '';
+                }
+              }
+            );
             this.quiz = res.doc;
-            this.quizModal = true;
+            this.startQuizTime('start');
           } else {
             this.error = res.error;
           }
         });
     }
+  }
+  async finishQuiz(quiz: any) {
+    this.error = '';
+    if (this.isite.userSession && this.isite.userSession.id) {
+      this.quiz = {};
+      this.isite
+        .api({
+          url: '/api/quizzes/finishQuiz',
+          body: quiz,
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            res.doc.questionsList = res.doc.questionsList || [];
+            this.startQuizTime('finish');
+
+            this.quiz = res.doc;
+            this.buyModal = false;
+          } else {
+            this.error = res.error;
+          }
+        });
+    }
+  }
+
+  startQuizTime(type: any) {
+    this.minute = this.lecture.quizDuration - 1 || 0;
+    this.secound = 59;
+    if (type == 'start') {
+      this.buyModal = true;
+    }
+    const timeQuizInterval = setInterval(() => {
+      if (type == 'finish') {
+        clearInterval(timeQuizInterval);
+      }
+
+      this.secound--;
+      if (this.secound == 0) {
+        if (this.secound <= 1 && this.minute < 1) {
+          this.finishQuiz(this.quiz);
+        }
+        this.minute--;
+        this.secound = 60;
+      }
+    }, 1000);
   }
 
   setOpen(type: any, id: string) {
@@ -184,6 +247,14 @@ export class LectureViewPage implements OnInit {
     } else if (id == 'quizModal') {
       this.quizModal = type;
     }
+  }
+
+  checkCorrect(answersList: any, index: any) {
+    answersList.forEach((_a: { userAnswer: boolean }, i: any) => {
+      if (i != index) {
+        _a.userAnswer = false;
+      }
+    });
   }
 
   async buyLecture() {

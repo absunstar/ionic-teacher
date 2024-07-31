@@ -14,6 +14,7 @@ export class IsiteService {
   constructor(public http: HttpClient) {
     this.setting = {
       teacher: {},
+      textOurPlacesTimes : '',
       email: '',
       host: '',
       whatsapp: '',

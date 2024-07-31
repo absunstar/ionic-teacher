@@ -112,13 +112,13 @@ export class PackageViewPage implements OnInit {
           res.doc.imageUrl = res.doc.image
             ? this.isite.baseURL + res.doc.image.url
             : '';
+
           res.doc.lecturesList = res.doc.lecturesList || [];
 
           res.doc.lecturesList.forEach(
             (_element: {
               lecture: any;
               imageUrl: string;
-              imageURL: string;
             }) => {
               _element.imageUrl =
                 _element.lecture && _element.lecture.image
@@ -134,7 +134,6 @@ export class PackageViewPage implements OnInit {
   setOpen(type: any, id: string) {
     if (id == 'buyModal') {
       this.buyModal = type;
-      
     }
     // this[id] = type;
   }
@@ -165,7 +164,6 @@ export class PackageViewPage implements OnInit {
             (_element: {
               lecture: any;
               imageUrl: string;
-              imageURL: string;
             }) => {
               _element.imageUrl =
                 _element.lecture && _element.lecture.image
@@ -175,7 +173,6 @@ export class PackageViewPage implements OnInit {
           );
           this.package = res.doc;
           this.quizModal = false;
-          
         } else {
           this.error = res.error;
         }

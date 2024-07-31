@@ -1,0 +1,30 @@
+<ion-content [fullscreen]="true">
+  <ion-row class="main-row">
+    <ion-card *ngFor="let center of centersList">
+      <ion-card-header>
+        <ion-card-title>{{center.name}}</ion-card-title>
+      </ion-card-header>
+      <div *ngIf="center.daysList && center.daysList.length > 0">
+        <div *ngFor="let _day of center.daysList">
+          <p class="day-name">{{_day.day.nameAr}}
+            <span *ngFor="let _a of _day.appointmentsList" class="time-day">{{_a.startTime |date:"hh:mm a"}}</span>
+          </p>
+        </div>
+      </div>
+      <ion-card-content>
+        {{center.address}}
+      </ion-card-content>
+      <ion-row>
+        <ion-col size="6">
+          <ion-button color="light" href="tel:{{center.mobile}}" expand="block">
+            {{center.mobile}}
+            <ion-icon name="phone-portrait-outline"></ion-icon>
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+         <!--  <iframe height="100px" id="location_{{center.id}}" src="{{center.locationSrc}}"></iframe> -->
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </ion-row>
+</ion-content>

@@ -24,7 +24,7 @@
   <div id="container" class="book-div">
     <div class="nft" *ngFor="let book of booksList">
       <div class="main">
-        <ion-img class="tokenImage" [src]="book.imageURL"> </ion-img>
+        <ion-img class="tokenImage" [src]="book.imageUrl"> </ion-img>
         <h2>{{book.name}}</h2>
         <p class="description">{{book.description}}</p>
         <div
@@ -44,7 +44,7 @@
   >
     <figure class="image-block">
       <p class="name">{{book.name}}</p>
-      <ion-img [src]="book.imageURL"> </ion-img>
+      <ion-img [src]="book.imageUrl"> </ion-img>
       
       <figcaption>
         <p>{{book.description}}</p>

@@ -5,7 +5,13 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardHeader,
+  IonCardContent,
+  IonCard,
   IonImg,
+  IonButton,
   IonButtons,
   IonMenuButton,
   IonTitle,
@@ -32,7 +38,13 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./welcome.page.scss'],
   standalone: true,
   imports: [
+    IonCardTitle,
+    IonCardSubtitle,
+    IonCardHeader,
+    IonCardContent,
+    IonCard,
     IonImg,
+    IonButton,
     IonHeader,
     IonToolbar,
     IonButtons,

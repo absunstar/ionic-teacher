@@ -115,8 +115,8 @@ export class BookViewPage implements OnInit {
 
   setOpen(type: any, id: string) {
     if (id == 'buyModal') {
-      this.buyModal = type;      
-      this.address = this.isite.userSession.address
+      this.buyModal = type;
+      this.address = this.isite.userSession.address;
     }
     // this[id] = type;
   }

@@ -51,5 +51,13 @@ export const routes: Routes = [
     path: 'book-view',
     loadComponent: () => import('./book-view/book-view.page').then( m => m.BookViewPage)
   },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./notifications/notifications.page').then( m => m.NotificationsPage)
+  },
+  {
+    path: 'centers',
+    loadComponent: () => import('./centers/centers.page').then( m => m.CentersPage)
+  },
 
 ];

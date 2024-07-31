@@ -109,8 +109,8 @@ export class PackagesPage implements OnInit {
     }).subscribe((res: any) => {
       if (res.done) {
         res.list.forEach(
-          (element: { imageURL: string; image: { url: string } }) => {
-            element.imageURL = this.isite.baseURL + element.image.url;
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image ? this.isite.baseURL + element.image.url : '';
           }
         );
         this.packagesList = res.list;

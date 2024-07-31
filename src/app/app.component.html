@@ -176,7 +176,7 @@
           <ion-icon name="library"></ion-icon>
           الكتب
         </ion-tab-button>
-        <ion-tab-button [routerLink]="['/notifications']">
+        <ion-tab-button [routerLink]="['/notifications']" *ngIf="isite.userSession && isite.userSession.id">
           <ion-icon name="notifications-outline"></ion-icon>
           الإشعارات
         </ion-tab-button>

@@ -1,0 +1,39 @@
+<ion-content [fullscreen]="true">
+  <ion-row class="main-row">
+    <div id="container" *ngIf="user && user.notificationsList.length > 0 && isite.userSession && isite.userSession.id">
+      <ion-button expand="block" (click)="updateStudentNotifications('deleteAll',null)" color="danger">حذف الكل</ion-button>
+
+      <ion-item *ngFor="let notification of user.notificationsList">
+        <ion-card>
+          <ion-card-header>
+            <ion-row>
+              <ion-col size="6" class="col-top-left">
+                <ion-img
+                *ngIf="notification.imageUrl"
+                  class="logo-notification"
+                  [src]="notification.imageUrl"
+                >
+                </ion-img>
+              </ion-col>
+              <ion-col size="6" class="col-top-left">
+                <ion-img
+                
+                  class="logo-notification float-left"
+                  [src]="isite.setting.logoUrl"
+                >
+                </ion-img>
+              </ion-col>
+            </ion-row>
+
+            <ion-card-title class="right"
+              >{{notification.title}}</ion-card-title
+            >
+          </ion-card-header>
+
+          <ion-card-content> {{notification.content}} </ion-card-content>
+          <ion-button expand="block" (click)="updateStudentNotifications('deleteOne',notification.id)" color="danger">حذف</ion-button>
+        </ion-card>
+      </ion-item>
+    </div>
+  </ion-row>
+</ion-content>

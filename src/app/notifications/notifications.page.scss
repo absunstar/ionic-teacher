@@ -1,0 +1,41 @@
+.main-row {
+  margin-bottom: 90px;
+}
+ion-item {
+  display: contents;
+  width: 100%;
+  /* ion-img {
+    width: 20vw;
+    height: 20vh;
+    display: block;
+  } */
+  ion-label {
+    display: block;
+    width: 100vw;
+    text-align: center;
+    line-height: 1.8;
+  }
+}
+ion-content {
+  top: 90px;
+}
+ion-card {
+  width: 100%;
+}
+
+.right {
+  text-align: right;
+}
+.float-left {
+  float: left;
+}
+.logo-notification::part(image) {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 1px solid blue;
+  object-fit: fill;
+}
+ion-card-content {
+  white-space: pre-wrap;
+}

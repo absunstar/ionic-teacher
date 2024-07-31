@@ -4,22 +4,38 @@
 .item-native {
   background-color: #eceff5;
 }
+.font-larger {
+  font-size: larger;
+}
 .error {
   text-align: center;
   color: red;
   font-weight: bold;
   font-size: larger;
 }
+.timer {
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: x-large;
+  background: red;
+  border-radius: 10px;
+  padding: 5px;
+}
+
 .item-link {
   margin: unset;
 }
+.right {
+  text-align: right;
+}
 ion-item {
-  margin: 5%;
-  ion-img {
+  /* margin: 5%; */
+ /*  ion-img {
     width: 20vw;
     height: 20vh;
     display: block;
-  }
+  } */
   ion-label {
     display: block;
     width: 100vw;
@@ -27,7 +43,21 @@ ion-item {
     line-height: 1.8;
   }
 }
-ion-content {
+.zoom {
+  transition: transform 0.4s;
+  width: 100% !important;
+  height: 180px !important;
+  margin: 0 auto;
+}
+
+.zoom:hover {
+  -ms-transform: scale(1.8); /* IE 9 */
+  -webkit-transform: scale(1.8); /* Safari 3-8 */
+  transform: scale(1.8);
+}
+
+
+.main-content {
   top: 90px;
 }
 .degree {

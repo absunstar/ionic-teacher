@@ -1,7 +1,8 @@
-<ion-content [fullscreen]="true" class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding main-content">
   <div class="div-main">
     <ion-row class="main-row">
       <div id="container" class="container">
+        <ion-img [src]="lecture.imageUrl"> </ion-img>
         <ion-text><p class="main-name">{{lecture.name}}</p></ion-text>
         <div class="bg-data">
           <ion-text
@@ -17,18 +18,9 @@
         <ion-text>
           <p class="text-description">{{lecture.description}}</p>
         </ion-text>
-        <div *ngIf="lecture.filesList && lecture.filesList.length > 0">
-          <a *ngFor="let file of lecture.filesList" href="{{file.$url}}">
-            <p class="file">
-              <span>{{file.url.name}}</span>
-              <span class="left"
-                >تنزيل الملف<ion-icon name="download-outline"></ion-icon
-              ></span>
-            </p>
-          </a>
-        </div>
-
-        <ion-card *ngIf="lecture.linksList && lecture.linksList.length > 0">
+        <ion-card
+          *ngIf="lecture.linksList && lecture.linksList.length > 0 && (lecture.$buy || lecture.type.name == 'public')"
+        >
           <ion-card-title>الفيديوهات المسجلة</ion-card-title>
           <ion-card-content>
             <ion-list>
@@ -53,6 +45,19 @@
             </ion-list>
           </ion-card-content>
         </ion-card>
+        <div *ngIf="lecture.linksList && lecture.linksList.length > 0 && (lecture.$buy || lecture.type.name == 'public')">
+          <a
+            *ngFor="let file of lecture.filesList"
+            href="{{file.$url}}"
+          >
+            <p class="file">
+              <span>{{file.url.name}}</span>
+              <span class="left"
+                >تنزيل الملف<ion-icon name="download-outline"></ion-icon
+              ></span>
+            </p>
+          </a>
+        </div>
 
         <div *ngIf="quiz && quiz.id">
           <p class="file">
@@ -94,7 +99,7 @@
   </div>
 </ion-content>
 
-<ion-modal  [isOpen]="buyModal">
+<!-- <ion-modal  [isOpen]="buyModal">
   <ng-template>
     <ion-header>
       <ion-toolbar>
@@ -126,36 +131,53 @@
       </ion-button>
     </ion-content>
   </ng-template>
-</ion-modal>
-<ion-modal [isOpen]="quizModal">
+</ion-modal> -->
+<ion-modal [isOpen]="buyModal">
   <ng-template>
     <ion-header>
       <ion-toolbar>
         <ion-title>إجراء إختبار</ion-title>
-        <ion-buttons slot="end">
-          <ion-button (click)="setOpen(false,'quizModal')">إغلاق</ion-button>
-        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <p class="timer">{{minute}} : {{secound}}</p>
       <ion-item *ngFor="let question of quiz.questionsList">
         <ion-card>
           <ion-card-header>
-            <ion-card-title>{{question.numbering}}</ion-card-title>
-            <ion-card-subtitle *ngIf="question.questionType.name=='text'"
-              >{{question.name}}</ion-card-subtitle
+            <ion-card-subtitle
+              class="right font-larger"
+              *ngIf="question.questionType.name=='text'"
+            >
+              {{question.name}}
+            </ion-card-subtitle>
+            <ion-img
+              class="zoom"
+              *ngIf="question.questionType.name=='photo'"
+              [src]="question.imageUrl"
+            >
+            </ion-img>
+            <ion-card-title class="right"
+              >{{question.numbering}}</ion-card-title
             >
           </ion-card-header>
 
           <ion-card-content>
-            Here's a small text description for the card content. Nothing more,
-            nothing less.
+            <ion-item
+              *ngFor="let answer of question.answersList; let i = index"
+            >
+              <ion-checkbox
+                (ionChange)="checkCorrect(question.answersList,i)"
+                justify="end"
+                [(ngModel)]="answer.userAnswer"
+                >{{answer.numbering}} - {{answer.name}}</ion-checkbox
+              >
+            </ion-item>
           </ion-card-content>
         </ion-card>
       </ion-item>
       <p class="error">{{error}}</p>
 
-      <ion-button (click)="buyLecture()" class="buy-button" expand="block">
+      <ion-button (click)="finishQuiz(quiz)" class="buy-button" expand="block">
         <ion-icon name="checkmark-done-outline"></ion-icon>
         إنهاء الإختبار
       </ion-button>

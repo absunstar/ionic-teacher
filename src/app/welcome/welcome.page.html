@@ -21,6 +21,17 @@
       <div class="cbh-ph-img-circle1 whatsappLogo"></div
     ></a>
   </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title class="center"
+        >{{isite.setting.textOurPlacesTimes}}</ion-card-title
+      >
+    </ion-card-header>
+
+    <ion-button expand="full" color="primary" [routerLink]="['/centers']"
+      >مواعيدنا و أماكنا <ion-icon name="location-outline"></ion-icon
+    ></ion-button>
+  </ion-card>
   <ion-img class="" [src]="isite.setting.footerLogoUrl"></ion-img>
   <p class="center">
     <a
@@ -92,5 +103,4 @@
       ><ion-icon name="logo-youtube"></ion-icon
     ></a>
   </p>
-  
 </ion-content>

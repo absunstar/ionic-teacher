@@ -1,0 +1,32 @@
+.main-row {
+  margin-bottom: 90px;
+}
+ion-card {
+  width: 100%;
+}
+
+ion-content {
+  top: 90px;
+}
+
+.day-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.time-day {
+  background: #2c87db;
+  display: inline-table;
+  color: white;
+  padding: 5px;
+  border-radius: 15px;
+  font-size: medium;
+  margin: 2px;
+}
+
+ion-card-content {
+  white-space: pre-wrap;
+}
+
+
