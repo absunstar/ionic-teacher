@@ -23,7 +23,8 @@
       ></a>
     </div>
     <div *ngIf="isite.userSession && isite.userSession.type == 'parent'">
-      <ion-card class="center" *ngFor="let student of studentsList">
+      <ion-card class="center" *ngFor="let student of studentsList"  [routerLink]="['/parent-report']"
+      [queryParams]="{id: student._id}">
         <img class="child-img" [src]="student.imageUrl" />
         <ion-card-header class="center">
           <ion-card-title>{{student.firstName}}</ion-card-title>

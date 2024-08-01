@@ -1,0 +1,40 @@
+.main-row {
+  margin-bottom: 90px;
+}
+
+ion-content {
+  top: 90px;
+}
+p {
+  margin-right: 10px;
+}
+.main-div {
+  width: 100%;
+}
+.white {
+  color: white;
+}
+.quiz-status {
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+}
+
+.quiz-status-done {
+  background: green;
+}
+
+.quiz-status-notdone {
+  background: red;
+}
+
+.quiz-status-notfound {
+  background: #2579bb;
+}
+
+.font-17 {
+  font-size: 17px;
+}
+.center {
+  text-align: center;
+}

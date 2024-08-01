@@ -1,0 +1,77 @@
+<ion-content [fullscreen]="true">
+  <ion-row class="main-row">
+    <div class="main-div" id="container">
+      <ion-card *ngFor="let lecture of lecturesList">
+        <ion-card-header>
+          <ion-card-title>{{lecture.name}}</ion-card-title>
+        </ion-card-header>
+        <div>
+          <p class="font-17">
+            حالة الإمتحان
+            <span class="quiz-status quiz-status-done" *ngIf="lecture.quiz.done"
+              >مكتمل</span
+            >
+            <span
+              class="quiz-status quiz-status-notdone"
+              *ngIf="!lecture.quiz.done && lecture.activateQuiz"
+              >غير مكتمل</span
+            >
+            <span
+              class="quiz-status quiz-status-notfound"
+              *ngIf="!lecture.activateQuiz"
+              >لا يوجد</span
+            >
+          </p>
+          <div *ngIf="lecture.quiz.done">
+            <p class="font-17">
+              مرات دخول الإمتحان
+              <span class="quiz-status quiz-status-notfound"
+                >{{lecture.quiz.timesEnterQuiz}}</span
+              >
+            </p>
+            <p class="font-17">
+              الدرجة
+              <span class="quiz-status quiz-status-notfound"
+                >{{lecture.quiz.userDegree}} %</span
+              >
+            </p>
+            <ion-row>
+              <ion-col class="font-17 center white quiz-status-notfound" size="4"> عدد الإسئلة </ion-col>
+              <ion-col class="font-17 center white quiz-status-notfound" size="4"
+                >الإجابات الصحيحة</ion-col
+              >
+              <ion-col class="font-17 center white quiz-status-notfound" size="4"
+                >الإجابات الخاطئة</ion-col
+              >
+            </ion-row>
+            <ion-row>
+              <ion-col class="font-17 center" size="4">
+                {{lecture.quiz.questionsCount}}
+              </ion-col>
+              <ion-col class="font-17 center" size="4"
+                >{{lecture.quiz.correctAnswers}}</ion-col
+              >
+              <ion-col class="font-17 center" size="4"
+                >{{lecture.quiz.wrongAnswers}}</ion-col
+              >
+            </ion-row>
+          </div>
+          <!-- <div ngIf="lecture.quiz.done">
+            <ion-row>
+              <ion-col>الدرجة</ion-col>
+              <ion-col>عدد الإسئلة</ion-col>
+              <ion-col>الإجابات الصحيحة</ion-col>
+              <ion-col>الإجابات الخاطئة</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>{{lecture.quiz.userDegree}}</ion-col>
+              <ion-col>{{lecture.quiz.questionsCount}}</ion-col>
+              <ion-col>{{lecture.quiz.correctAnswers}}</ion-col>
+              <ion-col>{{lecture.quiz.wrongAnswers}}</ion-col>
+            </ion-row>
+          </div> -->
+        </div>
+      </ion-card>
+    </div>
+  </ion-row>
+</ion-content>
