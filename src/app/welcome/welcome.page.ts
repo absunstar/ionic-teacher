@@ -69,12 +69,46 @@ import { IsiteService } from '../isite.service';
   ],
 })
 export class WelcomePage implements OnInit {
-
+  studentsList: [any] | undefined;
   constructor(public isite: IsiteService) {
     addIcons({ ...icons });
-   }
-
-  ngOnInit() {
   }
 
+  ngOnInit() {
+    console.log(
+      'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
+    );
+    console.log(this.isite.userSession);
+    if (this.isite.userSession && this.isite.userSession.type == 'parent') {
+      this.getParentsList();
+    }
+  }
+
+  getParentsList() {
+    this.isite
+      .api({
+        url: '/api/manageUsers/all',
+        body: {
+          where: {
+            'parent.id': this.isite.userSession.id,
+          },
+          select: {
+            id: 1,
+            firstName: 1,
+          },
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.isite.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.studentsList = res.list;
+        }
+      });
+  }
 }

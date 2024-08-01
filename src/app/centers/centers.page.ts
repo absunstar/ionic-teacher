@@ -80,7 +80,6 @@ export class CentersPage implements OnInit {
   centersList: [any] | undefined;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
     addIcons({ ...icons });
-
   }
 
   ngOnInit() {
@@ -112,15 +111,17 @@ export class CentersPage implements OnInit {
           },
         },
       })
-      .subscribe((res: any) => {
+      .subscribe(async (res: any) => {
         if (res.done) {
-           /*  res.list.forEach((_item: { locationSrc: string; latitude: any; longitude: any; }) => {
+          await res.list.forEach(
+            (_item: { locationSrc: string; latitude: any; longitude: any }) => {
               _item.locationSrc = `https://maps.google.com/maps?q=${_item.latitude},${_item.longitude}&hl=es;z=14&output=embed`;
-
-            }); */
-          this.centersList = res.list;
-          console.log(this.centersList);
-          
+            }
+          );
+          let done = await Promise.all(res.list);
+          if (done) {
+            this.centersList = res.list;
+          }
         }
       });
   }

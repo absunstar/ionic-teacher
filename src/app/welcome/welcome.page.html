@@ -1,106 +1,117 @@
 <ion-content [fullscreen]="true">
-  <ion-img
-    class=""
-    *ngIf="isite.setting.showBanner"
-    [src]="isite.setting.bannerUrl"
-  ></ion-img>
-  <div
-    class="phone-call cbh-phone cbh-green cbh-show cbh-static"
-    *ngIf="isite.setting.whatsapp"
-  >
-    <a
-      id="WhatsApp-button"
-      href="https://wa.me/{{isite.setting.whatsapp}}"
-      target="_blank"
-      class="phoneJs"
-      title="WhatsApp 360imagem"
+  <div class="main-div-welcome">
+    <ion-img
+      class=""
+      *ngIf="isite.setting.showBanner"
+      [src]="isite.setting.bannerUrl"
+    ></ion-img>
+    <div
+      class="phone-call cbh-phone cbh-green cbh-show cbh-static"
+      *ngIf="isite.setting.whatsapp"
     >
-      <p>التواصل مع الدعم</p>
-      <div class="cbh-ph-circle"></div>
-      <div class="cbh-ph-circle-fill"></div>
-      <div class="cbh-ph-img-circle1 whatsappLogo"></div
-    ></a>
-  </div>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title class="center"
-        >{{isite.setting.textOurPlacesTimes}}</ion-card-title
+      <a
+        id="WhatsApp-button"
+        href="https://wa.me/{{isite.setting.whatsapp}}"
+        target="_blank"
+        class="phoneJs"
+        title="WhatsApp 360imagem"
       >
-    </ion-card-header>
+        <p>التواصل مع الدعم</p>
+        <div class="cbh-ph-circle"></div>
+        <div class="cbh-ph-circle-fill"></div>
+        <div class="cbh-ph-img-circle1 whatsappLogo"></div
+      ></a>
+    </div>
+    <div *ngIf="isite.userSession && isite.userSession.type == 'parent'">
+      <ion-card class="center" *ngFor="let student of studentsList">
+        <img class="child-img" [src]="student.imageUrl" />
+        <ion-card-header class="center">
+          <ion-card-title>{{student.firstName}}</ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </div>
 
-    <ion-button expand="full" color="primary" [routerLink]="['/centers']"
-      >مواعيدنا و أماكنا <ion-icon name="location-outline"></ion-icon
-    ></ion-button>
-  </ion-card>
-  <ion-img class="" [src]="isite.setting.footerLogoUrl"></ion-img>
-  <p class="center">
-    <a
-      class="pages"
-      [routerLink]="['/pages-content']"
-      [queryParams]="{
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="center"
+          >{{isite.setting.textOurPlacesTimes}}</ion-card-title
+        >
+      </ion-card-header>
+
+      <ion-button expand="full" color="primary" [routerLink]="['/centers']"
+        >مواعيدنا و أماكنا <ion-icon name="location-outline"></ion-icon
+      ></ion-button>
+    </ion-card>
+    <ion-img class="" [src]="isite.setting.footerLogoUrl"></ion-img>
+    <p class="center">
+      <a
+        class="pages"
+        [routerLink]="['/pages-content']"
+        [queryParams]="{
         type: 'inviteFriends'
       }"
-      >أدع أصدقاءك</a
-    >
-    <a
-      class="pages"
-      [routerLink]="['/pages-content']"
-      [queryParams]="{
+        >أدع أصدقاءك</a
+      >
+      <a
+        class="pages"
+        [routerLink]="['/pages-content']"
+        [queryParams]="{
         type: 'joinUs'
       }"
-      >إنضم إلينا</a
-    >
-    <a
-      class="pages"
-      [routerLink]="['/pages-content']"
-      [queryParams]="{
+        >إنضم إلينا</a
+      >
+      <a
+        class="pages"
+        [routerLink]="['/pages-content']"
+        [queryParams]="{
       type: 'usageAgreement'
     }"
-      >إتفاقية الإستخدام</a
-    >
-    <a
-      class="pages"
-      [routerLink]="['/pages-content']"
-      [queryParams]="{
+        >إتفاقية الإستخدام</a
+      >
+      <a
+        class="pages"
+        [routerLink]="['/pages-content']"
+        [queryParams]="{
     type: 'privacyPolicy'
   }"
-      >سياسة الخصوصية</a
-    >
-  </p>
-  <p class="center">
-    <a
-      *ngIf="isite.setting.facebookAccount"
-      class="social-logo facebook-logo"
-      href="https://www.facebook.com/{{ isite.setting.facebookAccount }}"
-      ><ion-icon name="logo-facebook"></ion-icon
-    ></a>
-    <a
-      *ngIf="isite.setting.twitterAccouunt"
-      class="social-logo twitter-logo"
-      href="https://www.twitter.com/{{ isite.setting.twitterAccouunt }}"
-      ><ion-icon name="logo-twitter"></ion-icon
-    ></a>
-    <a
-      *ngIf="isite.setting.instagramAccouunt"
-      class="social-logo instagram-logo"
-      href="https://www.instagram.com/{{
+        >سياسة الخصوصية</a
+      >
+    </p>
+    <p class="center">
+      <a
+        *ngIf="isite.setting.facebookAccount"
+        class="social-logo facebook-logo"
+        href="https://www.facebook.com/{{ isite.setting.facebookAccount }}"
+        ><ion-icon name="logo-facebook"></ion-icon
+      ></a>
+      <a
+        *ngIf="isite.setting.twitterAccouunt"
+        class="social-logo twitter-logo"
+        href="https://www.twitter.com/{{ isite.setting.twitterAccouunt }}"
+        ><ion-icon name="logo-twitter"></ion-icon
+      ></a>
+      <a
+        *ngIf="isite.setting.instagramAccouunt"
+        class="social-logo instagram-logo"
+        href="https://www.instagram.com/{{
           isite.setting.instagramAccouunt
         }}"
-      ><ion-icon name="logo-instagram"></ion-icon
-    ></a>
-    <a
-      *ngIf="isite.setting.linkedinAccouunt"
-      class="social-logo linkedin-logo"
-      href="https://www.linkedin.com/in/{{
+        ><ion-icon name="logo-instagram"></ion-icon
+      ></a>
+      <a
+        *ngIf="isite.setting.linkedinAccouunt"
+        class="social-logo linkedin-logo"
+        href="https://www.linkedin.com/in/{{
           isite.setting.linkedinAccouunt
         }}"
-      ><ion-icon name="logo-linkedin"></ion-icon
-    ></a>
-    <a
-      *ngIf="isite.setting.youTubeAccouunt"
-      class="social-logo youtube-logo"
-      href="https://www.youtube.com/{{ isite.setting.youTubeAccouunt }}"
-      ><ion-icon name="logo-youtube"></ion-icon
-    ></a>
-  </p>
+        ><ion-icon name="logo-linkedin"></ion-icon
+      ></a>
+      <a
+        *ngIf="isite.setting.youTubeAccouunt"
+        class="social-logo youtube-logo"
+        href="https://www.youtube.com/{{ isite.setting.youTubeAccouunt }}"
+        ><ion-icon name="logo-youtube"></ion-icon
+      ></a>
+    </p>
+  </div>
 </ion-content>

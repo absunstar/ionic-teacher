@@ -14,17 +14,14 @@
       <ion-card-content>
         {{center.address}}
       </ion-card-content>
-      <ion-row>
-        <ion-col size="6">
+      <div>
           <ion-button color="light" href="tel:{{center.mobile}}" expand="block">
             {{center.mobile}}
             <ion-icon name="phone-portrait-outline"></ion-icon>
           </ion-button>
-        </ion-col>
-        <ion-col size="6">
-         <!--  <iframe height="100px" id="location_{{center.id}}" src="{{center.locationSrc}}"></iframe> -->
-        </ion-col>
-      </ion-row>
+     
+          <iframe height="100px" id="location_{{center.id}}" src="https://maps.google.com/maps?q=30.158500279397636,31.71053601170482&hl=es;z=14&output=embed"></iframe>
+      </div>
     </ion-card>
   </ion-row>
 </ion-content>

@@ -155,23 +155,9 @@ export class PackageViewPage implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.done) {
-          res.doc.imageUrl = res.doc.image
-            ? this.isite.baseURL + res.doc.image.url
-            : '';
-          res.doc.lecturesList = res.doc.lecturesList || [];
-
-          res.doc.lecturesList.forEach(
-            (_element: {
-              lecture: any;
-              imageUrl: string;
-            }) => {
-              _element.imageUrl =
-                _element.lecture && _element.lecture.image
-                  ? this.isite.baseURL + _element.lecture.image.url
-                  : '';
-            }
-          );
-          this.package = res.doc;
+          this.route.queryParams.forEach((p) => {
+            this.getPackage(p['id']);
+          });
           this.quizModal = false;
         } else {
           this.error = res.error;

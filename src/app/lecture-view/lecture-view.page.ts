@@ -119,6 +119,7 @@ export class LectureViewPage implements OnInit {
         url: '/api/lectures/view',
         body: {
           _id: _id,
+          type : 'toStudent'
         },
       })
       .subscribe((res: any) => {
