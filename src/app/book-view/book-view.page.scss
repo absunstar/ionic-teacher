@@ -63,7 +63,17 @@
   .red {
     color: red;
   }
-  
+  .code {
+    display: block;
+    font-weight: bold;
+    font-size: 23px;
+    margin-right: 10px;
+    padding: 10px;
+  }
+  .code-text {
+    color: gray;
+    user-select: all;
+  }
   .text-description {
     color: #5a6257;
     font-size: 24px;

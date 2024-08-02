@@ -77,7 +77,7 @@ import { IsiteService } from '../isite.service';
   ],
 })
 export class CentersPage implements OnInit {
-  centersList: [any] | undefined;
+  centersList: [any] = [{}];
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
     addIcons({ ...icons });
   }
@@ -86,7 +86,7 @@ export class CentersPage implements OnInit {
     this.getCenters();
   }
   async getCenters() {
-    this.centersList = undefined;
+    this.centersList = [{}];
     this.isite
       .api({
         url: '/api/centers/all',
@@ -113,15 +113,33 @@ export class CentersPage implements OnInit {
       })
       .subscribe(async (res: any) => {
         if (res.done) {
-          await res.list.forEach(
-            (_item: { locationSrc: string; latitude: any; longitude: any }) => {
-              _item.locationSrc = `https://maps.google.com/maps?q=${_item.latitude},${_item.longitude}&hl=es;z=14&output=embed`;
-            }
-          );
-          let done = await Promise.all(res.list);
-          if (done) {
-            this.centersList = res.list;
-          }
+          this.centersList = res.list;
+          setTimeout(() => {
+            res.list.forEach(
+              (
+                _item: {
+                  id: Number;
+                  locationSrc: string;
+                  latitude: any;
+                  longitude: any;
+                },
+                i: number
+              ) => {
+                this.centersList[
+                  i
+                ].locationSrc = `https://maps.google.com/maps?q=${_item.latitude},${_item.longitude}&hl=es;z=14&output=embed`;
+                let iframe = document.querySelector(
+                  '#location_' + _item.id.toString()
+                );
+                if (iframe) {
+                  iframe.setAttribute(
+                    'src',
+                    `https://maps.google.com/maps?q=${_item.latitude},${_item.longitude}&hl=es;z=14&output=embed`
+                  );
+                }
+              }
+            );
+          }, 1000);
         }
       });
   }

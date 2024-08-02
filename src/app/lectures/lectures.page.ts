@@ -82,21 +82,13 @@ export class LecturesPage implements OnInit {
     this.getLectures();
     })
   }
-  async getLectures() {
+  async getLectures() {    
       this.lecturesList = undefined;
       this.isite
         .api({
-          url: '/api/lectures/all',
+          url: '/api/lectures/allToStudent',
           body: {
             type: this.type,
-            select: {
-              id: 1,
-              _id: 1,
-              name: 1,
-              price: 1,
-              description: 1,
-              image: 1,
-            },
             search: this.search,
             where: {},
           },

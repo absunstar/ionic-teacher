@@ -1,20 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Preferences } from '@capacitor/preferences';
-
+import {
+  NavController,
+  MenuController,
+  AlertController,
+  ToastController,
+  LoadingController,
+} from '@ionic/angular';
 @Injectable({
   providedIn: 'root',
 })
 export class IsiteService {
-  accessToken: string = '';
+  studentList: any;
+  accessToken: string | null = '';
   setting: any;
   userSession: any;
-  
   baseURL: string = 'http://professional.localhost';
-  constructor(public http: HttpClient) {
+  constructor(public http: HttpClient, public loadingCtrl: LoadingController) {
+    this.start();
     this.setting = {
       teacher: {},
-      textOurPlacesTimes : '',
+      textOurPlacesTimes: '',
       email: '',
       host: '',
       whatsapp: '',
@@ -73,17 +80,34 @@ export class IsiteService {
     }
   }
 
+  async start() {
+    const loader = await this.loadingCtrl.create({
+      message: ' انتظر قليلا - جاري التحميل',
+    });
+
+    await loader.present();
+    if (!this.accessToken) {
+      this.accessToken =
+        (await (await Preferences.get({ key: 'accessToken' })).value) || null;
+    }
+
+    this.getUserSession(() => {      
+      if (this.userSession && this.userSession.type == 'parent') {
+        this.getParentsList();
+      }
+      loader.dismiss();
+    });
+  }
+
   async getUserSession(callback: () => void) {
     this.api({
       url: '/x-api/session',
       body: {},
     }).subscribe((resUserSession: any) => {
-      if (callback) {
-        callback();
-      }
+    
       if (resUserSession.session.accessToken) {
         this.accessToken = resUserSession.session.accessToken;
-        Preferences.set({ key: 'accessToken', value: this.accessToken });
+        Preferences.set({ key: 'accessToken', value: this.accessToken ||'' });
       }
 
       if (resUserSession.done) {
@@ -110,8 +134,36 @@ export class IsiteService {
             educationalLevel: resUserSession.session.user.educationalLevel,
             address: resUserSession.session.user.address,
           };
-          
         }
+      }
+      if (callback) {
+        callback();
+      }
+    });
+  }
+
+  async getParentsList() {
+    this.api({
+      url: '/api/manageUsers/all',
+      body: {
+        where: {
+          'parent.id': this.userSession.id,
+        },
+        select: {
+          id: 1,
+          firstName: 1,
+        },
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {        
+        res.list.forEach(
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image
+              ? this.baseURL + element.image.url
+              : '';
+          }
+        );
+        this.studentList = res.list;
       }
     });
   }
@@ -129,11 +181,7 @@ export class IsiteService {
         this.setting.bannerUrl = this.setting.banner
           ? this.baseURL + this.setting.banner.url
           : '';
-          
       }
     });
   }
-
-
- 
 }

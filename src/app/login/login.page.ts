@@ -76,7 +76,7 @@ import { IsiteService } from '../isite.service';
 })
 export class LoginPage implements OnInit {
   user;
-  error : string | undefined
+  error: string | undefined;
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
@@ -110,6 +110,12 @@ export class LoginPage implements OnInit {
         }
         if (resUser.done) {
           this.isite.getUserSession(() => {
+            if (
+              this.isite.userSession &&
+              this.isite.userSession.type == 'parent'
+            ) {
+              this.isite.getParentsList();
+            }
             this.close();
             this.router.navigateByUrl('/welcome', { replaceUrl: true });
           });

@@ -15,6 +15,10 @@
             <span class="green"> {{package.price}} ج.م</span>
             <s class="red"> {{package.totalLecturesPrice}} </s>
           </ion-text>
+          <ion-text class="code">
+            <span>الكود #</span>
+            <span class="code-text"> {{package.code}}</span>
+          </ion-text>
         </div>
         <ion-text>
           <p class="text-description">{{package.description}}</p>
@@ -28,7 +32,7 @@
             <ion-item
               *ngFor="let lec of package.lecturesList"
               [routerLink]="['/lecture-view']"
-              [queryParams]="{id: lec._id}"
+              [queryParams]="{id: lec.lecture._id}"
             >
               <ion-thumbnail slot="start">
                 <img alt="Silhouette of mountains" [src]="lec.imageUrl" />

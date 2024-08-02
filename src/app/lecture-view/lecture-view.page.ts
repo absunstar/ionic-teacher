@@ -95,6 +95,7 @@ export class LectureViewPage implements OnInit {
       lecturesList: [],
     };
     this.buyModal = false;
+    this.quizModal = false;
     this.minute = 0;
     this.secound = 0;
     this.route.queryParams.forEach((p) => {
@@ -116,10 +117,9 @@ export class LectureViewPage implements OnInit {
     this.lecture = {};
     this.isite
       .api({
-        url: '/api/lectures/view',
+        url: '/api/lectures/viewToStudent',
         body: {
           _id: _id,
-          type : 'toStudent'
         },
       })
       .subscribe((res: any) => {
@@ -147,7 +147,6 @@ export class LectureViewPage implements OnInit {
         .api({
           url: '/api/quizzes/viewByUserLecture',
           body: {
-            'user.id': this.isite.userSession.id,
             'lecture._id': _id,
           },
         })
@@ -168,9 +167,7 @@ export class LectureViewPage implements OnInit {
           body: {
             where: {
               'lecture.id': this.lecture.id,
-              'user.id': this.isite.userSession.id,
             },
-            lectureId: this.lecture.id,
           },
         })
         .subscribe((res: any) => {
@@ -212,7 +209,7 @@ export class LectureViewPage implements OnInit {
             this.startQuizTime('finish');
 
             this.quiz = res.doc;
-            this.buyModal = false;
+            this.quizModal = false;
           } else {
             this.error = res.error;
           }
@@ -224,7 +221,7 @@ export class LectureViewPage implements OnInit {
     this.minute = this.lecture.quizDuration - 1 || 0;
     this.secound = 59;
     if (type == 'start') {
-      this.buyModal = true;
+      this.quizModal = true;
     }
     const timeQuizInterval = setInterval(() => {
       if (type == 'finish') {

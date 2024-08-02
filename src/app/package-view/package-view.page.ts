@@ -80,7 +80,6 @@ export class PackageViewPage implements OnInit {
   code: string | undefined;
   error: string | undefined;
   buyModal: any;
-  quizModal: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
     this.package = {
       lecturesList: [],
@@ -158,7 +157,7 @@ export class PackageViewPage implements OnInit {
           this.route.queryParams.forEach((p) => {
             this.getPackage(p['id']);
           });
-          this.quizModal = false;
+          this.buyModal = false;
         } else {
           this.error = res.error;
         }

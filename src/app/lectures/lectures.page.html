@@ -1,49 +1,44 @@
-
-
 <ion-content [fullscreen]="true">
   <ion-row class="main-row">
+    <ion-row class="full-width">
+      <ion-col size="9">
+        <ion-list>
+          <ion-item>
+            <ion-input
+              label="بحث شامل"
+              [clearInput]="true"
+              labelPlacement="stacked"
+              placeholder="بحث"
+              [(ngModel)]="search"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="2">
+        <br />
+        <ion-button (click)="getLectures()" color="secondary">بحث</ion-button>
+      </ion-col>
+    </ion-row>
 
-  <ion-row>
-    <ion-col size="9">
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label="بحث شامل"
-            [clearInput]="true"
-            labelPlacement="stacked"
-            placeholder="بحث"
-            [(ngModel)]="search"
-          ></ion-input>
-        </ion-item>
-      </ion-list>
-    </ion-col>
-    <ion-col size="2">
-      <br>
-      <ion-button (click)="getLectures()" color="secondary">بحث</ion-button>
-    </ion-col>
+    <div id="container" class="full-width">
+      <a
+        *ngFor="let lecture of lecturesList"
+        [routerLink]="['/lecture-view']"
+        [queryParams]="{id: lecture._id}"
+      >
+        <figure class="image-block">
+          <p class="name">{{lecture.name}}</p>
+          <ion-img [src]="lecture.imageUrl"> </ion-img>
+
+          <figcaption>
+            <p>{{lecture.description}}</p>
+            <div class="row price-more-card">
+              <i class="price">ج.م {{lecture.price}} </i>
+              <span class="more-card"> المزيد..</span>
+            </div>
+          </figcaption>
+        </figure>
+      </a>
+    </div>
   </ion-row>
-
-  <div id="container">
-
-    <a
-    *ngFor="let lecture of lecturesList"
-    [routerLink]="['/lecture-view']"
-    [queryParams]="{id: lecture._id}"
-  >
-    <figure class="image-block">
-      <p class="name">{{lecture.name}}</p>
-      <ion-img [src]="lecture.imageUrl"> </ion-img>
-      
-      <figcaption>
-        <p>{{lecture.description}}</p>
-        <div class="row price-more-card">
-          <i class="price">ج.م {{lecture.price}} </i>
-          <span class="more-card"> المزيد..</span>
-        </div>
-      </figcaption>
-    </figure>
-  </a>
-  </div>
-</ion-row>
-
 </ion-content>

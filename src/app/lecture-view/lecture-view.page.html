@@ -14,6 +14,11 @@
             <span>السعر</span>
             <span class="green"> {{lecture.price}} ج.م</span>
           </ion-text>
+
+          <ion-text class="code">
+            <span>الكود #</span>
+            <span class="code-text"> {{lecture.code}}</span>
+          </ion-text>
         </div>
         <ion-text>
           <p class="text-description">{{lecture.description}}</p>
@@ -45,11 +50,10 @@
             </ion-list>
           </ion-card-content>
         </ion-card>
-        <div *ngIf="lecture.linksList && lecture.linksList.length > 0 && (lecture.$buy || lecture.type.name == 'public')">
-          <a
-            *ngFor="let file of lecture.filesList"
-            href="{{file.$url}}"
-          >
+        <div
+          *ngIf="lecture.linksList && lecture.linksList.length > 0 && (lecture.$buy || lecture.type.name == 'public')"
+        >
+          <a *ngFor="let file of lecture.filesList" href="{{file.$url}}">
             <p class="file">
               <span>{{file.url.name}}</span>
               <span class="left"
@@ -99,7 +103,7 @@
   </div>
 </ion-content>
 
-<!-- <ion-modal  [isOpen]="buyModal">
+<ion-modal [isOpen]="buyModal">
   <ng-template>
     <ion-header>
       <ion-toolbar>
@@ -131,8 +135,8 @@
       </ion-button>
     </ion-content>
   </ng-template>
-</ion-modal> -->
-<ion-modal [isOpen]="buyModal">
+</ion-modal>
+<ion-modal [isOpen]="quizModal">
   <ng-template>
     <ion-header>
       <ion-toolbar>
