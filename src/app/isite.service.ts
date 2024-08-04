@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Preferences } from '@capacitor/preferences';
+import { Router } from '@angular/router';
 import {
   NavController,
   MenuController,
@@ -13,11 +14,17 @@ import {
 })
 export class IsiteService {
   studentList: any;
+  teacherList: any;
   accessToken: string | null = '';
   setting: any;
   userSession: any;
-  baseURL: string = 'http://professional.localhost';
-  constructor(public http: HttpClient, public loadingCtrl: LoadingController) {
+  session: any;
+  baseURL: string = 'http://sh.localhost';
+  constructor(
+    public http: HttpClient,
+    public loadingCtrl: LoadingController,
+    private router: Router
+  ) {
     this.start();
     this.setting = {
       teacher: {},
@@ -91,7 +98,7 @@ export class IsiteService {
         (await (await Preferences.get({ key: 'accessToken' })).value) || null;
     }
 
-    this.getUserSession(() => {      
+    this.getUserSession(() => {
       if (this.userSession && this.userSession.type == 'parent') {
         this.getParentsList();
       }
@@ -103,41 +110,101 @@ export class IsiteService {
     this.api({
       url: '/x-api/session',
       body: {},
-    }).subscribe((resUserSession: any) => {
-    
-      if (resUserSession.session.accessToken) {
-        this.accessToken = resUserSession.session.accessToken;
-        Preferences.set({ key: 'accessToken', value: this.accessToken ||'' });
+    }).subscribe((resSession: any) => {
+      this.session = resSession.session;
+      if (resSession.session.accessToken) {
+        this.accessToken = resSession.session.accessToken;
+        Preferences.set({ key: 'accessToken', value: this.accessToken || '' });
       }
 
-      if (resUserSession.done) {
-        if (resUserSession.session.user) {
+      if (resSession.done) {
+        if (resSession.session.user) {
           // this.updateVisit();
 
           this.userSession = {
-            id: resUserSession.session.user.id,
-            _id: resUserSession.session.user._id,
-            email: resUserSession.session.user.email,
-            mobile: resUserSession.session.user.mobile,
-            firstName: resUserSession.session.user.firstName,
-            lastName: resUserSession.session.user.lastName,
-            imageUrl: resUserSession.session.user.image
-              ? this.baseURL + resUserSession.session.user.image.url
+            id: resSession.session.user.id,
+            _id: resSession.session.user._id,
+            email: resSession.session.user.email,
+            mobile: resSession.session.user.mobile,
+            firstName: resSession.session.user.firstName,
+            lastName: resSession.session.user.lastName,
+            imageUrl: resSession.session.user.image
+              ? this.baseURL + resSession.session.user.image.url
               : '',
-            type: resUserSession.session.user.type,
-            notificationsCount: resUserSession.session.user.notificationsCount,
-            notificationsList: resUserSession.session.user.notificationsList,
-            booksList: resUserSession.session.user.booksList,
-            lecturesList: resUserSession.session.user.lecturesList,
-            packagesList: resUserSession.session.user.packagesList,
-            schoolYear: resUserSession.session.user.schoolYear,
-            educationalLevel: resUserSession.session.user.educationalLevel,
-            address: resUserSession.session.user.address,
+            type: resSession.session.user.type,
+            notificationsCount: resSession.session.user.notificationsCount,
+            notificationsList: resSession.session.user.notificationsList,
+            booksList: resSession.session.user.booksList,
+            lecturesList: resSession.session.user.lecturesList,
+            packagesList: resSession.session.user.packagesList,
+            schoolYear: resSession.session.user.schoolYear,
+            educationalLevel: resSession.session.user.educationalLevel,
+            address: resSession.session.user.address,
           };
         }
       }
       if (callback) {
         callback();
+      }
+    });
+  }
+  async selectTeacher(id: any) {
+    this.api({
+      url: '/api/selectTeacher',
+      body: id,
+    }).subscribe((res: any) => {
+      if (res.done) {
+        this.getUserSession(() => {          
+          this.router.navigateByUrl('/welcome', {
+            replaceUrl: true,
+          });
+        });
+      }
+    });
+  }
+
+  async exitTeacher() {
+    this.api({
+      url: '/api/exitTeacher',
+      body: {},
+    }).subscribe((res: any) => {
+      if (res.done) {
+        this.getUserSession(() => {          
+          this.router.navigateByUrl('/welcome', {
+            replaceUrl: true,
+          });
+        });
+      }
+    });
+  }
+
+  async getTeachersList() {
+    this.api({
+      url: '/api/manageUsers/all',
+      body: {
+        where: {
+          type: 'teacher',
+        },
+        limit: 9,
+        select: {
+          id: 1,
+          firstName: 1,
+          lastName: 1,
+          image: 1,
+          title: 1,
+          bio: 1,
+        },
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {
+        res.list.forEach(
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image
+              ? this.baseURL + element.image.url
+              : '';
+          }
+        );
+        this.teacherList = res.list;
       }
     });
   }
@@ -155,7 +222,7 @@ export class IsiteService {
         },
       },
     }).subscribe((res: any) => {
-      if (res.done) {        
+      if (res.done) {
         res.list.forEach(
           (element: { imageUrl: string; image: { url: string } }) => {
             element.imageUrl = element.image
@@ -181,6 +248,9 @@ export class IsiteService {
         this.setting.bannerUrl = this.setting.banner
           ? this.baseURL + this.setting.banner.url
           : '';
+      }
+      if (this.setting.isShared) {
+        this.getTeachersList();
       }
     });
   }

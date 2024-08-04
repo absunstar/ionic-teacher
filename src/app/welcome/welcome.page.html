@@ -22,10 +22,32 @@
         <div class="cbh-ph-img-circle1 whatsappLogo"></div
       ></a>
     </div>
+    <div *ngIf="isite.setting.isShared && isite.session && !isite.session.selectedTeacherId">
+      <div class="banner-word">
+        <span> المدرسين </span>
+        <a class="banner-viewAll" [routerLink]="['/teachers']">مشاهدة الكل</a>
+      </div>
+      <ion-card
+        class="center"
+        *ngFor="let teacher of isite.teacherList"
+        (click)="isite.selectTeacher(teacher.id)"
+      >
+        <img class="circle-img" [src]="teacher.imageUrl" />
+        <ion-card-header class="center">
+          <ion-card-title>{{teacher.firstName}}</ion-card-title>
+        </ion-card-header>
+        <p>{{teacher.title}}</p>
+        <p>{{teacher.bio}}</p>
+      </ion-card>
+    </div>
     <div *ngIf="isite.userSession && isite.userSession.type == 'parent'">
-      <ion-card class="center" *ngFor="let student of isite.studentList"  [routerLink]="['/parent-report']"
-      [queryParams]="{id: student._id}">
-        <img class="child-img" [src]="student.imageUrl" />
+      <ion-card
+        class="center"
+        *ngFor="let student of isite.studentList"
+        [routerLink]="['/parent-report']"
+        [queryParams]="{id: student._id}"
+      >
+        <img class="circle-img" [src]="student.imageUrl" />
         <ion-card-header class="center">
           <ion-card-title>{{student.firstName}}</ion-card-title>
         </ion-card-header>
@@ -39,7 +61,7 @@
         >
       </ion-card-header>
 
-      <ion-button expand="full" color="primary" [routerLink]="['/centers']"
+      <ion-button expand="block" color="primary" [routerLink]="['/centers']"
         >مواعيدنا و أماكنا <ion-icon name="location-outline"></ion-icon
       ></ion-button>
     </ion-card>

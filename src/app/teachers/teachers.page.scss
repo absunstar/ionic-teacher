@@ -1,0 +1,46 @@
+.main-row {
+  margin-bottom: 90px;
+}
+ion-item {
+  margin: 5%;
+  ion-img {
+    width: 20vw;
+    height: 20vh;
+    display: block;
+  }
+  ion-label {
+    display: block;
+    width: 100vw;
+    text-align: center;
+    line-height: 1.8;
+  }
+}
+ion-content {
+  top: 90px;
+}
+.full-width {
+  width: 100%;
+}
+ion-card-header {
+  padding: 5px;
+}
+.banner-word {
+  background: #dfdfdf;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 15px;
+}
+.banner-word span {
+  font-size: xx-large;
+  font-weight: bold;
+}
+.banner-word a {
+  float: left;
+  font-size: larger;
+}
+.circle-img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+  }
+  

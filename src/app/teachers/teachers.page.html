@@ -1,0 +1,37 @@
+<ion-content [fullscreen]="true">
+  <ion-row class="main-row">
+    <ion-row class="full-width">
+      <ion-col size="9">
+        <ion-list>
+          <ion-item>
+            <ion-input
+              label="بحث شامل"
+              labelPlacement="stacked"
+              [clearInput]="true"
+              placeholder="بحث"
+              [(ngModel)]="search"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="2">
+        <br />
+        <ion-button (click)="getTeachers()" color="secondary">بحث</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <div id="container" class="full-width">
+      <ion-card
+        class="center"
+        *ngFor="let teacher of teacherList"
+      >
+        <img class="circle-img" [src]="teacher.imageUrl" />
+        <ion-card-header class="center">
+          <ion-card-title>{{teacher.firstName}}</ion-card-title>
+        </ion-card-header>
+        <p>{{teacher.title}}</p>
+        <p>{{teacher.bio}}</p>
+      </ion-card>
+    </div>
+  </ion-row>
+</ion-content>
