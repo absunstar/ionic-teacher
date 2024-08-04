@@ -320,7 +320,6 @@ export class LectureViewPage implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.done) {
-          this.videoId = res.videoId;
           this.videoModal = true;
           setTimeout(() => {
             let iframe = document.querySelector('#video_' + this.videoCode);
@@ -328,7 +327,7 @@ export class LectureViewPage implements OnInit {
             if (iframe) {
               iframe.setAttribute(
                 'src',
-                `https://www.youtube.com/embed/${this.videoId}`
+                `${this.isite.baseURL}/view-video?code=${this.videoCode}&id=${this.lecture._id}`,
               );
             }
           }, 1000);
