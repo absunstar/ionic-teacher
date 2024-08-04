@@ -84,10 +84,13 @@ import { IsiteService } from '../isite.service';
 export class LectureViewPage implements OnInit {
   lecture: any;
   quiz: any;
+  videoId: any;
+  videoCode: any;
   code: string | undefined;
   error: string | undefined;
   quizModal: Boolean | undefined;
   buyModal: Boolean;
+  videoModal: Boolean | undefined;
   minute!: number;
   secound!: number;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
@@ -96,6 +99,7 @@ export class LectureViewPage implements OnInit {
     };
     this.buyModal = false;
     this.quizModal = false;
+    this.videoModal = false;
     this.minute = 0;
     this.secound = 0;
     this.route.queryParams.forEach((p) => {
@@ -245,6 +249,9 @@ export class LectureViewPage implements OnInit {
     } else if (id == 'quizModal') {
       this.quizModal = type;
     }
+    else if (id == 'videoModal') {
+      this.videoModal = type;
+    }
   }
 
   checkCorrect(answersList: any, index: any) {
@@ -276,6 +283,55 @@ export class LectureViewPage implements OnInit {
             this.getLecture(p['id']);
           });
           this.buyModal = false;
+        } else {
+          this.error = res.error;
+        }
+      });
+  }
+
+  async openVideo(link: any) {
+    this.error = '';
+    this.videoId = '';
+    this.videoCode = link.code;
+    this.isite
+      .api({
+        url: '/api/lectures/changeViewMobile',
+        body: {
+          code: link.code,
+          _id: this.lecture._id,
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          this.viewVideo();
+        } else {
+          this.error = res.error;
+        }
+      });
+  }
+  async viewVideo() {
+    this.isite
+      .api({
+        url: '/api/lectures/view-video',
+        body: {
+          _id: this.lecture._id,
+          code: this.videoCode,
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          this.videoId = res.videoId;
+          this.videoModal = true;
+          setTimeout(() => {
+            let iframe = document.querySelector('#video_' + this.videoCode);
+            
+            if (iframe) {
+              iframe.setAttribute(
+                'src',
+                `https://www.youtube.com/embed/${this.videoId}`
+              );
+            }
+          }, 1000);
         } else {
           this.error = res.error;
         }

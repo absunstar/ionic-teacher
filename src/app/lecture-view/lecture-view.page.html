@@ -33,7 +33,7 @@
                 class="item-link"
                 *ngFor="let link of lecture.linksList"
               >
-                <ion-button expand="block"
+                <ion-button expand="block" (click)="openVideo(link)"
                   >{{link.name}} <ion-icon name="eye-outline"></ion-icon>
                 </ion-button>
                 <ion-label *ngIf="lecture.typeExpiryView.name == 'number'"
@@ -102,7 +102,26 @@
     </ion-button>
   </div>
 </ion-content>
+<ion-modal [isOpen]="videoModal">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button (click)="setOpen(false,'videoModal')">إغلاق</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
 
+      <iframe
+        id="video_{{videoCode}}"
+        width="100%"
+        height="100%"
+      ></iframe>
+      <p class="error">{{error}}</p>
+    </ion-content>
+  </ng-template>
+</ion-modal>
 <ion-modal [isOpen]="buyModal">
   <ng-template>
     <ion-header>

@@ -19,7 +19,7 @@ export class IsiteService {
   setting: any;
   userSession: any;
   session: any;
-  baseURL: string = 'http://sh.localhost';
+  baseURL: string = 'http://professional.localhost';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,
@@ -249,6 +249,7 @@ export class IsiteService {
           ? this.baseURL + this.setting.banner.url
           : '';
       }
+      
       if (this.setting.isShared) {
         this.getTeachersList();
       }
