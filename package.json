@@ -1,8 +1,8 @@
 {
-  "name": "Teacher",
+  "name": "teacher",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Smart Code",
+  "homepage": "https://professional.teacher.egytag.com/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
+    "@capacitor/android": "6.1.1",
     "@capacitor/app": "6.0.0",
     "@capacitor/camera": "^6.0.1",
     "@capacitor/core": "6.1.1",
@@ -63,5 +64,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.4.0"
   },
-  "description": "An Ionic project"
+  "description": "Teacher Platform For learning"
 }
