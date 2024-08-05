@@ -93,6 +93,12 @@ export class AppComponent {
     addIcons({ ...icons });
     this.enablePrivacyScreen();
     this.isite.getSetting();
+    PrivacyScreen.addListener('screenRecordingStarted', () => {
+      this.doLogout();
+    });
+    PrivacyScreen.addListener('screenshotTaken', () => {
+      this.doLogout();
+    });
   }
   async enablePrivacyScreen() {
     await PrivacyScreen.enable();
@@ -104,7 +110,24 @@ export class AppComponent {
     });
     await modal.present();
   }
-
+  async doLogout() {
+    this.isite
+      .api({
+        url: '/api/user/logout',
+      })
+      .subscribe((resUser: any) => {
+        if (resUser.accessToken) {
+          this.isite.accessToken = '';
+        }
+        if (resUser.done) {
+          this.isite.userSession = null;
+          this.isite.getUserSession(() => {
+            this.router.navigateByUrl('/', { replaceUrl: true });
+          });
+        } else {
+        }
+      });
+  }
   async logout() {
     const alert = await this.alertController.create({
       header: 'تأكيد تسجيل الخروج',
@@ -117,31 +140,12 @@ export class AppComponent {
         {
           text: 'OK',
           role: 'confirm',
-          handler: () => {
-            this.isite
-              .api({
-                url: '/api/user/logout',
-              })
-              .subscribe((resUser: any) => {
-                if (resUser.accessToken) {
-                  this.isite.accessToken = '';
-                }
-                if (resUser.done) {
-                  this.isite.userSession = null;
-                  this.isite.getUserSession(() => {
-                    this.router.navigateByUrl('/', { replaceUrl: true });
-                  });
-                } else {
-                }
-              });
-          },
+          handler: this.doLogout,
         },
       ],
     });
 
     await alert.present();
-
-    const { role } = await alert.onDidDismiss();
   }
 
   async hideMenu() {
