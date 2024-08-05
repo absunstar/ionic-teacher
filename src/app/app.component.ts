@@ -5,6 +5,7 @@ import { ModalController } from '@ionic/angular/standalone';
 import { LoginPage } from './login/login.page';
 import { ActivatedRoute } from '@angular/router';
 import { menuController } from '@ionic/core';
+import { PrivacyScreen } from '@capacitor-community/privacy-screen';
 
 import {
   NavController,
@@ -90,8 +91,11 @@ export class AppComponent {
     private alertController: AlertController
   ) {
     addIcons({ ...icons });
-
+    this.enablePrivacyScreen();
     this.isite.getSetting();
+  }
+  async enablePrivacyScreen() {
+    await PrivacyScreen.enable();
   }
   async login() {
     const modal = await this.modalCtrl.create({
@@ -141,7 +145,6 @@ export class AppComponent {
   }
 
   async hideMenu() {
-   
     this.menuCtrl.enable(false);
   }
 }
