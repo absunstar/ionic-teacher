@@ -166,3 +166,11 @@ a {
   white-space: inherit;
   border-radius: 10px;
 }
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
+}

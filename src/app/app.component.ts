@@ -4,12 +4,11 @@ import { RouterLink, Router, RouterLinkActive } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
 import { LoginPage } from './login/login.page';
 import { ActivatedRoute } from '@angular/router';
-import { menuController } from '@ionic/core';
 import { PrivacyScreen } from '@capacitor-community/privacy-screen';
+import { MenuController } from '@ionic/angular';
 
 import {
   NavController,
-  MenuController,
   AlertController,
   ToastController,
   LoadingController,
@@ -82,12 +81,14 @@ import { IsiteService } from './isite.service';
     IonRouterOutlet,
   ],
 })
+
 export class AppComponent {
   constructor(
     private modalCtrl: ModalController,
-    private menuCtrl: MenuController,
     public isite: IsiteService,
     private router: Router,
+    private menuCtrl: MenuController,
+
     private alertController: AlertController
   ) {
     addIcons({ ...icons });
@@ -122,7 +123,7 @@ export class AppComponent {
         if (resUser.done) {
           this.isite.userSession = null;
           this.isite.getUserSession(() => {
-            this.router.navigateByUrl('/', { replaceUrl: true });
+            this.router.navigateByUrl('/welcome', { replaceUrl: true });
           });
         } else {
         }
@@ -140,15 +141,24 @@ export class AppComponent {
         {
           text: 'OK',
           role: 'confirm',
-          handler: this.doLogout,
+          handler: ()=>{this.doLogout()},
         },
       ],
     });
 
     await alert.present();
   }
+    hideMenu() {
+     this.menuCtrl.toggle('main-content');
+     this.menuCtrl.toggle('main-menu');
+    this.menuCtrl.close('main-menu');
+    this.menuCtrl.close('main-content');
+    this.menuCtrl.close();
+   this.menuCtrl.enable(false);
 
-  async hideMenu() {
-    this.menuCtrl.enable(false);
-  }
+    console.log(this.menuCtrl,"fffffffffffffffffffffffff");
+ 
+}
+
+
 }

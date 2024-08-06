@@ -113,6 +113,15 @@ ion-item.selected {
   --color: var(--ion-color-primary);
 }
 
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
+}
+
 ion-menu::part(backdrop) {
   background-color: rgb(0 53 255 / 70%);
 }
@@ -121,9 +130,13 @@ ion-menu::part(container) {
   border-radius: 0 20px 20px 0;
   box-shadow: 4px 0px 16px rgb(0 53 255 / 70%);
 }
-
+.blue {
+  color: blue;
+}
 .list-menu {
   height: 35px;
+  color: blue;
+
 }
 
 .menu-main {
@@ -146,19 +159,16 @@ ion-menu::part(container) {
   max-width: 180px;
 }
 .margin-input {
-  margin: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
 }
 .siteName {
-  background-image: linear-gradient(to left, #aa9526, #1475cf, #aa9526, #aa9526);
   -webkit-background-clip: text;
-  color: transparent;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   text-wrap: pretty;
   font-family: fangsong;
   text-align: right;
-  top: 20px;
-  left: 15px;
+  top: 27px;
   position: relative;
 }
 
@@ -166,8 +176,8 @@ ion-menu::part(container) {
   place-content: center;
 }
 .user-logo {
-  height: 50px;
-  width: 50px;
+  height: 70px;
+  width: 70px;
   display: inline-table;
 
 }
@@ -176,6 +186,8 @@ border-radius: 50%;
 }
 .user-name {
   bottom: 15px;
+  font-size: 23px;
   position: sticky;
   margin: 10px;
+  font-weight: bold;
 }

@@ -1,60 +1,70 @@
 .main-row {
-    margin-bottom: 90px;
-    display: flow;
+  margin-bottom: 90px;
+  display: flow;
+}
+.error {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  font-size: larger;
+}
+ion-list {
+  width: 95%;
+}
+ion-item {
+  // margin: 5%;
+  ion-img {
+    width: 20vw;
+    height: 20vh;
+    display: block;
   }
-  .error {
+  ion-label {
+    display: block;
+    width: 100vw;
     text-align: center;
-    color: red;
-    font-weight: bold;
-    font-size: larger;
+    line-height: 1.8;
   }
-  ion-list {
-    width: 95%;
-  }
-  ion-item {
-    // margin: 5%;
-    ion-img {
-      width: 20vw;
-      height: 20vh;
-      display: block;
-    }
-    ion-label {
-      display: block;
-      width: 100vw;
-      text-align: center;
-      line-height: 1.8;
-    }
-  }
-  ion-content {
-    top: 90px;
-  }
-  
-  .img-upload {
-    height: 128px;
-    width: 128px;
-    border-radius: 50%;
-    border: 1px dashed blue;
-  }
-  .title-uploadimg {
-    position: relative;
-    top: 75px;
-    margin: 6px;
-    font-weight: bold;
-    color: #003296;
-  }
-  
-  .upload-img {
-    padding: 5px 5px 0px 5px;
-    border-radius: 50%;
-    width: 100%;
-    text-align: center;
-  }
+}
+ion-content {
+  top: 90px;
+}
 
- .parent-div {
+.img-upload {
+  height: 128px;
+  width: 128px;
+  border-radius: 50%;
+  border: 1px dashed blue;
+}
+.title-uploadimg {
+  position: relative;
+  top: 75px;
+  margin: 6px;
+  font-weight: bold;
+  color: #003296;
+}
+
+.upload-img {
+  padding: 5px 5px 0px 5px;
+  border-radius: 50%;
+  width: 100%;
+  text-align: center;
+}
+
+.parent-div {
   background: #dddddd;
   border-radius: 15px;
   padding: 7px;
   margin: 10px;
   font-size: large;
- }
-  
+}
+.margin-input {
+  margin: 10px 0px 10px 0px;
+}
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
+}

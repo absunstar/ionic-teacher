@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
+import { Preferences } from '@capacitor/preferences';
+
 import * as icons from 'ionicons/icons';
 import {
   ActivatedRoute,
@@ -107,6 +109,10 @@ export class LoginPage implements OnInit {
       .subscribe((resUser: any) => {
         if (resUser.accessToken) {
           this.isite.accessToken = resUser.accessToken;
+          Preferences.set({
+            key: 'accessToken',
+            value: this.isite.accessToken || '',
+          });
         }
         if (resUser.done) {
           this.isite.getUserSession(() => {

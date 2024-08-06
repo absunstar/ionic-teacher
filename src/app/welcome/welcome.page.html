@@ -22,7 +22,9 @@
         <div class="cbh-ph-img-circle1 whatsappLogo"></div
       ></a>
     </div>
-    <div *ngIf="isite.setting.isShared && isite.session && !isite.session.selectedTeacherId">
+    <div
+      *ngIf="isite.setting.isShared && isite.session && !isite.session.selectedTeacherId"
+    >
       <div class="banner-word">
         <span> المدرسين </span>
         <a class="banner-viewAll" [routerLink]="['/teachers']">مشاهدة الكل</a>
@@ -69,33 +71,33 @@
     <p class="center">
       <a
         class="pages"
-        [routerLink]="['/pages-content']"
+        [routerLink]="['/page-view']"
         [queryParams]="{
-        type: 'inviteFriends'
+        type: 'invite-friends'
       }"
         >أدع أصدقاءك</a
       >
       <a
         class="pages"
-        [routerLink]="['/pages-content']"
+        [routerLink]="['/page-view']"
         [queryParams]="{
-        type: 'joinUs'
+        type: 'join-us'
       }"
         >إنضم إلينا</a
       >
       <a
         class="pages"
-        [routerLink]="['/pages-content']"
+        [routerLink]="['/page-view']"
         [queryParams]="{
-      type: 'usageAgreement'
+      type: 'usage-agreement'
     }"
         >إتفاقية الإستخدام</a
       >
       <a
         class="pages"
-        [routerLink]="['/pages-content']"
+        [routerLink]="['/page-view']"
         [queryParams]="{
-    type: 'privacyPolicy'
+    type: 'privacy-policy'
   }"
         >سياسة الخصوصية</a
       >

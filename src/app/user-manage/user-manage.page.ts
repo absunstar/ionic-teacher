@@ -13,7 +13,6 @@ import {
 } from '@capacitor/camera';
 import {
   NavController,
-  MenuController,
   AlertController,
   ToastController,
   LoadingController,
@@ -156,7 +155,7 @@ export class UserManagePage implements OnInit {
       quality: 90,
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera, // Camera, Photos or Prompt!
+      source: CameraSource.Prompt, // Camera, Photos or Prompt!
     });
     this.startUpload(image, type);
   }

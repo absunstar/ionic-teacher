@@ -1,9 +1,18 @@
 .error {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-    font-size: larger;
-  }
-  .margin-input {
-    margin: 5px 0px 5px 0px;
-  }
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  font-size: larger;
+}
+.margin-input {
+  margin: 10px 0px 10px 0px;
+}
+
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
+}

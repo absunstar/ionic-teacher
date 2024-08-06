@@ -13,7 +13,6 @@ import {
 } from '@capacitor/camera';
 import {
   NavController,
-  MenuController,
   AlertController,
   ToastController,
   LoadingController,
