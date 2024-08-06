@@ -14,7 +14,7 @@
         class="types-buttons"
         (click)="selectUserType('parent')"
         >
-        <p class="xx-large">الأباء</p>
+        <p class="xx-large">ولي أمر</p>
         <ion-icon class="xx-large" name="people-outline"></ion-icon>
       </ion-button>
       </ion-buttons>
@@ -75,6 +75,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="الإسم الرباعي"
@@ -86,6 +87,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="إسم المستخدم"
@@ -97,6 +99,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="موبايل"
@@ -109,19 +112,20 @@
 
         <ion-item *ngIf="user.type == 'student'">
           <ion-input
-          
+          class="margin-input"
             label-placement="floating"
             fill="outline"
-            label="هاتف الوالد/ة"
+            label="هاتف ولي الأمر"
             type="tel"
             [(ngModel)]="user.parentMobile"
             [clearInput]="true"
-            placeholder="أدخل هاتف الوالد/ة"
+            placeholder="أدخل هاتف ولي الأمر"
           ></ion-input>
         </ion-item>
 
         <ion-item *ngIf="user.placeType =='online'">
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="رقم البطاقة الشخصية"
@@ -282,6 +286,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="العنوان"
@@ -293,6 +298,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="موبايل أو بريد الدخول"
@@ -304,6 +310,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="كلمة المرور"
@@ -316,6 +323,7 @@
 
         <ion-item>
           <ion-input
+          class="margin-input"
             label-placement="floating"
             fill="outline"
             label="إعادة كلمة المرور"

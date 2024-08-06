@@ -145,16 +145,21 @@ ion-menu::part(container) {
   float: left;
   max-width: 180px;
 }
+.margin-input {
+  margin: 5px 0px 5px 0px;
+}
 .siteName {
   background-image: linear-gradient(to left, #aa9526, #1475cf, #aa9526, #aa9526);
   -webkit-background-clip: text;
   color: transparent;
-  font-size: 28px;
+  font-size: 25px;
   font-weight: bold;
   text-wrap: pretty;
   font-family: fangsong;
   text-align: right;
-  right: -40px;
+  top: 20px;
+  left: 15px;
+  position: relative;
 }
 
 .contain-register-login {
