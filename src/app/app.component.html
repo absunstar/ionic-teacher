@@ -5,12 +5,21 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-img class="logo" [src]="isite.setting.logoUrl"></ion-img>
-      <ion-title class="siteName" *ngIf="isite.setting.nameBesidLogoShow">{{ isite.setting.siteName }}</ion-title>
+      <ion-title class="siteName" *ngIf="isite.setting.nameBesidLogoShow">{{
+        isite.setting.siteName
+      }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-split-pane >
-    <ion-menu id="main-menu" autoHide="false" contentId="main-content" menuId="main-menu" side="end" type="overlay">
+  <ion-split-pane>
+    <ion-menu
+      id="main-menu"
+      autoHide="false"
+      contentId="main-content"
+      menuId="main-menu"
+      side="end"
+      type="overlay"
+    >
       <ion-content dir="rtl" class="menu-main">
         <ion-row class="contain-register-login" *ngIf="!isite.userSession">
           <ion-button color="primary" (click)="hideMenu(); login()">
@@ -56,7 +65,7 @@
           </ion-button>
         </ion-row>
 
-       <!--  <ion-list
+        <ion-list
           id="inbox-list"
           *ngIf="isite.userSession && isite.userSession.id"
         >
@@ -102,7 +111,7 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
- -->
+
         <ion-button
           *ngIf="
             isite.setting.isShared &&
@@ -116,7 +125,7 @@
           تفيير المدرس
           <ion-icon name="git-compare-outline"></ion-icon>
         </ion-button>
-        <ion-list id="labels-list" >
+        <ion-list id="labels-list">
           <ion-item
             class="list-menu"
             lines="none"

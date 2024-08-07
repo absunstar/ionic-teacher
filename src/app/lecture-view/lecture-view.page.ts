@@ -248,8 +248,7 @@ export class LectureViewPage implements OnInit {
       this.buyModal = type;
     } else if (id == 'quizModal') {
       this.quizModal = type;
-    }
-    else if (id == 'videoModal') {
+    } else if (id == 'videoModal') {
       this.videoModal = type;
     }
   }
@@ -303,6 +302,8 @@ export class LectureViewPage implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.done) {
+          console.log(this.videoCode);
+
           this.viewVideo();
         } else {
           this.error = res.error;
@@ -310,30 +311,16 @@ export class LectureViewPage implements OnInit {
       });
   }
   async viewVideo() {
-    this.isite
-      .api({
-        url: '/api/lectures/view-video',
-        body: {
-          _id: this.lecture._id,
-          code: this.videoCode,
-        },
-      })
-      .subscribe((res: any) => {
-        if (res.done) {
-          this.videoModal = true;
-          setTimeout(() => {
-            let iframe = document.querySelector('#video_' + this.videoCode);
-            
-            if (iframe) {
-              iframe.setAttribute(
-                'src',
-                `${this.isite.baseURL}/view-video?code=${this.videoCode}&id=${this.lecture._id}`,
-              );
-            }
-          }, 1000);
-        } else {
-          this.error = res.error;
-        }
-      });
+    this.videoModal = true;
+    setTimeout(() => {
+      let iframe = document.querySelector('#video_' + this.videoCode);
+
+      if (iframe) {
+        iframe.setAttribute(
+          'src',
+          `${this.isite.baseURL}/view-video?code=${this.videoCode}&id=${this.lecture._id}`
+        );
+      }
+    }, 1000);
   }
 }
