@@ -2,16 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
+
 import {
   NavController,
-  MenuController,
   AlertController,
   ToastController,
+  
   LoadingController,
 } from '@ionic/angular';
 @Injectable({
   providedIn: 'root',
 })
+
 export class IsiteService {
   studentList: any;
   teacherList: any;
@@ -86,6 +88,8 @@ export class IsiteService {
       });
     }
   }
+
+  
 
   async start() {
     const loader = await this.loadingCtrl.create({

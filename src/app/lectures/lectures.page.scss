@@ -52,7 +52,7 @@ figure {
     z-index: 999;
   }
   ion-img {
-    object-fit: cover;
+    object-fit: fill;
     width: 100%;
     height: 100%;
   }
@@ -117,4 +117,12 @@ figure {
       cursor: pointer;
     }
   }
+}
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
 }

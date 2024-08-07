@@ -50,7 +50,7 @@ ion-content {
   font-size: larger;
 }
 .margin-input {
-  margin: 5px 0px 5px 0px;
+  margin: 10px 0px 10px 0px;
 }
 .alert-msg {
   font-size: x-large;
@@ -85,4 +85,12 @@ ion-content {
 }
 ion-buttons {
   display: grid;
+}
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
 }

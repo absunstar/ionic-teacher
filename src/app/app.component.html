@@ -5,24 +5,32 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-img class="logo" [src]="isite.setting.logoUrl"></ion-img>
-      <ion-title class="siteName">{{ isite.setting.siteName }}</ion-title>
+      <ion-title class="siteName" *ngIf="isite.setting.nameBesidLogoShow">{{
+        isite.setting.siteName
+      }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-split-pane contentId="main-content">
+  <ion-split-pane>
     <ion-menu
-      class="menu-main"
+      id="main-menu"
+      autoHide="false"
       contentId="main-content"
+      menuId="main-menu"
       side="end"
       type="overlay"
     >
-      <ion-content dir="rtl">
+      <ion-content dir="rtl" class="menu-main">
         <ion-row class="contain-register-login" *ngIf="!isite.userSession">
-          <ion-button color="primary" (click)="login(); hideMenu()">
+          <ion-button color="primary" (click)="hideMenu(); login()">
             دخول
             <ion-icon name="log-in-outline"></ion-icon>
           </ion-button>
-          <ion-button color="secondary" [routerLink]="['/register']">
+          <ion-button
+            color="secondary"
+            (click)="hideMenu()"
+            [routerLink]="['/register']"
+          >
             تسجيل
             <ion-icon name="person-add-outline"></ion-icon>
           </ion-button>
@@ -38,7 +46,6 @@
               isite.userSession.firstName
             }}</ion-text>
           </ion-list-header>
-          <ion-note>{{ isite.userSession.email }}</ion-note>
         </div>
         <ion-row
           class="contain-register-login"
@@ -62,7 +69,7 @@
           id="inbox-list"
           *ngIf="isite.userSession && isite.userSession.id"
         >
-          <ion-menu-toggle auto-hide="false">
+          <ion-menu-toggle>
             <ion-item
               routerDirection="root"
               [routerLink]="['/packages']"
@@ -76,7 +83,7 @@
               <ion-label class="my-menu">مجموعاتي</ion-label>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false">
+          <ion-menu-toggle>
             <ion-item
               routerDirection="root"
               [routerLink]="['/lectures']"
@@ -90,7 +97,7 @@
               <ion-label class="my-menu">محاضراتي</ion-label>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle auto-hide="false">
+          <ion-menu-toggle>
             <ion-item
               routerDirection="root"
               [routerLink]="['/books']"
@@ -118,19 +125,13 @@
           تفيير المدرس
           <ion-icon name="git-compare-outline"></ion-icon>
         </ion-button>
-        <!-- <ion-list id="labels-list">
-           <ion-list-header>Labels</ion-list-header>
-           <ion-icon
-              slot="start"
-              ios="bookmark-outline"
-              md="bookmark-sharp"
-            ></ion-icon>
+        <ion-list id="labels-list">
           <ion-item
             class="list-menu"
             lines="none"
-            [routerLink]="['/pages-content']"
+            [routerLink]="['/page-view']"
             [queryParams]="{
-              type: 'inviteFriends'
+              type: 'invite-friends'
             }"
           >
             <ion-label>أدع أصدقاءك</ion-label>
@@ -138,9 +139,9 @@
           <ion-item
             class="list-menu"
             lines="none"
-            [routerLink]="['/pages-content']"
+            [routerLink]="['/page-view']"
             [queryParams]="{
-              type: 'joinUs'
+              type: 'join-us'
             }"
           >
             <ion-label>إنضم إلينا</ion-label>
@@ -148,9 +149,9 @@
           <ion-item
             class="list-menu"
             lines="none"
-            [routerLink]="['/pages-content']"
+            [routerLink]="['/page-view']"
             [queryParams]="{
-              type: 'usageAgreement'
+              type: 'usage-agreement'
             }"
           >
             <ion-label>إتفاقية الإستخدام</ion-label>
@@ -158,15 +159,14 @@
           <ion-item
             class="list-menu"
             lines="none"
-            [routerLink]="['/pages-content']"
+            [routerLink]="['/page-view']"
             [queryParams]="{
-              type: 'privacyPolicy'
+              type: 'privacy-policy'
             }"
           >
             <ion-label>سياسة الخصوصية</ion-label>
           </ion-item>
         </ion-list>
-     -->
       </ion-content>
     </ion-menu>
 

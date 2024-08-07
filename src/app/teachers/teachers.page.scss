@@ -39,8 +39,16 @@ ion-card-header {
   font-size: larger;
 }
 .circle-img {
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-  }
-  
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
+}

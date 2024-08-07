@@ -14,6 +14,7 @@
 
         <ion-item>
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
             label="الإسم الرباعي"
@@ -25,6 +26,7 @@
 
         <ion-item>
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
             label="إسم المستخدم"
@@ -36,6 +38,7 @@
 
         <ion-item>
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
             label="موبايل"
@@ -48,13 +51,14 @@
 
         <ion-item *ngIf="user.type == 'student'">
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
-            label="هاتف الوالد/ة"
+            label="هاتف ولي الأمر"
             type="tel"
             [(ngModel)]="user.parentMobile"
             [clearInput]="true"
-            placeholder="أدخل هاتف الوالد/ة"
+            placeholder="أدخل هاتف ولي الأمر"
           ></ion-input>
         </ion-item>
 
@@ -62,12 +66,13 @@
           <ion-row>
             <ion-col size="9">
               <ion-input
+                class="margin-input"
                 label-placement="floating"
                 fill="outline"
-                label="بحث بريد أو رقم موبايل تسجيل الوالدين"
+                label="بحث بريد أو رقم موبايل تسجيل ولي الأمر"
                 [(ngModel)]="parentSearch"
                 [clearInput]="true"
-                placeholder="أدخل بريد أو رقم تسجيل الدخول الوالدين"
+                placeholder="أدخل بريد أو رقم تسجيل الدخول ولي الأمر"
               ></ion-input>
             </ion-col>
             <ion-col size="3">
@@ -81,9 +86,8 @@
               </ion-button>
             </ion-col>
             <div class="parent-div" *ngIf="user.parent">
-  
               <span>الوالد/ة : </span>
-              <span >{{user.parent.firstName}}</span>
+              <span>{{user.parent.firstName}}</span>
             </div>
           </ion-row>
         </ion-item>
@@ -155,6 +159,7 @@
 
         <ion-item>
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
             label="العنوان"
@@ -166,6 +171,7 @@
 
         <ion-item>
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
             label="موبايل أو بريد الدخول"
@@ -177,6 +183,7 @@
 
         <ion-item>
           <ion-input
+            class="margin-input"
             label-placement="floating"
             fill="outline"
             label="كلمة المرور"
@@ -186,7 +193,6 @@
             <ion-input-password-toggle slot="end"></ion-input-password-toggle>
           </ion-input>
         </ion-item>
-
       </ion-list>
       <p class="error">{{user.$error}}</p>
       <ion-button expand="block" color="secondary" (click)="updateUser(user)">
