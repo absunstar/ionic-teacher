@@ -21,7 +21,7 @@ export class IsiteService {
   setting: any;
   userSession: any;
   session: any;
-  baseURL: string = 'https://professional.teacher.egytag.com';
+  baseURL: string = 'http://professional.localhost';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,

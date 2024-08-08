@@ -23,7 +23,7 @@
     <ion-button
       *ngIf="!book.$buy && isite.userSession && isite.userSession.type =='student'"
       (click)="setOpen(true,'buyModal')"
-      class="buy-button"
+      size="large"
       expand="block"
       >شراء
       <ion-icon name="bag-check-outline"></ion-icon>
@@ -48,8 +48,9 @@
           </ion-item>
         </ion-list>
         <p class="error">{{error}}</p>
+        
 
-        <ion-button (click)="buyBook()" class="buy-button" expand="block">
+        <ion-button size="large" (click)="buyBook()"  expand="block">
           <ion-icon name="checkmark-done-outline"></ion-icon>
           تأكيد الشراء
         </ion-button>
