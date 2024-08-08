@@ -2,18 +2,6 @@
   <div class="div-main">
     <ion-row class="main-row">
       <div id="container" class="container">
-        <ion-scroll
-          id="mapImage"
-          zooming="true"
-          direction="xy"
-          delegate-handle="zoom-pane"
-          class="zoom-pane"
-          min-zoom="1"
-          max-zoom="15"
-          overflow-scroll="false"
-        >
-          <img ng-src="img/map.png" />
-        </ion-scroll>
         <ion-img [src]="package.imageUrl"> </ion-img>
         <ion-text><p class="main-name">{{package.name}}</p></ion-text>
         <div class="bg-data">
@@ -57,7 +45,7 @@
     </ion-row>
 
     <ion-button
-      *ngIf="!package.$buy && isite.userSession && isite.userSession.type =='student'"
+    *ngIf="!package.$buy && isite.userSession && isite.userSession.type =='student'"
       (click)="setOpen(true,'buyModal')"
       size="large"
       expand="block"
