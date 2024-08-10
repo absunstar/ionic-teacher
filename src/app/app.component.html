@@ -69,7 +69,7 @@
           id="inbox-list"
           *ngIf="isite.userSession && isite.userSession.id"
         >
-          <ion-menu-toggle>
+          <ion-menu-toggle *ngIf="isite.setting.showPackages">
             <ion-item
               routerDirection="root"
               [routerLink]="['/packages']"
@@ -83,7 +83,7 @@
               <ion-label class="my-menu">مجموعاتي</ion-label>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle>
+          <ion-menu-toggle *ngIf="isite.setting.showLectures && (!isite.userSession || isite.userSession.placeType == 'offline')">
             <ion-item
               routerDirection="root"
               [routerLink]="['/lectures']"
@@ -97,7 +97,7 @@
               <ion-label class="my-menu">محاضراتي</ion-label>
             </ion-item>
           </ion-menu-toggle>
-          <ion-menu-toggle>
+          <ion-menu-toggle *ngIf="isite.setting.showBooks">
             <ion-item
               routerDirection="root"
               [routerLink]="['/books']"
@@ -177,16 +177,16 @@
           <ion-icon name="home-outline"></ion-icon>
           الرئيسية
         </ion-tab-button>
-        <ion-tab-button [routerLink]="['/packages']">
+        <ion-tab-button [routerLink]="['/packages']" *ngIf="isite.setting.showPackages">
           <ion-icon name="layers-outline"></ion-icon>
           المجموعات
         </ion-tab-button>
-        <ion-tab-button [routerLink]="['/lectures']">
+        <ion-tab-button [routerLink]="['/lectures']" *ngIf="isite.setting.showLectures && (!isite.userSession || isite.userSession.placeType == 'offline')">
           <ion-icon name="desktop-outline"></ion-icon>
           المحاضرات
         </ion-tab-button>
 
-        <ion-tab-button [routerLink]="['/books']">
+        <ion-tab-button [routerLink]="['/books']" *ngIf="isite.setting.showBooks">
           <ion-icon name="library"></ion-icon>
           الكتب
         </ion-tab-button>

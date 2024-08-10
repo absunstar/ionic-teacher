@@ -69,7 +69,7 @@ import { IsiteService } from '../isite.service';
 
 export class PackagesPage implements OnInit {
   search : String | undefined ;
-  packagesList: [any] | undefined;
+  packageList: [any] | undefined;
   type: string | undefined;
    constructor(public isite: IsiteService, private route: ActivatedRoute) {
     addIcons({ ...icons });
@@ -90,7 +90,7 @@ export class PackagesPage implements OnInit {
     })
   }
   async getPackages() {
-    this.packagesList = undefined;
+    this.packageList = undefined;
     this.isite.api({
       url: '/api/packages/all',
       body: {
@@ -100,6 +100,7 @@ export class PackagesPage implements OnInit {
           _id: 1,
           name: 1,
           price: 1,
+          totalLecturesPrice : 1,
           description: 1,
           image: 1,
         },
@@ -113,7 +114,7 @@ export class PackagesPage implements OnInit {
             element.imageUrl = element.image ? this.isite.baseURL + element.image.url : '';
           }
         );
-        this.packagesList = res.list;
+        this.packageList = res.list;
       }
     });
   }

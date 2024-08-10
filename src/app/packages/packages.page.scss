@@ -49,6 +49,9 @@ ion-item{
       transition: 0.25s ease;
       z-index: 999;
     }
+    .red { 
+      color: red;
+    }
     ion-img {
       object-fit: fill;
       width: 100%;
@@ -84,7 +87,7 @@ ion-item{
         text-align: center;
         font-weight: bold;
         position: relative;
-        font-size: large;
+        font-size: 25px;
         margin-right: 10px;
       }
   

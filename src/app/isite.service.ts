@@ -21,6 +21,9 @@ export class IsiteService {
   setting: any;
   userSession: any;
   session: any;
+  packageList: [any] | undefined;
+  lectureList: [any] | undefined;
+  bookList: [any] | undefined;
   baseURL: string = 'http://professional.localhost';
   constructor(
     public http: HttpClient,
@@ -56,6 +59,9 @@ export class IsiteService {
       banner: '',
       codeCard: '',
       isShared: false,
+      packagesLimit : 0,
+      lecturesLimit : 0,
+      booksLimit : 0,
       citiesAndAreasShow: false,
       nationalitiesShow: false,
       nameBesidLogoShow: false,
@@ -106,8 +112,23 @@ export class IsiteService {
       if (this.userSession && this.userSession.type == 'parent') {
         this.getParentsList();
       }
+      if(this.setting.showLectures && (!this.userSession || this.userSession.placeType == 'offline')){
+
+        this.getLectures();
+      }
       loader.dismiss();
     });
+
+    if(this.setting.showPackages){
+
+      this.getPackages();
+    }
+   
+    if(this.setting.showBooks){
+
+      this.getBooks();
+    }
+
   }
 
   async getUserSession(callback: () => void) {
@@ -136,6 +157,7 @@ export class IsiteService {
               ? this.baseURL + resSession.session.user.image.url
               : '',
             type: resSession.session.user.type,
+            placeType: resSession.session.user.placeType,
             notificationsCount: resSession.session.user.notificationsCount,
             notificationsList: resSession.session.user.notificationsList,
             booksList: resSession.session.user.booksList,
@@ -152,6 +174,91 @@ export class IsiteService {
       }
     });
   }
+
+  async getPackages() {
+    this.packageList = undefined;
+    this.api({
+      url: '/api/packages/all',
+      body: {
+        limit : this.setting.packagesLimit,
+        type: 'toStudent',
+        select: {
+          id: 1,
+          _id: 1,
+          name: 1,
+          price: 1,
+          image: 1,
+        },
+        where: {},
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {
+        res.list.forEach(
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image ? this.baseURL + element.image.url : '';
+          }
+        );
+        this.packageList = res.list;
+      }
+    });
+  }
+
+  async getLectures() {
+    this.lectureList = undefined;
+    this.api({
+      url: '/api/lectures/allToStudent',
+      body: {
+        limit : this.setting.lecturesLimit,
+        type: 'toStudent',
+        select: {
+          id: 1,
+          _id: 1,
+          name: 1,
+          price: 1,
+          image: 1,
+        },
+        where: {},
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {
+        res.list.forEach(
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image ? this.baseURL + element.image.url : '';
+          }
+        );
+        this.lectureList = res.list;
+      }
+    });
+  }
+
+  async getBooks() {
+    this.bookList = undefined;
+    this.api({
+      url: '/api/books/all',
+      body: {
+        limit : this.setting.booksLimit,
+        type: 'toStudent',
+        select: {
+          id: 1,
+          _id: 1,
+          name: 1,
+          price: 1,
+          image: 1,
+        },
+        where: {},
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {
+        res.list.forEach(
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image ? this.baseURL + element.image.url : '';
+          }
+        );
+        this.bookList = res.list;
+      }
+    });
+  }
+
   async selectTeacher(id: any) {
     this.api({
       url: '/api/selectTeacher',
