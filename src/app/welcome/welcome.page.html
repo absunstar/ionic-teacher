@@ -57,7 +57,7 @@
     </div>
 
     <ion-card class="card-bg" *ngIf="isite.setting.showPackages">
-      <ion-card-header>
+      <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title"
           >أحدث مجموعات المحاضرات</ion-card-title
         >
@@ -85,7 +85,7 @@
       class="card-bg"
       *ngIf="isite.setting.showLectures && (!isite.userSession || isite.userSession.placeType == 'offline')"
     >
-      <ion-card-header>
+      <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title">أحدث المحاضرات</ion-card-title>
       </ion-card-header>
       <ion-card-content>
@@ -93,25 +93,33 @@
           class="card-list-style"
           *ngFor="let lecture of isite.lectureList"
         >
-          <ion-item class="item-bg" [routerLink]="['/lecture-view']"
-          [queryParams]="{id: lecture._id}">
+          <ion-item
+            class="item-bg"
+            [routerLink]="['/lecture-view']"
+            [queryParams]="{id: lecture._id}"
+          >
             <ion-thumbnail slot="start">
               <img class="radius-15" [src]="lecture.imageUrl" />
             </ion-thumbnail>
-            <ion-label>{{lecture.name}}</ion-label>
+            <ion-label>
+              <span>{{lecture.name}}</span>
+            </ion-label>
           </ion-item>
         </ion-list>
       </ion-card-content>
     </ion-card>
 
     <ion-card class="card-bg" *ngIf="isite.setting.showBooks">
-      <ion-card-header>
+      <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title">أحدث الكتب</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list class="card-list-style" *ngFor="let book of isite.bookList">
-          <ion-item class="item-bg" [routerLink]="['/book-view']"
-          [queryParams]="{id: book._id}">
+          <ion-item
+            class="item-bg"
+            [routerLink]="['/book-view']"
+            [queryParams]="{id: book._id}"
+          >
             <ion-thumbnail slot="start">
               <img class="radius-15" [src]="book.imageUrl" />
             </ion-thumbnail>
@@ -128,7 +136,11 @@
         >
       </ion-card-header>
 
-      <ion-button expand="block" color="primary" [routerLink]="['/centers']"
+      <ion-button
+        expand="block"
+        size="large"
+        color="primary"
+        [routerLink]="['/centers']"
         >مواعيدنا و أماكنا <ion-icon name="location-outline"></ion-icon
       ></ion-button>
     </ion-card>
