@@ -33,7 +33,10 @@
                 class="item-link"
                 *ngFor="let link of lecture.linksList"
               >
-                <ion-button expand="block" (click)="openVideo(link)"
+                <ion-button
+                  expand="block"
+                  class="font-large"
+                  (click)="openVideo(link)"
                   >{{link.name}} <ion-icon name="eye-outline"></ion-icon>
                 </ion-button>
                 <ion-label *ngIf="lecture.typeExpiryView.name == 'number'"
@@ -85,14 +88,15 @@
     </ion-row>
     <p class="error">{{error}}</p>
     <ion-button
+      size="large"
       *ngIf="lecture.$buy && lecture.activateQuiz && (!quiz.id || lecture.timesEnterQuiz > quiz.timesEnterQuiz) "
       (click)="startQuiz()"
-      class="buy-button"
       expand="block"
       >بدأ الإختبار
       <ion-icon name="bag-check-outline"></ion-icon>
     </ion-button>
     <ion-button
+      size="large"
       *ngIf="!lecture.$buy && isite.userSession && isite.userSession.type =='student'"
       (click)="setOpen(true,'buyModal')"
       class="buy-button"

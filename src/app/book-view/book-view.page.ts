@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { IonicSlides } from '@ionic/angular';
 
 import {
   IonTextarea,
@@ -35,8 +36,17 @@ import {
   IonRouterLink,
 } from '@ionic/angular/standalone';
 import { IsiteService } from '../isite.service';
+import { Swiper } from 'swiper/types';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
+// 2nd step:
+
+// 3rd step :
+
+
+// and
 @Component({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   selector: 'app-book-view',
   templateUrl: './book-view.page.html',
   styleUrls: ['./book-view.page.scss'],
@@ -78,11 +88,16 @@ import { IsiteService } from '../isite.service';
   ],
 })
 export class BookViewPage implements OnInit {
+  @ViewChild('swiper')
+  swiperRef: ElementRef | undefined;
+  swiperModules = [IonicSlides];
   book: any;
   address: string | undefined;
   error: string | undefined;
   buyModal: any;
+  swiper?: Swiper;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
+
     this.book = {
       lecturesList: [],
     };
@@ -92,7 +107,21 @@ export class BookViewPage implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  swiperReady() {
+    console.log("ddddddddddddddddddddddddddddddddddd");
+    
+    this.swiper = this.swiperRef?.nativeElement.swiper;
+  }
+
+  logActiveIndex() {
+    console.log(this.swiperRef?.nativeElement.swiper.activeIndex);
+  }
+  ngOnInit() {
+    this.swiper = this.swiperRef?.nativeElement.swiper;
+    this.swiper?.init();
+    console.log(this.swiper,"ddddddddddddddddddddddddddddddddddd");
+   
+  }
   async getBook(_id: string) {
     this.book = {};
     this.isite

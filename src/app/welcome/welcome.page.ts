@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonThumbnail,
   IonCardTitle,
   IonCardSubtitle,
   IonCardHeader,
@@ -38,6 +39,7 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./welcome.page.scss'],
   standalone: true,
   imports: [
+    IonThumbnail,
     IonCardTitle,
     IonCardSubtitle,
     IonCardHeader,
@@ -70,13 +72,13 @@ import { IsiteService } from '../isite.service';
 })
 export class WelcomePage implements OnInit {
   studentList: [any] | undefined;
+
   constructor(public isite: IsiteService) {
     addIcons({ ...icons });
   }
 
   ngOnInit() {
-
-
+   
   }
 
  

@@ -2,7 +2,23 @@
   <div class="div-main">
     <ion-row class="main-row">
       <div id="container" class="container">
-        <ion-img [src]="book.imageUrl"> </ion-img>
+      <!--   <swiper-container #swiperEx initial-slide="0" [navigation]="true">
+          <swiper-slide class="swiper-zoom-container">
+            <img [src]="book.imageUrl" alt="" />
+          </swiper-slide>
+        </swiper-container> -->
+        <swiper-container
+          #swiper
+          (afterinit)="swiperReady()"
+          [zoom]="true"
+        >
+          <swiper-slide>
+            <div class="swiper-zoom-container">
+              <img [src]="book.imageUrl" alt="" />
+            </div>
+          </swiper-slide>
+        </swiper-container>
+
         <ion-text><p class="main-name">{{book.name}}</p></ion-text>
         <div class="bg-data">
           <ion-text class="main-price">
@@ -23,7 +39,7 @@
     <ion-button
       *ngIf="!book.$buy && isite.userSession && isite.userSession.type =='student'"
       (click)="setOpen(true,'buyModal')"
-      class="buy-button"
+      size="large"
       expand="block"
       >شراء
       <ion-icon name="bag-check-outline"></ion-icon>
@@ -44,12 +60,18 @@
         <p class="buy-text">{{isite.setting.textPurchaseByBook}}</p>
         <ion-list>
           <ion-item>
-            <ion-textarea label="Outline textarea" [(ngModel)]="address" labelPlacement="floating" fill="outline" placeholder="أكتب العنوان الذي تريد توصيل الكتاب إليه"></ion-textarea>
+            <ion-textarea
+              label="Outline textarea"
+              [(ngModel)]="address"
+              labelPlacement="floating"
+              fill="outline"
+              placeholder="أكتب العنوان الذي تريد توصيل الكتاب إليه"
+            ></ion-textarea>
           </ion-item>
         </ion-list>
         <p class="error">{{error}}</p>
 
-        <ion-button (click)="buyBook()" class="buy-button" expand="block">
+        <ion-button size="large" (click)="buyBook()" expand="block">
           <ion-icon name="checkmark-done-outline"></ion-icon>
           تأكيد الشراء
         </ion-button>

@@ -63,7 +63,7 @@
         </ion-item>
 
         <ion-item *ngIf="user.type == 'student'&& isite.setting.showParent">
-          <ion-row>
+          <ion-row class="border">
             <ion-col size="9">
               <ion-input
                 class="margin-input"
@@ -86,7 +86,7 @@
               </ion-button>
             </ion-col>
             <div class="parent-div" *ngIf="user.parent">
-              <span>الوالد/ة : </span>
+              <span>ولي الأمر : </span>
               <span>{{user.parent.firstName}}</span>
             </div>
           </ion-row>

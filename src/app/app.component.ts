@@ -6,7 +6,7 @@ import { LoginPage } from './login/login.page';
 import { ActivatedRoute } from '@angular/router';
 import { PrivacyScreen } from '@capacitor-community/privacy-screen';
 import { MenuController } from '@ionic/angular';
-
+import { register } from 'swiper/element/bundle';
 import {
   NavController,
   AlertController,
@@ -44,7 +44,7 @@ import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 
 import { IsiteService } from './isite.service';
-
+import { Platform } from '@ionic/angular';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -81,9 +81,9 @@ import { IsiteService } from './isite.service';
     IonRouterOutlet,
   ],
 })
-
 export class AppComponent {
   constructor(
+    private platform: Platform,
     private modalCtrl: ModalController,
     public isite: IsiteService,
     private router: Router,
@@ -100,9 +100,13 @@ export class AppComponent {
     PrivacyScreen.addListener('screenshotTaken', () => {
       this.doLogout();
     });
+    register();
   }
+
   async enablePrivacyScreen() {
-    await PrivacyScreen.enable();
+   /*  if (this.platform.is('android')) {
+      await PrivacyScreen.enable();
+    } */
   }
   async login() {
     const modal = await this.modalCtrl.create({
@@ -141,24 +145,23 @@ export class AppComponent {
         {
           text: 'OK',
           role: 'confirm',
-          handler: ()=>{this.doLogout()},
+          handler: () => {
+            this.doLogout();
+          },
         },
       ],
     });
 
     await alert.present();
   }
-    hideMenu() {
-     this.menuCtrl.toggle('main-content');
-     this.menuCtrl.toggle('main-menu');
+  hideMenu() {
+    this.menuCtrl.toggle('main-content');
+    this.menuCtrl.toggle('main-menu');
     this.menuCtrl.close('main-menu');
     this.menuCtrl.close('main-content');
     this.menuCtrl.close();
-   this.menuCtrl.enable(false);
+    this.menuCtrl.enable(false);
 
-    console.log(this.menuCtrl,"fffffffffffffffffffffffff");
- 
-}
-
-
+    console.log(this.menuCtrl, 'fffffffffffffffffffffffff');
+  }
 }

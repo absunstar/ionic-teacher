@@ -22,7 +22,7 @@
 
     <div id="container" class="full-width">
       <a
-        *ngFor="let package of packagesList"
+        *ngFor="let package of packageList"
         [routerLink]="['/package-view']"
         [queryParams]="{id: package._id}"
       >
@@ -33,7 +33,7 @@
           <figcaption>
             <p>{{package.description}}</p>
             <div class="row price-more-card">
-              <i class="price">ج.م {{package.price}} </i>
+              <i class="price">ج.م {{package.price}} <s class="red">{{package.totalLecturesPrice}}</s> </i>
               <span class="more-card"> المزيد..</span>
             </div>
           </figcaption>

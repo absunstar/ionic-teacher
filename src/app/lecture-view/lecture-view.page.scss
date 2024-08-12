@@ -140,6 +140,7 @@ a {
   padding: 10px;
   border-radius: 10px;
   background-color: #eceff5;
+  font-size: larger;
   display: flow-root;
 }
 .left {
@@ -173,4 +174,7 @@ a {
 
 .ion-valid.sc-ion-input-md-h {
   --highlight-color: blue;
+}
+.font-large {
+  font-size: large;
 }

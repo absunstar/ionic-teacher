@@ -371,7 +371,7 @@ export class UserManagePage implements OnInit {
     }
   }
 
-  getUser() {
+  getUser() {    
     if (this.isite.userSession && this.isite.userSession.id) {
       this.isite
         .api({
