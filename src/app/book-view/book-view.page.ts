@@ -36,7 +36,6 @@ import {
   IonRouterLink,
 } from '@ionic/angular/standalone';
 import { IsiteService } from '../isite.service';
-import { Swiper } from 'swiper/types';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 // 2nd step:
@@ -88,14 +87,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   ],
 })
 export class BookViewPage implements OnInit {
-  @ViewChild('swiper')
-  swiperRef: ElementRef | undefined;
-  swiperModules = [IonicSlides];
+
   book: any;
   address: string | undefined;
   error: string | undefined;
   buyModal: any;
-  swiper?: Swiper;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
 
     this.book = {
@@ -107,19 +103,9 @@ export class BookViewPage implements OnInit {
     });
   }
 
-  swiperReady() {
-    console.log("ddddddddddddddddddddddddddddddddddd");
-    
-    this.swiper = this.swiperRef?.nativeElement.swiper;
-  }
 
-  logActiveIndex() {
-    console.log(this.swiperRef?.nativeElement.swiper.activeIndex);
-  }
+
   ngOnInit() {
-    this.swiper = this.swiperRef?.nativeElement.swiper;
-    this.swiper?.init();
-    console.log(this.swiper,"ddddddddddddddddddddddddddddddddddd");
    
   }
   async getBook(_id: string) {

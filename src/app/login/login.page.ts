@@ -109,13 +109,10 @@ export class LoginPage implements OnInit {
       .subscribe((resUser: any) => {
         if (resUser.accessToken) {
           this.isite.accessToken = resUser.accessToken;
-          Preferences.set({
-            key: 'accessToken',
-            value: this.isite.accessToken || '',
-          });
+          this.isite.set('accessToken', this.isite.accessToken);
         }
         if (resUser.done) {
-          this.isite.getUserSession(() => {
+          this.isite.getSession().subscribe((session) => {
             if (
               this.isite.userSession &&
               this.isite.userSession.type == 'parent'
@@ -123,7 +120,7 @@ export class LoginPage implements OnInit {
               this.isite.getParentsList();
             }
             this.close();
-            this.router.navigateByUrl('/welcome', { replaceUrl: true });
+           // this.router.navigateByUrl('/', { replaceUrl: true });
           });
         } else {
           this.error = resUser.error;

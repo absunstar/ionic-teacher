@@ -45,7 +45,7 @@
               صورة شخصية
               <ion-icon name="camera-outline"></ion-icon>
             </p>
-            <img class="img-upload" [src]="user.$_imageUrl" />
+            <img class="img-upload" src="{{user.$imageUrl}}" />
           </div>
         </ion-item>
 
@@ -55,7 +55,7 @@
               صورة البطاقة الشخصية
               <ion-icon name="camera-outline"></ion-icon>
             </p>
-            <img class="img-upload" [src]="user.$_nationalIdImageUrl" />
+            <img class="img-upload" src="{{user.$_nationalIdImageUrl}}" />
           </div>
         </ion-item>
 

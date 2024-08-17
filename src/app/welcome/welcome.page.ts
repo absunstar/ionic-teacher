@@ -72,14 +72,42 @@ import { IsiteService } from '../isite.service';
 })
 export class WelcomePage implements OnInit {
   studentList: [any] | undefined;
+  setting: any = {};
+  lectureList: [any] = [{}];
+  session: any;
+  userSession: any;
 
   constructor(public isite: IsiteService) {
     addIcons({ ...icons });
+    this.isite.getSetting().subscribe((setting) => {
+      this.setting = setting;
+      this.session = this.isite.session;
+      this.userSession = this.isite.userSession;
+      if (
+        this.setting.showLectures &&
+        (!this.session.user ||
+          this.session.user.placeType == 'offline')
+      ) {
+        this.isite.getLectures().subscribe((lecturers: any) => {
+          this.lectureList = lecturers;
+        });
+      }else{
+        this.lectureList= [{}];
+      }
+
+      if (this.setting.showPackages) {
+        this.isite.getPackages();
+      }
+
+      if (this.setting.showBooks) {
+        this.isite.getBooks();
+      }
+
+      if (this.setting.isShared) {
+        this.isite.getTeachersList();
+      }
+    });
   }
 
-  ngOnInit() {
-   
-  }
-
- 
+  ngOnInit() {}
 }

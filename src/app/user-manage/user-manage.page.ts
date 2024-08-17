@@ -187,7 +187,7 @@ export class UserManagePage implements OnInit {
       });
   }
 
-  getParentsList() {    
+  getParentsList() {
     this.isite
       .api({
         url: '/api/manageUsers/all',
@@ -204,7 +204,7 @@ export class UserManagePage implements OnInit {
         },
       })
       .subscribe((res: any) => {
-        if (res.done) {          
+        if (res.done) {
           this.user.parent = res.list[0];
         } else {
           this.error = 'لا يوجد'
@@ -361,7 +361,7 @@ export class UserManagePage implements OnInit {
             user.$error = res.error;
             this.parentSearch = '';
           } else if (res.user) {
-            this.isite.getUserSession(() => {
+            this.isite.getSession().subscribe((session) => {
               this.router.navigateByUrl('/user-manage', { replaceUrl: true });
             });
           }
@@ -371,7 +371,7 @@ export class UserManagePage implements OnInit {
     }
   }
 
-  getUser() {    
+  getUser() {
     if (this.isite.userSession && this.isite.userSession.id) {
       this.isite
         .api({

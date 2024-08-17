@@ -7,30 +7,29 @@ import {
   NavController,
   AlertController,
   ToastController,
-  
   LoadingController,
 } from '@ionic/angular';
+import { Observable, observeOn } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-
 export class IsiteService {
   studentList: any;
   teacherList: any;
-  accessToken: string | null = '';
+  accessToken: string = '';
   setting: any;
-  userSession: any;
-  session: any;
+  userSession: any = {};
+  session: any = {};
   packageList: [any] | undefined;
   lectureList: [any] | undefined;
   bookList: [any] | undefined;
-  baseURL: string = 'http://professional.localhost';
+  baseURL: string = 'https://professional.teacher.egytag.com';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,
     private router: Router
   ) {
-    this.start();
+    console.log('Isite Init ...');
     this.setting = {
       teacher: {},
       textOurPlacesTimes: '',
@@ -59,9 +58,9 @@ export class IsiteService {
       banner: '',
       codeCard: '',
       isShared: false,
-      packagesLimit : 0,
-      lecturesLimit : 0,
-      booksLimit : 0,
+      packagesLimit: 0,
+      lecturesLimit: 0,
+      booksLimit: 0,
       citiesAndAreasShow: false,
       nationalitiesShow: false,
       nameBesidLogoShow: false,
@@ -73,6 +72,7 @@ export class IsiteService {
     };
   }
 
+  // return subscribe
   api(options: any) {
     if (typeof options == 'string') {
       options = {
@@ -95,82 +95,70 @@ export class IsiteService {
     }
   }
 
-  
-
-  async start() {
-    const loader = await this.loadingCtrl.create({
-      message: ' انتظر قليلا - جاري التحميل',
+  start() {
+    return new Observable((observeOn) => {
+      this.get('accessToken').then((d) => {
+        this.accessToken = d;
+        observeOn.next(this.accessToken);
+      });
     });
-
-    await loader.present();
-    if (!this.accessToken) {
-      this.accessToken =
-        (await (await Preferences.get({ key: 'accessToken' })).value) || null;
-    }
-
-    this.getUserSession(() => {
-      if (this.userSession && this.userSession.type == 'parent') {
-        this.getParentsList();
-      }
-      if(this.setting.showLectures && (!this.userSession || this.userSession.placeType == 'offline')){
-
-        this.getLectures();
-      }
-      loader.dismiss();
-    });
-
-    if(this.setting.showPackages){
-
-      this.getPackages();
-    }
-   
-    if(this.setting.showBooks){
-
-      this.getBooks();
-    }
-
   }
 
-  async getUserSession(callback: () => void) {
-    this.api({
-      url: '/x-api/session',
-      body: {},
-    }).subscribe((resSession: any) => {
-      this.session = resSession.session;
-      if (resSession.session.accessToken) {
-        this.accessToken = resSession.session.accessToken;
-        Preferences.set({ key: 'accessToken', value: this.accessToken || '' });
-      }
+  async set(key: string, value: string) {
+    if (value) {
+      value = JSON.stringify(value);
+    }
+    await Preferences.set({ key: key, value: value });
+  }
+  async get(key: string) {
+    let value = (await Preferences.get({ key: key })).value;
+    if (value) {
+      return JSON.parse(value);
+    }
+    return value;
+  }
 
-      if (resSession.done) {
-        if (resSession.session.user) {
-          // this.updateVisit();
-
-          this.userSession = {
-            id: resSession.session.user.id,
-            _id: resSession.session.user._id,
-            email: resSession.session.user.email,
-            mobile: resSession.session.user.mobile,
-            firstName: resSession.session.user.firstName,
-            lastName: resSession.session.user.lastName,
-            imageUrl: resSession.session.user.image
-              ? this.baseURL + resSession.session.user.image.url
-              : '',
-            type: resSession.session.user.type,
-            placeType: resSession.session.user.placeType,
-            notificationsCount: resSession.session.user.notificationsCount,
-            notificationsList: resSession.session.user.notificationsList,
-            booksList: resSession.session.user.booksList,
-            lecturesList: resSession.session.user.lecturesList,
-            packagesList: resSession.session.user.packagesList,
-            schoolYear: resSession.session.user.schoolYear,
-            educationalLevel: resSession.session.user.educationalLevel,
-            address: resSession.session.user.address,
-          };
+  getSession() {
+    return new Observable((observeOn) => {
+      this.api({
+        url: '/x-api/session',
+        body: {},
+      }).subscribe((res: any) => {
+        this.session = res.session || {};
+        if (this.session.accessToken) {
+          this.accessToken = this.session.accessToken;
+          this.set('accessToken', this.accessToken);
         }
-      }
-      if (callback) {
-        callback();
+
+        if (res.done && this.session.user && this.session.user.image) {
+          this.session.user.imageUrl =
+            this.baseURL + this.session.user.image.url;
+        }
+        this.userSession = this.session.user || {};
+        observeOn.next(this.session);
+      });
+    });
+  }
+
+  getSetting() {
+    return new Observable((observeOn) => {
+      if (this.setting && this.setting.loaded) {
+        observeOn.next(this.setting);
+      } else {
+        this.api('/api/get-site-setting').subscribe((res: any) => {
+          this.setting = res.doc || {};
+          this.setting.loaded = true;
+          this.setting.logoUrl = this.setting.logo
+            ? this.baseURL + this.setting.logo.url
+            : this.baseURL + '/images/logo.png';
+          this.setting.footerLogoUrl = this.setting.footerLogo
+            ? this.baseURL + this.setting.footerLogo.url
+            : this.baseURL + '/images/logo.png';
+          this.setting.bannerUrl = this.setting.banner
+            ? this.baseURL + this.setting.banner.url
+            : this.baseURL + '/images/logo.png';
+          observeOn.next(this.setting);
+        });
       }
     });
   }
@@ -180,7 +168,7 @@ export class IsiteService {
     this.api({
       url: '/api/packages/all',
       body: {
-        limit : this.setting.packagesLimit,
+        limit: this.setting.packagesLimit,
         type: 'toStudent',
         select: {
           id: 1,
@@ -195,7 +183,9 @@ export class IsiteService {
       if (res.done) {
         res.list.forEach(
           (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image ? this.baseURL + element.image.url : '';
+            element.imageUrl = element.image
+              ? this.baseURL + element.image.url
+              : '';
           }
         );
         this.packageList = res.list;
@@ -203,31 +193,35 @@ export class IsiteService {
     });
   }
 
-  async getLectures() {
-    this.lectureList = undefined;
-    this.api({
-      url: '/api/lectures/allToStudent',
-      body: {
-        limit : this.setting.lecturesLimit,
-        type: 'toStudent',
-        select: {
-          id: 1,
-          _id: 1,
-          name: 1,
-          price: 1,
-          image: 1,
+  getLectures() {
+    return new Observable((observeOn) => {
+      this.api({
+        url: '/api/lectures/allToStudent',
+        body: {
+          limit: this.setting.lecturesLimit,
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            price: 1,
+            image: 1,
+          },
+          where: {},
         },
-        where: {},
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.list.forEach(
-          (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image ? this.baseURL + element.image.url : '';
-          }
-        );
-        this.lectureList = res.list;
-      }
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.lectureList = res.list;
+          observeOn.next(this.lectureList);
+        }
+      });
     });
   }
 
@@ -236,7 +230,7 @@ export class IsiteService {
     this.api({
       url: '/api/books/all',
       body: {
-        limit : this.setting.booksLimit,
+        limit: this.setting.booksLimit,
         type: 'toStudent',
         select: {
           id: 1,
@@ -251,7 +245,9 @@ export class IsiteService {
       if (res.done) {
         res.list.forEach(
           (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image ? this.baseURL + element.image.url : '';
+            element.imageUrl = element.image
+              ? this.baseURL + element.image.url
+              : '';
           }
         );
         this.bookList = res.list;
@@ -265,7 +261,7 @@ export class IsiteService {
       body: id,
     }).subscribe((res: any) => {
       if (res.done) {
-        this.getUserSession(() => {          
+        this.getSession().subscribe((session: any) => {
           this.router.navigateByUrl('/welcome', {
             replaceUrl: true,
           });
@@ -280,7 +276,7 @@ export class IsiteService {
       body: {},
     }).subscribe((res: any) => {
       if (res.done) {
-        this.getUserSession(() => {          
+        this.getSession().subscribe((session) => {
           this.router.navigateByUrl('/welcome', {
             replaceUrl: true,
           });
@@ -342,27 +338,6 @@ export class IsiteService {
           }
         );
         this.studentList = res.list;
-      }
-    });
-  }
-
-  async getSetting() {
-    this.api('/api/get-site-setting').subscribe((res: any) => {
-      if (res.done) {
-        this.setting = res.doc;
-        this.setting.logoUrl = this.setting.logo
-          ? this.baseURL + this.setting.logo.url
-          : '';
-        this.setting.footerLogoUrl = this.setting.footerLogo
-          ? this.baseURL + this.setting.footerLogo.url
-          : '';
-        this.setting.bannerUrl = this.setting.banner
-          ? this.baseURL + this.setting.banner.url
-          : '';
-      }
-      
-      if (this.setting.isShared) {
-        this.getTeachersList();
       }
     });
   }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
+import { Platform } from '@ionic/angular';
 
 import {
   Camera,
@@ -114,7 +115,8 @@ export class RegisterPage implements OnInit {
     public isite: IsiteService,
     private router: Router,
     public loadingCtrl: LoadingController,
-    public http: HttpClient
+    public http: HttpClient,
+    private platform: Platform
   ) {
     this.getEducationalLevelsList();
     this.getGendersList();
@@ -138,7 +140,6 @@ export class RegisterPage implements OnInit {
       password: '',
       rePassword: '',
       $imageUrl: '',
-      $_imageUrl: '',
       nationalId: '',
       $nationalIdImageUrl: '',
       $_nationalIdImageUrl: '',
@@ -199,48 +200,65 @@ export class RegisterPage implements OnInit {
 
   async selectImage(type: string) {
     this.user.$error = '';
-    await Camera.checkPermissions().then((permissions) => {
-      if (permissions.photos !== 'granted') {
-        Camera.requestPermissions();
-      }
-    });
 
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Prompt, // Camera, Photos or Prompt!
-    });
-    this.startUpload(image, type);
+    Camera.checkPermissions()
+      .then(async (permissions) => {
+        console.log('selectImage ..............', permissions);
+
+        if (
+          permissions.photos === 'denied' ||
+          permissions.camera === 'denied'
+        ) {
+          let p = await Camera.requestPermissions();
+          if (p.photos === 'denied' || p.camera === 'denied') {
+            return false;
+          } else {
+            return this.selectImage(type);
+          }
+        }
+        const image = await Camera.getPhoto({
+          quality: 90,
+          allowEditing: false,
+          resultType: CameraResultType.DataUrl,
+          source: CameraSource.Photos, // Camera, Photos or Prompt!
+        });
+        if (image) {
+          this.startUpload(image, type);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   async startUpload(image: any, type: string) {
+    const loader = await this.loadingCtrl.create({
+      message: ' انتظر قليلا - جاري التحميل',
+    });
+    await loader.present();
     this.user.$error = '';
     const base64Response = await fetch(image.dataUrl);
     const blob = await base64Response.blob();
     const formData = new FormData();
-    formData.append('fileToUpload', blob, 'image1.png');
-    this.uploadData(formData, type);
+    formData.append('fileToUpload', blob, 'image1.jpg');
+    this.uploadData(formData, type , loader);
   }
-  async uploadData(formData: FormData, type: string) {
+  async uploadData(formData: FormData, type: string , loader :HTMLIonLoadingElement) {
+
     this.user.$error = '';
-    const loading = await this.loadingCtrl.create({
-      message: 'جاري تحميل الصورة',
-    });
-    await loading.present();
-    this.http
-      .post(`${this.isite.baseURL}/x-api/upload/image`, formData)
+
+    this.isite
+      .api({ url: '/x-api/upload/image', body: formData })
       .subscribe((res: any) => {
         if (type == 'image') {
-          this.user.$imageUrl = res.image.url;
-          this.user.$_imageUrl = this.isite.baseURL + res.image.url;
+          this.user.image = res.image;
+          this.user.$imageUrl = this.isite.baseURL + this.user.image.url;
         } else if (type == 'nationalIdImage') {
           this.user.$nationalIdImageUrl = res.image.url;
           this.user.$_nationalIdImageUrl = this.isite.baseURL + res.image.url;
         }
-        /* this.user.image_url = res.image.url;
-        this.user.$image_url = this.isite.baseURL + res.image.url; */
-        loading.dismiss();
+        console.log(this.user);
+        loader.dismiss();
       });
   }
 
@@ -440,7 +458,6 @@ export class RegisterPage implements OnInit {
     user.$error = '';
 
     if (user) {
-
       if (!user.firstName) {
         user.$error = 'يجب إدخال الإسم الرباعي';
         return;
@@ -505,7 +522,6 @@ export class RegisterPage implements OnInit {
         }
       }
       user.nationalIdImage = { url: user.$nationalIdImageUrl };
-      user.image = { url: user.$imageUrl };
       if (user.password === user.rePassword) {
         this.user.birthOfDate = new Date(this.user.$birthOfDate);
         this.user.country = this.countriesList.find(
@@ -563,7 +579,7 @@ export class RegisterPage implements OnInit {
             if (res.error) {
               user.$error = res.error;
             } else if (res.user) {
-              this.isite.getUserSession(() => {
+              this.isite.getSession().subscribe((session) => {
                 this.router.navigateByUrl('/welcome', { replaceUrl: true });
               });
             }

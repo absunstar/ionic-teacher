@@ -6,7 +6,6 @@ import { LoginPage } from './login/login.page';
 import { ActivatedRoute } from '@angular/router';
 import { PrivacyScreen } from '@capacitor-community/privacy-screen';
 import { MenuController } from '@ionic/angular';
-import { register } from 'swiper/element/bundle';
 import {
   NavController,
   AlertController,
@@ -82,37 +81,69 @@ import { Platform } from '@ionic/angular';
   ],
 })
 export class AppComponent {
+  setting: any = {};
+  session: any = {};
+  userSession: any = {};
   constructor(
     private platform: Platform,
     private modalCtrl: ModalController,
     public isite: IsiteService,
     private router: Router,
     private menuCtrl: MenuController,
-
+    public loadingCtrl: LoadingController,
     private alertController: AlertController
   ) {
     addIcons({ ...icons });
     this.enablePrivacyScreen();
-    this.isite.getSetting();
     PrivacyScreen.addListener('screenRecordingStarted', () => {
       this.doLogout();
     });
     PrivacyScreen.addListener('screenshotTaken', () => {
       this.doLogout();
     });
-    register();
+
+    this.start();
+  }
+
+  async start() {
+    const loader = await this.loadingCtrl.create({
+      message: ' انتظر قليلا - جاري التحميل',
+    });
+
+    await loader.present();
+
+    this.isite.start().subscribe((accessToken) => {
+      this.isite.getSession().subscribe((session: any) => {
+        this.session = session;
+        this.userSession = this.session.user || {};
+        this.isite.getSetting().subscribe((setting) => {
+          this.setting = setting;
+          loader.dismiss();
+        });
+      });
+    });
   }
 
   async enablePrivacyScreen() {
-   /*  if (this.platform.is('android')) {
+    if (this.platform.is('android')) {
       await PrivacyScreen.enable();
-    } */
+    }
   }
   async login() {
     const modal = await this.modalCtrl.create({
       component: LoginPage,
       initialBreakpoint: 0.5,
     });
+
+    modal.onDidDismiss().then(() => {
+      this.isite.getSession().subscribe((session) => {
+        this.session = session;
+        this.userSession = this.session.user || {};
+        this.setting = this.isite.setting;
+        this.router.navigateByUrl('/', { replaceUrl: true });
+      });
+    });
+
     await modal.present();
   }
   async doLogout() {
@@ -123,11 +154,15 @@ export class AppComponent {
       .subscribe((resUser: any) => {
         if (resUser.accessToken) {
           this.isite.accessToken = '';
+          this.isite.set('accessToken', this.isite.accessToken);
         }
         if (resUser.done) {
-          this.isite.userSession = null;
-          this.isite.getUserSession(() => {
-            this.router.navigateByUrl('/welcome', { replaceUrl: true });
+          this.session = null;
+          this.isite.getSession().subscribe((session) => {
+            this.session = session;
+            this.userSession = this.session.user || {};
+            this.setting = this.isite.setting;
+            this.router.navigateByUrl('/');
           });
         } else {
         }
@@ -161,7 +196,5 @@ export class AppComponent {
     this.menuCtrl.close('main-content');
     this.menuCtrl.close();
     this.menuCtrl.enable(false);
-
-    console.log(this.menuCtrl, 'fffffffffffffffffffffffff');
   }
 }

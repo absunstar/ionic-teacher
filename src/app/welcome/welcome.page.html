@@ -2,16 +2,16 @@
   <div class="main-div-welcome">
     <ion-img
       class=""
-      *ngIf="isite.setting.showBanner"
-      [src]="isite.setting.bannerUrl"
+      *ngIf="setting.showBanner"
+      [src]="setting.bannerUrl"
     ></ion-img>
     <div
       class="phone-call cbh-phone cbh-green cbh-show cbh-static"
-      *ngIf="isite.setting.whatsapp"
+      *ngIf="setting.whatsapp"
     >
       <a
         id="WhatsApp-button"
-        href="https://wa.me/{{isite.setting.whatsapp}}"
+        href="https://wa.me/{{setting.whatsapp}}"
         target="_blank"
         class="phoneJs"
         title="WhatsApp 360imagem"
@@ -23,7 +23,7 @@
       ></a>
     </div>
     <div
-      *ngIf="isite.setting.isShared && isite.session && !isite.session.selectedTeacherId"
+      *ngIf="setting.isShared && isite.session && !isite.session.selectedTeacherId"
     >
       <div class="banner-word">
         <span> المدرسين </span>
@@ -56,7 +56,7 @@
       </ion-card>
     </div>
 
-    <ion-card class="card-bg" *ngIf="isite.setting.showPackages">
+    <ion-card class="card-bg" *ngIf="setting.showPackages">
       <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title"
           >أحدث مجموعات المحاضرات</ion-card-title
@@ -83,7 +83,7 @@
 
     <ion-card
       class="card-bg"
-      *ngIf="isite.setting.showLectures && (!isite.userSession || isite.userSession.placeType == 'offline')"
+      *ngIf="setting.showLectures"
     >
       <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title">أحدث المحاضرات</ion-card-title>
@@ -91,7 +91,7 @@
       <ion-card-content>
         <ion-list
           class="card-list-style"
-          *ngFor="let lecture of isite.lectureList"
+          *ngFor="let lecture of lectureList"
         >
           <ion-item
             class="item-bg"
@@ -109,7 +109,7 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card class="card-bg" *ngIf="isite.setting.showBooks">
+    <ion-card class="card-bg" *ngIf="setting.showBooks">
       <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title">أحدث الكتب</ion-card-title>
       </ion-card-header>
@@ -132,7 +132,7 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title class="center"
-          >{{isite.setting.textOurPlacesTimes}}</ion-card-title
+          >{{setting.textOurPlacesTimes}}</ion-card-title
         >
       </ion-card-header>
 
@@ -144,7 +144,7 @@
         >مواعيدنا و أماكنا <ion-icon name="location-outline"></ion-icon
       ></ion-button>
     </ion-card>
-    <ion-img class="" [src]="isite.setting.footerLogoUrl"></ion-img>
+    <ion-img class="" src="{{setting.footerLogoUrl}}"></ion-img>
     <p class="center">
       <a
         class="pages"
@@ -181,37 +181,37 @@
     </p>
     <p class="center">
       <a
-        *ngIf="isite.setting.facebookAccount"
+        *ngIf="setting.facebookAccount"
         class="social-logo facebook-logo"
-        href="https://www.facebook.com/{{ isite.setting.facebookAccount }}"
+        href="https://www.facebook.com/{{ setting.facebookAccount }}"
         ><ion-icon name="logo-facebook"></ion-icon
       ></a>
       <a
-        *ngIf="isite.setting.twitterAccouunt"
+        *ngIf="setting.twitterAccouunt"
         class="social-logo twitter-logo"
-        href="https://www.twitter.com/{{ isite.setting.twitterAccouunt }}"
+        href="https://www.twitter.com/{{ setting.twitterAccouunt }}"
         ><ion-icon name="logo-twitter"></ion-icon
       ></a>
       <a
-        *ngIf="isite.setting.instagramAccouunt"
+        *ngIf="setting.instagramAccouunt"
         class="social-logo instagram-logo"
         href="https://www.instagram.com/{{
-          isite.setting.instagramAccouunt
+          setting.instagramAccouunt
         }}"
         ><ion-icon name="logo-instagram"></ion-icon
       ></a>
       <a
-        *ngIf="isite.setting.linkedinAccouunt"
+        *ngIf="setting.linkedinAccouunt"
         class="social-logo linkedin-logo"
         href="https://www.linkedin.com/in/{{
-          isite.setting.linkedinAccouunt
+          setting.linkedinAccouunt
         }}"
         ><ion-icon name="logo-linkedin"></ion-icon
       ></a>
       <a
-        *ngIf="isite.setting.youTubeAccouunt"
+        *ngIf="setting.youTubeAccouunt"
         class="social-logo youtube-logo"
-        href="https://www.youtube.com/{{ isite.setting.youTubeAccouunt }}"
+        href="https://www.youtube.com/{{ setting.youTubeAccouunt }}"
         ><ion-icon name="logo-youtube"></ion-icon
       ></a>
     </p>
