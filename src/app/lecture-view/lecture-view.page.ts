@@ -104,7 +104,7 @@ export class LectureViewPage implements OnInit {
     this.secound = 0;
     this.route.queryParams.forEach((p) => {
       this.getLecture(p['id']);
-      this.quizView(p['id']);
+      
     });
   }
 
@@ -139,11 +139,12 @@ export class LectureViewPage implements OnInit {
           });
 
           this.lecture = res.doc;
+          this.quizView(this.lecture.id);
         }
       });
   }
 
-  async quizView(_id: string) {
+  async quizView(id: number) {
     this.error = '';
     if (this.isite.userSession && this.isite.userSession.id) {
       this.quiz = {};
@@ -151,7 +152,7 @@ export class LectureViewPage implements OnInit {
         .api({
           url: '/api/quizzes/viewByUserLecture',
           body: {
-            'lecture._id': _id,
+            'lecture.id': id,
           },
         })
         .subscribe((res: any) => {

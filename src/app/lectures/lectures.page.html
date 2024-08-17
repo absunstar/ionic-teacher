@@ -1,6 +1,6 @@
 <ion-content [fullscreen]="true">
   <ion-row class="main-row">
-    <ion-row class="full-width">
+    <ion-row class="full-width ">
       <ion-col size="9">
         <ion-list>
           <ion-item>
@@ -20,7 +20,7 @@
       </ion-col>
     </ion-row>
 
-    <div id="container" class="full-width">
+    <div id="container" class="full-width padding-20">
       <a
         *ngFor="let lecture of lecturesList"
         [routerLink]="['/lecture-view']"
