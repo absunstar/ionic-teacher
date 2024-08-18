@@ -72,6 +72,24 @@ export class IsiteService {
     };
   }
 
+  async set(key: string, value: string) {
+    if (value && (typeof value == 'object' || typeof value == 'string')) {
+      value = JSON.stringify(value);
+    }
+    await Preferences.set({ key: key, value: value });
+  }
+  async get(key: string) {
+    let value = (await Preferences.get({ key: key })).value;
+    if (value && typeof value == 'string') {
+      try {
+        return JSON.parse(value);
+      } catch (error) {
+        return value;
+      }
+    }
+    return value;
+  }
+
   // return subscribe
   api(options: any) {
     if (typeof options == 'string') {
@@ -81,41 +99,41 @@ export class IsiteService {
       };
     }
 
-    options.headers = options.headers || {};
-    options.headers['Access-Token'] = this.accessToken || '';
-    options.url = this.baseURL + options.url;
-    if (options.type == 'get') {
-      return this.http.get(options.url, {
-        headers: options.headers,
-      });
-    } else {
-      return this.http.post(options.url, options.body, {
-        headers: options.headers,
-      });
-    }
-  }
-
-  start() {
     return new Observable((observeOn) => {
-      this.get('accessToken').then((d) => {
-        this.accessToken = d;
-        observeOn.next(this.accessToken);
+      this.get('accessToken').then((accessToken) => {
+        this.accessToken = accessToken;
+
+        options.headers = options.headers || {};
+        options.headers['Access-Token'] = this.accessToken;
+        options.url = this.baseURL + options.url;
+
+        if (options.type == 'get') {
+          this.http
+            .get(options.url, {
+              headers: options.headers,
+            })
+            .subscribe((res) => {
+              observeOn.next(res);
+            });
+        } else {
+          this.http
+            .post(options.url, options.body, {
+              headers: options.headers,
+            })
+            .subscribe((res: any) => {
+              if (res.session && res.session.accessToken) {
+                this.accessToken = res.session.accessToken;
+                this.set('accessToken', this.accessToken);
+              }
+              if (res.accessToken) {
+                this.accessToken = res.accessToken;
+                this.set('accessToken', this.accessToken);
+              }
+              observeOn.next(res);
+            });
+        }
       });
     });
-  }
-
-  async set(key: string, value: string) {
-    if (value) {
-      value = JSON.stringify(value);
-    }
-    await Preferences.set({ key: key, value: value });
-  }
-  async get(key: string) {
-    let value = (await Preferences.get({ key: key })).value;
-    if (value) {
-      return JSON.parse(value);
-    }
-    return value;
   }
 
   getSession() {
@@ -125,17 +143,17 @@ export class IsiteService {
         body: {},
       }).subscribe((res: any) => {
         this.session = res.session || {};
-        if (this.session.accessToken) {
-          this.accessToken = this.session.accessToken;
-          this.set('accessToken', this.accessToken);
-        }
 
         if (res.done && this.session.user && this.session.user.image) {
           this.session.user.imageUrl =
             this.baseURL + this.session.user.image.url;
         }
+
         this.userSession = this.session.user || {};
-        observeOn.next(this.session);
+        observeOn.next({
+          session: this.session,
+          userSession: this.userSession,
+        });
       });
     });
   }
@@ -143,53 +161,74 @@ export class IsiteService {
   getSetting() {
     return new Observable((observeOn) => {
       if (this.setting && this.setting.loaded) {
-        observeOn.next(this.setting);
+        observeOn.next({
+          setting: this.setting,
+          session: this.session,
+          userSession: this.userSession,
+        });
       } else {
         this.api('/api/get-site-setting').subscribe((res: any) => {
           this.setting = res.doc || {};
           this.setting.loaded = true;
-          this.setting.logoUrl = this.setting.logo
-            ? this.baseURL + this.setting.logo.url
-            : this.baseURL + '/images/logo.png';
-          this.setting.footerLogoUrl = this.setting.footerLogo
-            ? this.baseURL + this.setting.footerLogo.url
-            : this.baseURL + '/images/logo.png';
-          this.setting.bannerUrl = this.setting.banner
-            ? this.baseURL + this.setting.banner.url
-            : this.baseURL + '/images/logo.png';
-          observeOn.next(this.setting);
+          if (this.setting.logo) {
+            this.setting.logoUrl = this.baseURL + this.setting.logo.url;
+          } else {
+            this.setting.logoUrl = this.baseURL + '/images/logo.png';
+          }
+
+          if (this.setting.footerLogo) {
+            this.setting.footerLogoUrl =
+              this.baseURL + this.setting.footerLogo.url;
+          } else {
+            this.setting.footerLogoUrl = this.baseURL + '/images/logo.png';
+          }
+
+          if (this.setting.banner) {
+            this.setting.bannerUrl = this.baseURL + this.setting.banner.url;
+          } else {
+            this.setting.bannerUrl = this.baseURL + '/images/logo.png';
+          }
+
+          observeOn.next({
+            setting: this.setting,
+            session: this.session,
+            userSession: this.userSession,
+          });
         });
       }
     });
   }
 
-  async getPackages() {
-    this.packageList = undefined;
-    this.api({
-      url: '/api/packages/all',
-      body: {
-        limit: this.setting.packagesLimit,
-        type: 'toStudent',
-        select: {
-          id: 1,
-          _id: 1,
-          name: 1,
-          price: 1,
-          image: 1,
+  getPackages() {
+    return new Observable((observeOn) => {
+      this.packageList = undefined;
+      this.api({
+        url: '/api/packages/all',
+        body: {
+          limit: this.setting.packagesLimit,
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            price: 1,
+            image: 1,
+          },
+          where: {},
         },
-        where: {},
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.list.forEach(
-          (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image
-              ? this.baseURL + element.image.url
-              : '';
-          }
-        );
-        this.packageList = res.list;
-      }
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.packageList = res.list;
+          observeOn.next(this.packageList);
+        }
+      });
     });
   }
 
@@ -225,33 +264,36 @@ export class IsiteService {
     });
   }
 
-  async getBooks() {
-    this.bookList = undefined;
-    this.api({
-      url: '/api/books/all',
-      body: {
-        limit: this.setting.booksLimit,
-        type: 'toStudent',
-        select: {
-          id: 1,
-          _id: 1,
-          name: 1,
-          price: 1,
-          image: 1,
+  getBooks() {
+    return new Observable((observeOn) => {
+      this.bookList = undefined;
+      this.api({
+        url: '/api/books/all',
+        body: {
+          limit: this.setting.booksLimit,
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            price: 1,
+            image: 1,
+          },
+          where: {},
         },
-        where: {},
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.list.forEach(
-          (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image
-              ? this.baseURL + element.image.url
-              : '';
-          }
-        );
-        this.bookList = res.list;
-      }
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.bookList = res.list;
+          observeOn.next(this.bookList);
+        }
+      });
     });
   }
 
@@ -261,7 +303,7 @@ export class IsiteService {
       body: id,
     }).subscribe((res: any) => {
       if (res.done) {
-        this.getSession().subscribe((session: any) => {
+        this.getSession().subscribe(() => {
           this.router.navigateByUrl('/welcome', {
             replaceUrl: true,
           });
@@ -276,7 +318,7 @@ export class IsiteService {
       body: {},
     }).subscribe((res: any) => {
       if (res.done) {
-        this.getSession().subscribe((session) => {
+        this.getSession().subscribe(() => {
           this.router.navigateByUrl('/welcome', {
             replaceUrl: true,
           });
@@ -285,34 +327,37 @@ export class IsiteService {
     });
   }
 
-  async getTeachersList() {
-    this.api({
-      url: '/api/manageUsers/all',
-      body: {
-        where: {
-          type: 'teacher',
+  getTeachersList() {
+    return new Observable((observeOn) => {
+      this.api({
+        url: '/api/manageUsers/all',
+        body: {
+          where: {
+            type: 'teacher',
+          },
+          limit: 9,
+          select: {
+            id: 1,
+            firstName: 1,
+            lastName: 1,
+            image: 1,
+            title: 1,
+            bio: 1,
+          },
         },
-        limit: 9,
-        select: {
-          id: 1,
-          firstName: 1,
-          lastName: 1,
-          image: 1,
-          title: 1,
-          bio: 1,
-        },
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.list.forEach(
-          (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image
-              ? this.baseURL + element.image.url
-              : '';
-          }
-        );
-        this.teacherList = res.list;
-      }
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.teacherList = res.list;
+          observeOn.next(this.teacherList);
+        }
+      });
     });
   }
 

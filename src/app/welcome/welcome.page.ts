@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
@@ -74,40 +75,53 @@ export class WelcomePage implements OnInit {
   studentList: [any] | undefined;
   setting: any = {};
   lectureList: [any] = [{}];
+  packageList: [any] = [{}];
+  teacherList: [any] = [{}];
+  bookList: [any] = [{}];
   session: any;
   userSession: any;
 
-  constructor(public isite: IsiteService) {
+  constructor(public isite: IsiteService, private _ngzone: NgZone) {
     addIcons({ ...icons });
-    this.isite.getSetting().subscribe((setting) => {
-      this.setting = setting;
-      this.session = this.isite.session;
-      this.userSession = this.isite.userSession;
+  }
+  start() {
+    this.isite.getSetting().subscribe((data: any) => {
+      this.setting = data.setting;
+      this.session = data.session;
+      this.userSession = data.userSession;
+
       if (
         this.setting.showLectures &&
-        (!this.session.user ||
-          this.session.user.placeType == 'offline')
+        (!this.session.user || this.session.user.placeType == 'offline')
       ) {
         this.isite.getLectures().subscribe((lecturers: any) => {
           this.lectureList = lecturers;
         });
-      }else{
-        this.lectureList= [{}];
+      } else {
+        this.lectureList = [{}];
       }
 
       if (this.setting.showPackages) {
-        this.isite.getPackages();
+        this.isite.getPackages().subscribe((packages: any) => {
+          this.packageList = packages;
+        });
       }
 
       if (this.setting.showBooks) {
-        this.isite.getBooks();
+        this.isite.getBooks().subscribe((books: any) => {
+          this.bookList = books;
+        });
       }
 
       if (this.setting.isShared) {
-        this.isite.getTeachersList();
+        this.isite.getTeachersList().subscribe((teachers: any) => {
+          this.teacherList = teachers;
+        });
       }
     });
   }
-
-  ngOnInit() {}
+  ngOnInit() {
+    this.start();
+  }
+  ionViewWillEnter() {}
 }

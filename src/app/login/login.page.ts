@@ -107,15 +107,12 @@ export class LoginPage implements OnInit {
         },
       })
       .subscribe((resUser: any) => {
-        if (resUser.accessToken) {
-          this.isite.accessToken = resUser.accessToken;
-          this.isite.set('accessToken', this.isite.accessToken);
-        }
+
         if (resUser.done) {
-          this.isite.getSession().subscribe((session) => {
+          this.isite.getSession().subscribe((data:any) => {
             if (
-              this.isite.userSession &&
-              this.isite.userSession.type == 'parent'
+              data.userSession &&
+              data.userSession.type == 'parent'
             ) {
               this.isite.getParentsList();
             }

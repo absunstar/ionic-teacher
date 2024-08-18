@@ -1,10 +1,10 @@
 <ion-app>
   <ion-header [translucent]="true" dir="rtl">
-    <ion-toolbar [routerLink]="['/welcome']">
+    <ion-toolbar >
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-      <ion-img class="logo" src="{{setting.logoUrl}}"></ion-img>
+      <ion-img class="logo" [src]="setting.logoUrl"></ion-img>
       <ion-title class="siteName" *ngIf="setting.nameBesidLogoShow">{{
         setting.siteName
       }}</ion-title>
@@ -12,6 +12,7 @@
   </ion-header>
 
   <ion-split-pane>
+
     <ion-menu
       id="main-menu"
       contentId="main-content"
@@ -184,6 +185,7 @@
     </ion-menu>
 
     <ion-router-outlet id="main-content"></ion-router-outlet>
+
     <ion-tabs dir="rtl">
       <ion-tab-bar slot="bottom">
         <ion-tab-button [routerLink]="['/welcome']">
@@ -221,5 +223,6 @@
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
+
   </ion-split-pane>
 </ion-app>

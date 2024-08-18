@@ -3,8 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'welcome',
+    redirectTo: 'loading',
     pathMatch: 'full',
+  },
+  {
+    path: 'loading',
+    loadComponent: () => import('./loading/loading.page').then( m => m.LoadingPage)
   },
   {
     path: 'folder/:id',
@@ -71,5 +75,7 @@ export const routes: Routes = [
     path: 'page-view',
     loadComponent: () => import('./page-view/page-view.page').then( m => m.PageViewPage)
   },
+
+
 
 ];

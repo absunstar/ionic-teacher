@@ -23,7 +23,7 @@
       ></a>
     </div>
     <div
-      *ngIf="setting.isShared && isite.session && !isite.session.selectedTeacherId"
+      *ngIf="setting.isShared && session && !session.selectedTeacherId"
     >
       <div class="banner-word">
         <span> المدرسين </span>
@@ -31,7 +31,7 @@
       </div>
       <ion-card
         class="center"
-        *ngFor="let teacher of isite.teacherList"
+        *ngFor="let teacher of teacherList"
         (click)="isite.selectTeacher(teacher.id)"
       >
         <img class="circle-img" [src]="teacher.imageUrl" />
@@ -42,10 +42,10 @@
         <p>{{teacher.bio}}</p>
       </ion-card>
     </div>
-    <div *ngIf="isite.userSession && isite.userSession.type == 'parent'">
+    <div *ngIf="userSession && userSession.type == 'parent'">
       <ion-card
         class="center"
-        *ngFor="let student of isite.studentList"
+        *ngFor="let student of studentList"
         [routerLink]="['/parent-report']"
         [queryParams]="{id: student._id}"
       >
@@ -65,7 +65,7 @@
       <ion-card-content>
         <ion-list
           class="card-list-style"
-          *ngFor="let package of isite.packageList"
+          *ngFor="let package of packageList"
         >
           <ion-item
             class="item-bg"
@@ -81,18 +81,12 @@
       </ion-card-content>
     </ion-card>
 
-    <ion-card
-      class="card-bg"
-      *ngIf="setting.showLectures"
-    >
+    <ion-card class="card-bg" *ngIf="setting.showLectures">
       <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title">أحدث المحاضرات</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-list
-          class="card-list-style"
-          *ngFor="let lecture of lectureList"
-        >
+        <ion-list class="card-list-style" *ngFor="let lecture of lectureList">
           <ion-item
             class="item-bg"
             [routerLink]="['/lecture-view']"
@@ -114,7 +108,7 @@
         <ion-card-title class="card-title">أحدث الكتب</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-list class="card-list-style" *ngFor="let book of isite.bookList">
+        <ion-list class="card-list-style" *ngFor="let book of bookList">
           <ion-item
             class="item-bg"
             [routerLink]="['/book-view']"
@@ -183,29 +177,25 @@
       <a
         *ngIf="setting.facebookAccount"
         class="social-logo facebook-logo"
-        href="https://www.facebook.com/{{ setting.facebookAccount }}"
+        href="https://www.facebook.com/{{setting.facebookAccount}}"
         ><ion-icon name="logo-facebook"></ion-icon
       ></a>
       <a
         *ngIf="setting.twitterAccouunt"
         class="social-logo twitter-logo"
-        href="https://www.twitter.com/{{ setting.twitterAccouunt }}"
+        href="https://www.twitter.com/{{setting.twitterAccouunt}}"
         ><ion-icon name="logo-twitter"></ion-icon
       ></a>
       <a
         *ngIf="setting.instagramAccouunt"
         class="social-logo instagram-logo"
-        href="https://www.instagram.com/{{
-          setting.instagramAccouunt
-        }}"
+        href="https://www.instagram.com/{{setting.instagramAccouunt}}"
         ><ion-icon name="logo-instagram"></ion-icon
       ></a>
       <a
         *ngIf="setting.linkedinAccouunt"
         class="social-logo linkedin-logo"
-        href="https://www.linkedin.com/in/{{
-          setting.linkedinAccouunt
-        }}"
+        href="https://www.linkedin.com/in/{{setting.linkedinAccouunt}}"
         ><ion-icon name="logo-linkedin"></ion-icon
       ></a>
       <a

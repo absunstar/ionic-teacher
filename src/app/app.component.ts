@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { RouterLink, Router, RouterLinkActive } from '@angular/router';
 import { ModalController } from '@ionic/angular/standalone';
 import { LoginPage } from './login/login.page';
@@ -91,7 +91,8 @@ export class AppComponent {
     private router: Router,
     private menuCtrl: MenuController,
     public loadingCtrl: LoadingController,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private _ngzone: NgZone
   ) {
     addIcons({ ...icons });
     this.enablePrivacyScreen();
@@ -101,25 +102,15 @@ export class AppComponent {
     PrivacyScreen.addListener('screenshotTaken', () => {
       this.doLogout();
     });
-
     this.start();
   }
 
   async start() {
-    const loader = await this.loadingCtrl.create({
-      message: ' انتظر قليلا - جاري التحميل',
-    });
-
-    await loader.present();
-
-    this.isite.start().subscribe((accessToken) => {
-      this.isite.getSession().subscribe((session: any) => {
-        this.session = session;
-        this.userSession = this.session.user || {};
-        this.isite.getSetting().subscribe((setting) => {
-          this.setting = setting;
-          loader.dismiss();
-        });
+    this.isite.getSession().subscribe((data: any) => {
+      this.isite.getSetting().subscribe((data: any) => {
+        this.setting = data.setting;
+        this.session = data.session;
+        this.userSession = data.userSession;
       });
     });
   }
@@ -136,11 +127,11 @@ export class AppComponent {
     });
 
     modal.onDidDismiss().then(() => {
-      this.isite.getSession().subscribe((session) => {
-        this.session = session;
-        this.userSession = this.session.user || {};
-        this.setting = this.isite.setting;
-        this.router.navigateByUrl('/', { replaceUrl: true });
+      this.isite.getSession().subscribe((data: any) => {
+        this.session = data.session;
+        this.userSession = data.userSession;
+
+        this.router.navigateByUrl('/loading', { replaceUrl: true });
       });
     });
 
@@ -152,17 +143,13 @@ export class AppComponent {
         url: '/api/user/logout',
       })
       .subscribe((resUser: any) => {
-        if (resUser.accessToken) {
-          this.isite.accessToken = '';
-          this.isite.set('accessToken', this.isite.accessToken);
-        }
         if (resUser.done) {
           this.session = null;
-          this.isite.getSession().subscribe((session) => {
-            this.session = session;
-            this.userSession = this.session.user || {};
-            this.setting = this.isite.setting;
-            this.router.navigateByUrl('/');
+          this.isite.getSession().subscribe((data: any) => {
+            this.session = data.session;
+            this.userSession = data.userSession;
+
+            this.router.navigateByUrl('/loading');
           });
         } else {
         }

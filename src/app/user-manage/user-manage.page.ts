@@ -361,7 +361,7 @@ export class UserManagePage implements OnInit {
             user.$error = res.error;
             this.parentSearch = '';
           } else if (res.user) {
-            this.isite.getSession().subscribe((session) => {
+            this.isite.getSession().subscribe((data : any) => {
               this.router.navigateByUrl('/user-manage', { replaceUrl: true });
             });
           }
