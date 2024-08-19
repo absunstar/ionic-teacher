@@ -38,14 +38,7 @@ export class LoadingPage implements OnInit {
   ) {}
 
   async start() {
-    const loader = await this.loadingCtrl.create({
-      message: ' انتظر قليلا - جاري التحميل',
-    });
-
-    await loader.present();
-
     setTimeout(() => {
-      loader.dismiss();
       this.router.navigate(['/welcome']);
     }, 1000 * 3);
   }
