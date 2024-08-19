@@ -107,7 +107,7 @@ export class UserManagePage implements OnInit {
   govesList: any;
   citiesList: any;
   areasList: any;
-  parentSearch : string | undefined
+  parentSearch: string | undefined;
   constructor(
     public isite: IsiteService,
     private router: Router,
@@ -144,20 +144,34 @@ export class UserManagePage implements OnInit {
   }
 
   async selectImage(type: string) {
-    this.user.$error = '';
-    await Camera.checkPermissions().then((permissions) => {
-      if (permissions.photos !== 'granted') {
-        Camera.requestPermissions();
-      }
-    });
+    Camera.checkPermissions()
+      .then(async (permissions) => {
+        console.log('selectImage ..............', permissions);
 
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Prompt, // Camera, Photos or Prompt!
-    });
-    this.startUpload(image, type);
+        if (
+          permissions.photos === 'denied' ||
+          permissions.camera === 'denied'
+        ) {
+          let p = await Camera.requestPermissions();
+          if (p.photos === 'denied' || p.camera === 'denied') {
+            return false;
+          } else {
+            return this.selectImage(type);
+          }
+        }
+        const image = await Camera.getPhoto({
+          quality: 90,
+          allowEditing: false,
+          resultType: CameraResultType.DataUrl,
+          source: CameraSource.Prompt, // Camera, Photos or Prompt!
+        });
+        if (image) {
+          this.startUpload(image, type);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   async startUpload(image: any, type: string) {
@@ -170,10 +184,7 @@ export class UserManagePage implements OnInit {
   }
   async uploadData(formData: FormData, type: string) {
     this.user.$error = '';
-    const loading = await this.loadingCtrl.create({
-      message: 'جاري تحميل الصورة',
-    });
-    await loading.present();
+
     this.http
       .post(`${this.isite.baseURL}/x-api/upload/image`, formData)
       .subscribe((res: any) => {
@@ -183,7 +194,6 @@ export class UserManagePage implements OnInit {
         }
         /* this.user.image_url = res.image.url;
         this.user.$image_url = this.isite.baseURL + res.image.url; */
-        loading.dismiss();
       });
   }
 
@@ -194,7 +204,7 @@ export class UserManagePage implements OnInit {
         body: {
           where: {
             email: this.parentSearch,
-            type: "parent",
+            type: 'parent',
             active: true,
           },
           select: {
@@ -207,7 +217,7 @@ export class UserManagePage implements OnInit {
         if (res.done) {
           this.user.parent = res.list[0];
         } else {
-          this.error = 'لا يوجد'
+          this.error = 'لا يوجد';
         }
       });
   }
@@ -361,7 +371,7 @@ export class UserManagePage implements OnInit {
             user.$error = res.error;
             this.parentSearch = '';
           } else if (res.user) {
-            this.isite.getSession().subscribe((data : any) => {
+            this.isite.getSession().subscribe((data: any) => {
               this.router.navigateByUrl('/user-manage', { replaceUrl: true });
             });
           }

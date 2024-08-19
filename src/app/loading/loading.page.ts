@@ -50,7 +50,9 @@ export class LoadingPage implements OnInit {
     }, 1000 * 3);
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.start();
+  }
   ionViewWillEnter() {
     this.start();
   }

@@ -232,19 +232,15 @@ export class RegisterPage implements OnInit {
   }
 
   async startUpload(image: any, type: string) {
-    const loader = await this.loadingCtrl.create({
-      message: ' انتظر قليلا - جاري التحميل',
-    });
-    await loader.present();
     this.user.$error = '';
     const base64Response = await fetch(image.dataUrl);
     const blob = await base64Response.blob();
     const formData = new FormData();
     formData.append('fileToUpload', blob, 'image1.jpg');
-    this.uploadData(formData, type , loader);
+    this.uploadData(formData, type);
   }
-  async uploadData(formData: FormData, type: string , loader :HTMLIonLoadingElement) {
-
+  
+  async uploadData(formData: FormData, type: string) {
     this.user.$error = '';
 
     this.isite
@@ -258,7 +254,6 @@ export class RegisterPage implements OnInit {
           this.user.$_nationalIdImageUrl = this.isite.baseURL + res.image.url;
         }
         console.log(this.user);
-        loader.dismiss();
       });
   }
 
@@ -579,7 +574,7 @@ export class RegisterPage implements OnInit {
             if (res.error) {
               user.$error = res.error;
             } else if (res.user) {
-              this.isite.getSession().subscribe((data : any) => {
+              this.isite.getSession().subscribe((data: any) => {
                 this.router.navigateByUrl('/welcome', { replaceUrl: true });
               });
             }
