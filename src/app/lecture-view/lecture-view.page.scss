@@ -1,6 +1,16 @@
 .main-row {
   /* margin-bottom: 90px; */
 }
+.ion-padding {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
 .item-native {
   background-color: #eceff5;
 }
@@ -42,7 +52,7 @@
 }
 ion-item {
   /* margin: 5%; */
- /*  ion-img {
+  /*  ion-img {
     width: 20vw;
     height: 20vh;
     display: block;
@@ -67,14 +77,13 @@ ion-item {
   transform: scale(1.8);
 }
 
-
 .main-content {
   top: 90px;
 }
 .degree {
   color: white;
-    padding: 7px;
-    border-radius: 25px
+  padding: 7px;
+  border-radius: 25px;
 }
 .bg-red {
   background: red;

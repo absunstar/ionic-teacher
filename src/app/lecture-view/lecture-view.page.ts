@@ -104,8 +104,14 @@ export class LectureViewPage implements OnInit {
     this.secound = 0;
     this.route.queryParams.forEach((p) => {
       this.getLecture(p['id']);
-      
     });
+    // this.onWindowLoaded().then(() => {
+    //   this.addScript('https://social-browser.com/x-js/video.min.js').then(
+    //     () => {
+    //       this.addScript('https://social-browser.com/x-js/youtube.min.js');
+    //     }
+    //   );
+    // });
   }
 
   ngOnInit() {
@@ -323,5 +329,26 @@ export class LectureViewPage implements OnInit {
         );
       }
     }, 1000);
+  }
+  addScript(src: string) {
+    return new Promise((resolve, reject) => {
+      const el = document.createElement('script');
+      el.src = src;
+      el.addEventListener('load', resolve);
+      el.addEventListener('error', reject);
+      document.body.append(el);
+    });
+  }
+
+  onWindowLoaded() {
+    return new Promise((resolve, reject) => {
+      if (document.readyState !== 'loading') {
+        resolve(true);
+      } else {
+        document.addEventListener('DOMContentLoaded', () => {
+          resolve(true);
+        });
+      }
+    });
   }
 }
