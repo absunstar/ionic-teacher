@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCol,
   IonRow,
   IonButton,
@@ -35,6 +37,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./lectures.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonCol,
     IonButton,
     IonRow,
@@ -72,37 +76,45 @@ export class LecturesPage implements OnInit {
 
   ngOnInit() {
     this.search = '';
-    
+
     this.type = '';
     this.route.queryParams.forEach((p) => {
       this.type = 'toStudent';
-      if(p && p['id']) {
+      if (p && p['id']) {
         this.type = 'myStudent';
       }
-    this.getLectures();
-    })
+      this.getLectures();
+    });
   }
-  async getLectures() {    
-      this.lecturesList = undefined;
-      this.isite
-        .api({
-          url: '/api/lectures/allToStudent',
-          body: {
-            type: this.type,
-            search: this.search,
-            where: {},
-          },
-        })
-        .subscribe((res: any) => {
-          if (res.done) {
-            res.list.forEach(
-              (element: { imageUrl: string; image: { url: string } }) => {
-                element.imageUrl = element.image ? this.isite.baseURL + element.image.url : '';
-              }
-            );
-            this.lecturesList = res.list;
-          }
-        });
-    
+  async getLectures() {
+    this.lecturesList = undefined;
+    this.isite
+      .api({
+        url: '/api/lectures/allToStudent',
+        body: {
+          type: this.type,
+          search: this.search,
+          where: {},
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.isite.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.lecturesList = res.list;
+        }
+      });
+  }
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

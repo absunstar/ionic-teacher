@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCol,
   IonRow,
   IonButton,
@@ -35,6 +37,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./books.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonCol,
     IonButton,
     IonRow,
@@ -109,5 +113,12 @@ export class BooksPage implements OnInit {
         this.booksList = res.list;
       }
     });
+  }
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

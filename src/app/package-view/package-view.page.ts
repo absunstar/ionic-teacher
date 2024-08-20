@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCardTitle,
   IonInput,
   IonModal,
@@ -41,6 +43,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./package-view.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     FormsModule,
     IonInput,
     IonCardTitle,
@@ -81,6 +85,10 @@ export class PackageViewPage implements OnInit {
   error: string | undefined;
   buyModal: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
+    
+  }
+
+  ngOnInit() {
     this.package = {
       lecturesList: [],
     };
@@ -88,16 +96,9 @@ export class PackageViewPage implements OnInit {
     this.route.queryParams.forEach((p) => {
       this.getPackage(p['id']);
     });
+   
   }
-
-  ngOnInit() {
-    // this.route.queryParams.forEach((p) => {
-    //   if (p['id']) {
-    //     this.isite.getPackage(p['id']);
-    //   }
-    // });
-  }
-  async getPackage(_id: string) {
+  async getPackage(_id: string) {    
     this.package = {};
     this.isite
       .api({
@@ -115,10 +116,7 @@ export class PackageViewPage implements OnInit {
           res.doc.lecturesList = res.doc.lecturesList || [];
 
           res.doc.lecturesList.forEach(
-            (_element: {
-              lecture: any;
-              imageUrl: string;
-            }) => {
+            (_element: { lecture: any; imageUrl: string }) => {
               _element.imageUrl =
                 _element.lecture && _element.lecture.image
                   ? this.isite.baseURL + _element.lecture.image.url
@@ -162,5 +160,12 @@ export class PackageViewPage implements OnInit {
           this.error = res.error;
         }
       });
+  }
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

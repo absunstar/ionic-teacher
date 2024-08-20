@@ -81,8 +81,6 @@ export class PageViewPage implements OnInit {
 
   getPageImplement() {
     this.route.queryParams.subscribe(async (params) => {
-      console.log(params);
-
       if (params && params['type']) {
         this.isite
           .api({

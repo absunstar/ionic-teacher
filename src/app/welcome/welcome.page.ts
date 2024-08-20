@@ -1,8 +1,15 @@
 import { Component, OnInit, NgZone } from '@angular/core';
+import { ModalController } from '@ionic/angular/standalone';
+import { LoginPage } from '../login/login.page';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
@@ -12,6 +19,8 @@ import {
   IonCardHeader,
   IonCardContent,
   IonCard,
+  IonRefresher,
+  IonRefresherContent,
   IonImg,
   IonButton,
   IonButtons,
@@ -19,6 +28,7 @@ import {
   IonTitle,
   IonToolbar,
   IonHeader,
+  IonRow,
   IonApp,
   IonSplitPane,
   IonMenu,
@@ -40,6 +50,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./welcome.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonThumbnail,
     IonCardTitle,
     IonCardSubtitle,
@@ -47,6 +59,7 @@ import { IsiteService } from '../isite.service';
     IonCardContent,
     IonCard,
     IonImg,
+    IonRow,
     IonButton,
     IonHeader,
     IonToolbar,
@@ -81,9 +94,39 @@ export class WelcomePage implements OnInit {
   session: any;
   userSession: any;
 
-  constructor(public isite: IsiteService, private _ngzone: NgZone) {
+  constructor(
+    public isite: IsiteService,
+    private _ngzone: NgZone,
+    private modalCtrl: ModalController,
+    private router: Router
+  ) {
     addIcons({ ...icons });
   }
+  async login() {
+    const modal = await this.modalCtrl.create({
+      component: LoginPage,
+      initialBreakpoint: 0.5,
+    });
+
+    modal.onDidDismiss().then(() => {
+      this.isite.getSession().subscribe((data: any) => {
+        this.session = data.session;
+        this.userSession = data.userSession;
+
+        this.router.navigateByUrl('/loading', { replaceUrl: true });
+      });
+    });
+
+    await modal.present();
+  }
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.start();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
+  }
+
   start() {
     this.isite.getSetting().subscribe((data: any) => {
       this.setting = data.setting;
@@ -120,6 +163,7 @@ export class WelcomePage implements OnInit {
       }
     });
   }
+
   ngOnInit() {
     this.start();
   }

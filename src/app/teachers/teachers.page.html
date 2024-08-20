@@ -1,4 +1,13 @@
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <ion-row class="main-row">
     <ion-row class="full-width">
       <ion-col size="9">
@@ -21,10 +30,7 @@
     </ion-row>
 
     <div id="container" class="full-width">
-      <ion-card
-        class="center"
-        *ngFor="let teacher of teacherList"
-      >
+      <ion-card class="center" *ngFor="let teacher of teacherList">
         <img class="circle-img" [src]="teacher.imageUrl" />
         <ion-card-header class="center">
           <ion-card-title>{{teacher.firstName}}</ion-card-title>

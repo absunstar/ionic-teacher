@@ -1,5 +1,14 @@
 <ion-content [fullscreen]="true">
   <ion-row class="main-row">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content
+        pullingIcon="chevron-down-circle-outline"
+        pullingText="Pull to refresh"
+        refreshingSpinner="circles"
+        refreshingText="Refreshing..."
+      >
+      </ion-refresher-content>
+    </ion-refresher>
     <div class="main-div" id="container">
       <ion-card *ngFor="let lecture of lecturesList">
         <ion-card-header>
@@ -36,11 +45,20 @@
               >
             </p>
             <ion-row>
-              <ion-col class="font-17 center white quiz-status-notfound" size="4"> عدد الإسئلة </ion-col>
-              <ion-col class="font-17 center white quiz-status-notfound" size="4"
+              <ion-col
+                class="font-17 center white quiz-status-notfound"
+                size="4"
+              >
+                عدد الإسئلة
+              </ion-col>
+              <ion-col
+                class="font-17 center white quiz-status-notfound"
+                size="4"
                 >الإجابات الصحيحة</ion-col
               >
-              <ion-col class="font-17 center white quiz-status-notfound" size="4"
+              <ion-col
+                class="font-17 center white quiz-status-notfound"
+                size="4"
                 >الإجابات الخاطئة</ion-col
               >
             </ion-row>

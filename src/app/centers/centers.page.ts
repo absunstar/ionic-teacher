@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCardTitle,
   IonCardSubtitle,
   IonCardHeader,
@@ -42,6 +44,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./centers.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonCardTitle,
     IonCardSubtitle,
     IonCardHeader,
@@ -142,5 +146,12 @@ export class CentersPage implements OnInit {
           }, 1000);
         }
       });
+  }
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

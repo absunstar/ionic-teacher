@@ -10,6 +10,9 @@ ion-content {
 .font-large {
   font-size: large;
 }
+.content-center {
+  place-content: center;
+}
 .whatsappContact {
   font-size: xx-large;
   color: white;
@@ -21,7 +24,7 @@ ion-content {
   background: #7f7f7f;
 }
 .bg-card-header {
-  background : #0054e9;
+  background: #0054e9;
 }
 ion-card {
   margin-top: 20px;
@@ -644,6 +647,9 @@ ion-card-header {
 .radius-15 {
   border-radius: 15px;
 }
+.m-left {
+  margin-left: 5px;
+}
 .card-title {
   font-size: x-large;
   font-weight: bold;
@@ -656,4 +662,17 @@ ion-card-header {
 }
 .card-bg {
   background: #eeee;
+}
+.bold {
+  font-weight: bold;
+}
+ion-card-content p {
+  color: white;
+  background: green;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 10px;
+}
+.red {
+  color: red;
 }

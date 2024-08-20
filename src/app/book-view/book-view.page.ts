@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicSlides } from '@ionic/angular';
 
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonTextarea,
   IonCardTitle,
   IonInput,
@@ -42,7 +44,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 // 3rd step :
 
-
 // and
 @Component({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -51,6 +52,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   styleUrls: ['./book-view.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonTextarea,
     FormsModule,
     IonInput,
@@ -87,13 +90,15 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   ],
 })
 export class BookViewPage implements OnInit {
-
   book: any;
   address: string | undefined;
   error: string | undefined;
   buyModal: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
+  
+  }
 
+  ngOnInit() {
     this.book = {
       lecturesList: [],
     };
@@ -101,12 +106,6 @@ export class BookViewPage implements OnInit {
     this.route.queryParams.forEach((p) => {
       this.getBook(p['id']);
     });
-  }
-
-
-
-  ngOnInit() {
-   
   }
   async getBook(_id: string) {
     this.book = {};
@@ -163,5 +162,12 @@ export class BookViewPage implements OnInit {
           this.error = res.error;
         }
       });
+  }
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

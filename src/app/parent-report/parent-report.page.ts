@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonGrid,
   IonCardTitle,
   IonCardSubtitle,
@@ -43,6 +45,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./parent-report.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonGrid,
     IonCardTitle,
     IonCardSubtitle,
@@ -109,5 +113,13 @@ export class ParentReportPage implements OnInit {
           }
         });
     }
+  }
+
+  handleRefresh(event: { target: { complete: () => void; }; }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

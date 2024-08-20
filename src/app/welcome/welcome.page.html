@@ -1,4 +1,13 @@
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="main-div-welcome">
     <ion-img
       class=""
@@ -22,9 +31,21 @@
         <div class="cbh-ph-img-circle1 whatsappLogo"></div
       ></a>
     </div>
-    <div
-      *ngIf="setting.isShared && session && !session.selectedTeacherId"
+    <ion-row
+      class="content-center"
+      *ngIf="!userSession || !userSession.id"
     >
+        <ion-button color="primary" (click)="login()">
+          دخول
+          <ion-icon name="log-in-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button color="secondary" [routerLink]="['/register']">
+          تسجيل
+          <ion-icon name="person-add-outline"></ion-icon>
+        </ion-button>
+    </ion-row>
+    <div *ngIf="setting.isShared && session && !session.selectedTeacherId">
       <div class="banner-word">
         <span> المدرسين </span>
         <a class="banner-viewAll" [routerLink]="['/teachers']">مشاهدة الكل</a>
@@ -63,10 +84,7 @@
         >
       </ion-card-header>
       <ion-card-content>
-        <ion-list
-          class="card-list-style"
-          *ngFor="let package of packageList"
-        >
+        <ion-list class="card-list-style" *ngFor="let package of packageList">
           <ion-item
             class="item-bg"
             [routerLink]="['/package-view']"
@@ -76,6 +94,7 @@
               <img class="radius-15" [src]="package.imageUrl" />
             </ion-thumbnail>
             <ion-label>{{package.name}}</ion-label>
+            <s class="red bold margin m-left">{{package.totalLecturesPrice}}</s> <p>{{package.price}} ج.م </p> 
           </ion-item>
         </ion-list>
       </ion-card-content>
@@ -98,6 +117,7 @@
             <ion-label>
               <span>{{lecture.name}}</span>
             </ion-label>
+            <p>{{lecture.price}} ج.م</p>
           </ion-item>
         </ion-list>
       </ion-card-content>
@@ -118,6 +138,7 @@
               <img class="radius-15" [src]="book.imageUrl" />
             </ion-thumbnail>
             <ion-label>{{book.name}}</ion-label>
+            <p>{{book.price}} ج.م</p>
           </ion-item>
         </ion-list>
       </ion-card-content>

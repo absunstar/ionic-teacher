@@ -1,8 +1,17 @@
 <ion-content [fullscreen]="true" class="ion-padding main-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
   <div class="div-main">
     <ion-row class="main-row">
       <div id="container" class="container">
-        <ion-img [src]="lecture.imageUrl"> </ion-img>
+        <ion-img class="main-img" [src]="lecture.imageUrl"> </ion-img>
         <ion-text><p class="main-name">{{lecture.name}}</p></ion-text>
         <div class="bg-data">
           <ion-text

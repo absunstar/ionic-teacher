@@ -575,6 +575,8 @@ export class RegisterPage implements OnInit {
               user.$error = res.error;
             } else if (res.user) {
               this.isite.getSession().subscribe((data: any) => {
+                console.log(data);
+                
                 this.router.navigateByUrl('/welcome', { replaceUrl: true });
               });
             }

@@ -23,7 +23,7 @@ export class IsiteService {
   packageList: [any] | undefined;
   lectureList: [any] | undefined;
   bookList: [any] | undefined;
-  baseURL: string = 'https://professional.teacher.egytag.com';
+  baseURL: string = 'http://professional.localhost';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,
@@ -212,6 +212,7 @@ export class IsiteService {
             _id: 1,
             name: 1,
             price: 1,
+            totalLecturesPrice: 1,
             image: 1,
           },
           where: {},

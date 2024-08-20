@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
@@ -42,6 +44,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./notifications.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonCardHeader,
     IonCardSubtitle,
     IonCardTitle,
@@ -150,5 +154,13 @@ export class NotificationsPage implements OnInit {
           }
         });
     }
+  }
+
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

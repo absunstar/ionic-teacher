@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCardTitle,
   IonCardSubtitle,
   IonCardHeader,
@@ -44,6 +46,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./lecture-view.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     FormsModule,
     IonInput,
     IonCheckbox,
@@ -350,5 +354,13 @@ export class LectureViewPage implements OnInit {
         });
       }
     });
+  }
+
+  handleRefresh(event: { target: { complete: () => void } }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
 }

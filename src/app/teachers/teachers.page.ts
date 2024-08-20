@@ -5,6 +5,8 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonRefresher,
+  IonRefresherContent,
   IonCol,
   IonCard,
   IonCardHeader,
@@ -40,6 +42,8 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./teachers.page.scss'],
   standalone: true,
   imports: [
+    IonRefresher,
+    IonRefresherContent,
     IonCol,
     IonCard,
     IonCardHeader,
@@ -85,6 +89,13 @@ export class TeachersPage implements OnInit {
     this.type = '';
 
     this.getTeachers();
+  }
+  handleRefresh(event: { target: { complete: () => void; }; }) {
+    setTimeout(() => {
+      this.ngOnInit();
+      // Any calls to load data go here
+      event.target.complete();
+    }, 2000);
   }
   async getTeachers() {
     this.teacherList = undefined;
