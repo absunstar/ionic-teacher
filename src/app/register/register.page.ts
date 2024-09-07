@@ -133,7 +133,6 @@ export class RegisterPage implements OnInit {
       $showContent: false,
       firstName: '',
       lastName: '',
-      userName: '',
       mobile: '',
       parentMobile: '',
       email: '',
@@ -220,7 +219,7 @@ export class RegisterPage implements OnInit {
           quality: 90,
           allowEditing: false,
           resultType: CameraResultType.DataUrl,
-          source: CameraSource.Photos, // Camera, Photos or Prompt!
+          source: CameraSource.Prompt, // Camera, Photos or Prompt!
         });
         if (image) {
           this.startUpload(image, type);
