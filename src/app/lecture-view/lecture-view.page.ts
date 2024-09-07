@@ -313,7 +313,6 @@ export class LectureViewPage implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.done) {
-          console.log(this.videoCode);
 
           this.viewVideo();
         } else {

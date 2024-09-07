@@ -75,6 +75,11 @@ export const routes: Routes = [
     path: 'page-view',
     loadComponent: () => import('./page-view/page-view.page').then( m => m.PageViewPage)
   },
+  {
+    path: 'intro',
+    loadComponent: () => import('./intro/intro.page').then( m => m.IntroPage)
+  },
+
 
 
 

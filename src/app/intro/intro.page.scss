@@ -1,0 +1,33 @@
+.main-row {
+    margin-bottom: 80px;
+  }
+  ion-item {
+    margin: 5%;
+    ion-img {
+      width: 20vw;
+      height: 20vh;
+      display: block;
+    }
+    ion-label {
+      display: block;
+      width: 100vw;
+      text-align: center;
+      line-height: 1.8;
+    }
+  }
+
+  ion-content {
+    top: 90px;
+  }
+
+  .float-left {
+    float: left !important;
+  }
+  .has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+  .input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+    --border-color: blue;
+  }
+  
+  .ion-valid.sc-ion-input-md-h {
+    --highlight-color: blue;
+  }

@@ -239,7 +239,7 @@ export class RegisterPage implements OnInit {
     formData.append('fileToUpload', blob, 'image1.jpg');
     this.uploadData(formData, type);
   }
-  
+
   async uploadData(formData: FormData, type: string) {
     this.user.$error = '';
 
@@ -253,7 +253,6 @@ export class RegisterPage implements OnInit {
           this.user.$nationalIdImageUrl = res.image.url;
           this.user.$_nationalIdImageUrl = this.isite.baseURL + res.image.url;
         }
-        console.log(this.user);
       });
   }
 
@@ -576,7 +575,7 @@ export class RegisterPage implements OnInit {
             } else if (res.user) {
               this.isite.getSession().subscribe((data: any) => {
                 console.log(data);
-                
+
                 this.router.navigateByUrl('/welcome', { replaceUrl: true });
               });
             }
