@@ -62,19 +62,29 @@
             </ion-list>
           </ion-card-content>
         </ion-card>
-        <div
-          *ngIf="lecture.linksList && lecture.linksList.length > 0 && (lecture.$buy || lecture.type.name == 'public')"
+        <ion-card
+        *ngIf="lecture.filesList && lecture.filesList.length > 0 && (lecture.$buy || lecture.type.name == 'public')"
         >
-          <a *ngFor="let file of lecture.filesList" href="{{file.$url}}">
-            <p class="file">
-              <span>{{file.url.name}}</span>
-              <span class="left"
-                >تنزيل الملف<ion-icon name="download-outline"></ion-icon
-              ></span>
-            </p>
-          </a>
-        </div>
-
+          <ion-card-title>تحميل الملفات</ion-card-title>
+          <ion-card-content>
+            <ion-list>
+              <ion-item
+                class="item-link"
+                *ngFor="let f of lecture.filesList"
+              >
+              <a class="full-width" href="{{f.$url}}">
+                <p class="file">
+                  <span>{{f.title}}</span>
+                  <span class="left"
+                    >تنزيل الملف<ion-icon name="download-outline"></ion-icon
+                  ></span>
+                </p>
+              </a>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      
         <div *ngIf="quiz && quiz.id">
           <p class="file">
             درجة الإختبار

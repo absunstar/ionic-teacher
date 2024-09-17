@@ -32,7 +32,7 @@
       ></a>
     </div>
     <ion-row
-      class="content-center"
+      class=""
       *ngIf="!userSession || !userSession.id"
     >
         <ion-button color="primary" (click)="login()">
@@ -53,7 +53,7 @@
       <ion-card
         class="center"
         *ngFor="let teacher of teacherList"
-        (click)="isite.selectTeacher(teacher.id)"
+        (click)="selectTeacher(teacher.id)"
       >
         <img class="circle-img" [src]="teacher.imageUrl" />
         <ion-card-header class="center">

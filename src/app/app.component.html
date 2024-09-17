@@ -1,10 +1,14 @@
 <ion-app>
   <ion-header [translucent]="true" dir="rtl">
-    <ion-toolbar >
+    <ion-toolbar>
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-      <ion-img [routerLink]="['/welcome']" class="logo" [src]="setting.logoUrl"></ion-img>
+      <ion-img
+        [routerLink]="['/welcome']"
+        class="logo"
+        [src]="setting.logoUrl"
+      ></ion-img>
       <ion-title class="siteName" *ngIf="setting.nameBesidLogoShow">{{
         setting.siteName
       }}</ion-title>
@@ -12,7 +16,6 @@
   </ion-header>
 
   <ion-split-pane>
-
     <ion-menu
       id="main-menu"
       contentId="main-content"
@@ -47,10 +50,7 @@
           </ion-list-header>
         </div>
 
-        <ion-row
-          class="contain-register-login"
-          *ngIf="userSession.id"
-        >
+        <ion-row class="contain-register-login" *ngIf="userSession.id">
           <ion-menu-toggle>
             <ion-button
               color="light"
@@ -69,7 +69,15 @@
             </ion-button>
           </ion-menu-toggle>
         </ion-row>
-
+        <ion-button
+          *ngIf="setting.isShared && session && session.selectedTeacherId"
+          color="dark"
+          expand="block"
+          (click)="exitTeacher(); hideMenu()"
+        >
+          خروج {{ session.selectedTeacherName }}
+          <ion-icon name="log-out-outline"></ion-icon>
+        </ion-button>
         <ion-list id="inbox-list" *ngIf="userSession.id">
           <ion-menu-toggle *ngIf="setting.showPackages">
             <ion-item
@@ -119,15 +127,6 @@
           </ion-menu-toggle>
         </ion-list>
 
-        <ion-button
-          *ngIf="setting.isShared && session && userSession.selectedTeacherId"
-          color="primary"
-          expand="block"
-          (click)="isite.exitTeacher()"
-        >
-          تفيير المدرس
-          <ion-icon name="git-compare-outline"></ion-icon>
-        </ion-button>
         <ion-list id="labels-list">
           <ion-menu-toggle>
             <ion-item
@@ -223,6 +222,5 @@
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
-
   </ion-split-pane>
 </ion-app>

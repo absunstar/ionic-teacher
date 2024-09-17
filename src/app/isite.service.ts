@@ -23,7 +23,7 @@ export class IsiteService {
   packageList: [any] | undefined;
   lectureList: [any] | undefined;
   bookList: [any] | undefined;
-  baseURL: string = 'http://professional.localhost';
+  baseURL: string = 'http://shared.localhost';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,
@@ -143,7 +143,7 @@ export class IsiteService {
         body: {},
       }).subscribe((res: any) => {
         this.session = res.session || {};
-
+        
         if (res.done && this.session.user && this.session.user.image) {
           this.session.user.imageUrl =
             this.baseURL + this.session.user.image.url;
@@ -298,35 +298,7 @@ export class IsiteService {
     });
   }
 
-  async selectTeacher(id: any) {
-    this.api({
-      url: '/api/selectTeacher',
-      body: id,
-    }).subscribe((res: any) => {
-      if (res.done) {
-        this.getSession().subscribe(() => {
-          this.router.navigateByUrl('/welcome', {
-            replaceUrl: true,
-          });
-        });
-      }
-    });
-  }
-
-  async exitTeacher() {
-    this.api({
-      url: '/api/exitTeacher',
-      body: {},
-    }).subscribe((res: any) => {
-      if (res.done) {
-        this.getSession().subscribe(() => {
-          this.router.navigateByUrl('/welcome', {
-            replaceUrl: true,
-          });
-        });
-      }
-    });
-  }
+  
 
   getTeachersList() {
     return new Observable((observeOn) => {

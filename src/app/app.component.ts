@@ -137,6 +137,21 @@ export class AppComponent {
 
     await modal.present();
   }
+
+  async exitTeacher() {
+    this.isite
+      .api({
+        url: '/api/exitTeacher',
+        body: {},
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          this.isite.getSession().subscribe(() => {
+            this.router.navigateByUrl('/loading');
+          });
+        }
+      });
+  }
   async doLogout() {
     this.isite
       .api({
@@ -176,6 +191,7 @@ export class AppComponent {
 
     await alert.present();
   }
+
   hideMenu() {
     this.menuCtrl.toggle('main-content');
     this.menuCtrl.toggle('main-menu');

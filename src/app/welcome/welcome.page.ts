@@ -119,6 +119,20 @@ export class WelcomePage implements OnInit {
 
     await modal.present();
   }
+  async selectTeacher(id: any) {
+    this.isite.api({
+      url: '/api/selectTeacher',
+      body: id,
+    }).subscribe((res: any) => {
+      if (res.done) {
+        this.isite.getSession().subscribe((data: any) => {
+          this.session = data.session;
+          this.userSession = data.userSession;
+          this.router.navigateByUrl('/loading');
+        });
+      }
+    });
+  }
   handleRefresh(event: { target: { complete: () => void } }) {
     setTimeout(() => {
       this.start();

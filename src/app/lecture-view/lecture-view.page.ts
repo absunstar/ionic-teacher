@@ -142,11 +142,13 @@ export class LectureViewPage implements OnInit {
             ? this.isite.baseURL + res.doc.image.url
             : '';
           res.doc.filesList = res.doc.filesList || [];
-          res.doc.filesList.forEach((_file: { $url: string; url: any }) => {
-            if (_file.url) {
-              _file.$url = this.isite.baseURL + _file.url.url;
+          res.doc.filesList.forEach(
+            (_file: { file: any; $url: string; url: any }) => {
+              if (_file.file) {
+                _file.$url = this.isite.baseURL + _file.file.url;
+              }
             }
-          });
+          );
 
           this.lecture = res.doc;
           this.quizView(this.lecture.id);
@@ -313,7 +315,6 @@ export class LectureViewPage implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.done) {
-
           this.viewVideo();
         } else {
           this.error = res.error;
