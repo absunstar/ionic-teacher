@@ -2,7 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from '@capacitor/camera';
 import {
   IonRefresher,
   IonRefresherContent,
@@ -34,6 +41,8 @@ import {
   IonLabel,
   IonRouterOutlet,
   IonRouterLink,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 import { IsiteService } from '../isite.service';
 
@@ -77,16 +86,21 @@ import { IsiteService } from '../isite.service';
     IonLabel,
     IonRouterLink,
     IonRouterOutlet,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class PackageViewPage implements OnInit {
   package: any;
-  code: string | undefined;
+  purchase: any;
+  purchaseTypeList: any;
   error: string | undefined;
   buyModal: any;
-  constructor(public isite: IsiteService, private route: ActivatedRoute) {
-    
-  }
+  constructor(
+    public isite: IsiteService,
+    private route: ActivatedRoute,
+    public http: HttpClient
+  ) {}
 
   ngOnInit() {
     this.package = {
@@ -96,9 +110,61 @@ export class PackageViewPage implements OnInit {
     this.route.queryParams.forEach((p) => {
       this.getPackage(p['id']);
     });
-   
   }
-  async getPackage(_id: string) {    
+  async selectImage(type: string) {
+    Camera.checkPermissions()
+      .then(async (permissions) => {
+        console.log('selectImage ..............', permissions);
+
+        if (
+          permissions.photos === 'denied' ||
+          permissions.camera === 'denied'
+        ) {
+          let p = await Camera.requestPermissions();
+          if (p.photos === 'denied' || p.camera === 'denied') {
+            return false;
+          } else {
+            return this.selectImage(type);
+          }
+        }
+        const image = await Camera.getPhoto({
+          quality: 90,
+          allowEditing: false,
+          resultType: CameraResultType.DataUrl,
+          source: CameraSource.Prompt, // Camera, Photos or Prompt!
+        });
+        if (image) {
+          this.startUpload(image, type);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  async startUpload(image: any, type: string) {
+    this.purchase.$error = '';
+    const base64Response = await fetch(image.dataUrl);
+    const blob = await base64Response.blob();
+    const formData = new FormData();
+    formData.append('fileToUpload', blob, 'image1.png');
+    this.uploadData(formData, type);
+  }
+  async uploadData(formData: FormData, type: string) {
+    this.purchase.$error = '';
+
+    this.http
+      .post(`${this.isite.baseURL}/x-api/upload/image`, formData)
+      .subscribe((res: any) => {
+        if (type == 'image') {
+          this.purchase.$imageTransfer = res.image.url;
+          this.purchase.$_imageTransfer = this.isite.baseURL + res.image.url;
+        }
+        /* this.user.image_url = res.image.url;
+        this.user.$image_url = this.isite.baseURL + res.image.url; */
+      });
+  }
+  async getPackage(_id: string) {
     this.package = {};
     this.isite
       .api({
@@ -124,10 +190,30 @@ export class PackageViewPage implements OnInit {
             }
           );
           this.package = res.doc;
+          this.getPurchaseTypeTeacher(this.package.teacherId);
         }
       });
   }
-
+  async getPurchaseTypeTeacher(teacherId: any) {
+    this.error = '';
+    if (this.isite.userSession && this.isite.userSession.id) {
+      this.isite
+        .api({
+          url: '/api/manageUsers/purchaseTypeTeacher',
+          body: teacherId,
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            this.purchaseTypeList = res.list;
+            this.purchase = {};
+            this.purchase.purchaseType = res.list.find(
+              (p: { default: boolean }) => p?.default
+            );
+            this.purchase.$purchaseType = this.purchase?.purchaseType?.name;
+          }
+        });
+    }
+  }
   setOpen(type: any, id: string) {
     if (id == 'buyModal') {
       this.buyModal = type;
@@ -135,17 +221,33 @@ export class PackageViewPage implements OnInit {
     // this[id] = type;
   }
 
+  async changePurchaseType(type: any) {
+    this.purchase.purchaseType = this.purchaseTypeList.find(
+      (a: { name: string }) => a.name == type
+    );
+  }
+
   async buyPackage() {
     this.error = '';
-    if (!this.code) {
+    if (!this.purchase.$purchaseType) {
+      this.error = 'يجب إختيار نوع الشراء';
+      return;
+    }
+    if (!this.purchase.code && this.purchase.$purchaseType== 'code') {
       this.error = 'يجب إدخال كود الشراء';
       return;
     }
+    if (!this.purchase.numberTransferFrom && this.purchase.$purchaseType != 'code') {
+      this.error = 'يجب إدخال الرقم المحول منه';
+      return;
+    }
+    this.purchase.image = { url: this.purchase.$imageTransfer };
+   
     this.isite
       .api({
         url: '/api/packages/buyCode',
         body: {
-          code: this.code,
+          purchase: this.purchase,
           packageId: this.package.id,
           packagePrice: this.package.price,
         },

@@ -77,14 +77,59 @@
         <p class="buy-text">{{isite.setting.textPurchaseByCode}}</p>
         <ion-list>
           <ion-item>
+            <ion-select
+              interface="action-sheet"
+              (ionChange)="changePurchaseType(purchase.$purchaseType)"
+              [(ngModel)]="purchase.$purchaseType"
+              placeholder="إختر نوع الشراء"
+            >
+              <div slot="label">
+                نوع الشراء <ion-text color="danger">(مطلوب)</ion-text>
+              </div>
+              <ion-select-option
+                *ngFor="let purchaseType of purchaseTypeList"
+                value="{{purchaseType.name}}"
+                >{{purchaseType.nameAr}}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountName">إسم الحساب : <span class="code-text">{{purchase.purchaseType.accountName}}</span></p>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountNumber">رقم الحساب : <span class="code-text">{{purchase.purchaseType.accountNumber}}</span></p>
+          <ion-item
+            *ngIf="purchase.$purchaseType && purchase.$purchaseType == 'code'"
+          >
             <ion-input
               label-placement="floating"
               fill="outline"
               label="كود الشراء"
-              [(ngModel)]="code"
+              [(ngModel)]="purchase.code"
               [clearInput]="true"
               placeholder="أدخل كود الشراء"
             ></ion-input>
+          </ion-item>
+
+          <ion-item
+            *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'"
+          >
+            <ion-input
+              class="margin-input"
+              label-placement="floating"
+              fill="outline"
+              type="tel"
+              label="الرقم المحول منه"
+              [(ngModel)]="purchase.numberTransferFrom"
+              [clearInput]="true"
+              placeholder="الرقم المحول منه"
+            ></ion-input>
+          </ion-item>
+          <ion-item *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'">
+            <div (click)="selectImage('image')" class="upload-img">
+              <p>
+                صورة التحويل
+                <ion-icon name="camera-outline"></ion-icon>
+              </p>
+              <img class="img-upload" [src]="purchase.$_imageUrl" />
+            </div>
           </ion-item>
         </ion-list>
         <p class="error">{{error}}</p>

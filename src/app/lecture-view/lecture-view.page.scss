@@ -157,7 +157,7 @@ a {
 }
 .text-description {
   color: #5a6257;
-  font-size: 24px;
+  font-size: 20px;
   padding: 15px;
   margin-right: 10px;
   font-family: cursive;
@@ -186,4 +186,18 @@ a {
 }
 .font-large {
   font-size: large;
+}
+
+.black {
+  color: black !important;
+}
+.purchase-text {
+  background: #d8d8d8;
+  color: black;
+  text-align: center;
+  font-size: large;
+  padding: inherit;
+  margin: revert;
+  white-space: pre-line;
+  border-radius: 10px;
 }

@@ -63,28 +63,25 @@
           </ion-card-content>
         </ion-card>
         <ion-card
-        *ngIf="lecture.filesList && lecture.filesList.length > 0 && (lecture.$buy || lecture.type.name == 'public')"
+          *ngIf="lecture.filesList && lecture.filesList.length > 0 && (lecture.$buy || lecture.type.name == 'public')"
         >
           <ion-card-title>تحميل الملفات</ion-card-title>
           <ion-card-content>
             <ion-list>
-              <ion-item
-                class="item-link"
-                *ngFor="let f of lecture.filesList"
-              >
-              <a class="full-width" href="{{f.$url}}">
-                <p class="file">
-                  <span>{{f.title}}</span>
-                  <span class="left"
-                    >تنزيل الملف<ion-icon name="download-outline"></ion-icon
-                  ></span>
-                </p>
-              </a>
+              <ion-item class="item-link" *ngFor="let f of lecture.filesList">
+                <a class="full-width" href="{{f.$url}}">
+                  <p class="file">
+                    <span>{{f.title}}</span>
+                    <span class="left"
+                      >تنزيل الملف<ion-icon name="download-outline"></ion-icon
+                    ></span>
+                  </p>
+                </a>
               </ion-item>
             </ion-list>
           </ion-card-content>
         </ion-card>
-      
+
         <div *ngIf="quiz && quiz.id">
           <p class="file">
             درجة الإختبار
@@ -116,7 +113,7 @@
     </ion-button>
     <ion-button
       size="large"
-      *ngIf="!lecture.$buy && isite.userSession && isite.userSession.type =='student'"
+      *ngIf="!lecture.$buy && isite.userSession && isite.userSession.type =='student' && isite.userSession.placeType !='online' && lecture.type && lecture.type.name != 'public'"
       (click)="setOpen(true,'buyModal')"
       class="buy-button"
       expand="block"
@@ -167,21 +164,65 @@
     </ion-header>
     <ion-content class="ion-padding">
       <p class="buy-text">{{isite.setting.textPurchaseByCode}}</p>
-      <ion-list>
-        <ion-item>
-          <ion-input
-            label-placement="floating"
-            fill="outline"
-            label="كود الشراء"
-            [(ngModel)]="code"
-            [clearInput]="true"
-            placeholder="أدخل كود الشراء"
-          ></ion-input>
-        </ion-item>
-      </ion-list>
+      <ion-item>
+        <ion-select
+          interface="action-sheet"
+          (ionChange)="changePurchaseType(purchase.$purchaseType)"
+          [(ngModel)]="purchase.$purchaseType"
+          placeholder="إختر نوع الشراء"
+        >
+          <div slot="label">
+            نوع الشراء <ion-text color="danger">(مطلوب)</ion-text>
+          </div>
+          <ion-select-option
+            *ngFor="let purchaseType of purchaseTypeList"
+            value="{{purchaseType.name}}"
+            >{{purchaseType.nameAr}}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+      <p class="purchase-text" *ngIf="purchase.purchaseType.accountName">إسم الحساب : <span class="code-text">{{purchase.purchaseType.accountName}}</span></p>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountNumber">رقم الحساب : <span class="code-text">{{purchase.purchaseType.accountNumber}}</span></p>
+      <ion-item
+        *ngIf="purchase.$purchaseType && purchase.$purchaseType == 'code'"
+      >
+        <ion-input
+          label-placement="floating"
+          fill="outline"
+          label="كود الشراء"
+          [(ngModel)]="purchase.code"
+          [clearInput]="true"
+          placeholder="أدخل كود الشراء"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item
+        *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'"
+      >
+        <ion-input
+          class="margin-input"
+          label-placement="floating"
+          fill="outline"
+          type="tel"
+          label="الرقم المحول منه"
+          [(ngModel)]="purchase.numberTransferFrom"
+          [clearInput]="true"
+          placeholder="الرقم المحول منه"
+        ></ion-input>
+      </ion-item>
+      <ion-item *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'">
+        <div (click)="selectImage('image')" class="upload-img">
+          <p>
+            صورة التحويل
+            <ion-icon name="camera-outline"></ion-icon>
+          </p>
+          <img class="img-upload" [src]="purchase.$_imageUrl" />
+        </div>
+      </ion-item>
+
       <p class="error">{{error}}</p>
 
-      <ion-button (click)="buyLecture()" class="buy-button" expand="block">
+      <ion-button (click)="buyLecture('')" class="buy-button" expand="block">
         <ion-icon name="checkmark-done-outline"></ion-icon>
         تأكيد الشراء
       </ion-button>
