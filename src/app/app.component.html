@@ -69,15 +69,17 @@
             </ion-button>
           </ion-menu-toggle>
         </ion-row>
+
         <ion-button
-          *ngIf="setting.isShared && session && session.selectedTeacherId"
+          *ngIf="setting.isShared && isite.session && isite.session.selectedTeacherId > 0"
           color="dark"
           expand="block"
           (click)="exitTeacher(); hideMenu()"
         >
-          خروج {{ session.selectedTeacherName }}
+          خروج {{ isite.session.selectedTeacherName }}
           <ion-icon name="log-out-outline"></ion-icon>
         </ion-button>
+
         <ion-list id="inbox-list" *ngIf="userSession.id">
           <ion-menu-toggle *ngIf="setting.showPackages">
             <ion-item

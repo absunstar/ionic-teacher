@@ -146,7 +146,9 @@ export class AppComponent {
       })
       .subscribe((res: any) => {
         if (res.done) {
-          this.isite.getSession().subscribe(() => {
+          this.isite.getSession().subscribe((data: any) => {
+            this.session = data.session;
+            this.userSession = data.userSession;
             this.router.navigateByUrl('/loading');
           });
         }

@@ -45,7 +45,7 @@
           <ion-icon name="person-add-outline"></ion-icon>
         </ion-button>
     </ion-row>
-    <div *ngIf="setting.isShared && session && !session.selectedTeacherId">
+    <div *ngIf="setting.isShared && isite.session && !isite.session.selectedTeacherId">
       <div class="banner-word">
         <span> المدرسين </span>
         <a class="banner-viewAll" [routerLink]="['/teachers']">مشاهدة الكل</a>

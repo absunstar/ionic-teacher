@@ -23,7 +23,7 @@ export class IsiteService {
   packageList: [any] | undefined;
   lectureList: [any] | undefined;
   bookList: [any] | undefined;
-  baseURL: string = 'http://shared.localhost';
+  baseURL: string = 'https://teacher.egytag.com';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,

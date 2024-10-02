@@ -128,6 +128,7 @@ export class WelcomePage implements OnInit {
         this.isite.getSession().subscribe((data: any) => {
           this.session = data.session;
           this.userSession = data.userSession;
+          
           this.router.navigateByUrl('/loading');
         });
       }
