@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="div-main">
+    <ion-row class="main-row">
+      <div id="container" class="container">
+        <ion-img [src]="news.imageUrl"> </ion-img>
+        <ion-text><p class="main-name">{{news.name}}</p></ion-text>
+        <div class="bg-data">
+          <ion-text
+            ><p class="main-time">
+              <ion-icon name="time-outline"></ion-icon> {{news.$time}}
+            </p></ion-text
+          >
+          <ion-text class="code">
+            <span>أخبار </span>
+            <span class="code-text" *ngIf="news.newsType && news.newsType.nameAr"> {{news.newsType.nameAr}}</span>
+          </ion-text>
+        </div>
+        <ion-text>
+      <div class="text-description" [innerHTML]="news.description"></div>
+
+        </ion-text>
+      </div>
+
+      <ion-list>
+        <ion-item
+          *ngFor="let img of news.imageList"
+         
+        >
+            <img alt="Silhouette of mountains" class="padding-15" [src]="img.imageUrl" />
+        </ion-item>
+      </ion-list>
+    </ion-row>
+  </div>
+
+ 
+</ion-content>

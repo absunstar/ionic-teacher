@@ -22,6 +22,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonImg,
+  IonCol,
   IonButton,
   IonButtons,
   IonMenuButton,
@@ -41,6 +42,7 @@ import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
+  IonGrid,
   IonRouterLink,
 } from '@ionic/angular/standalone';
 import { IsiteService } from '../isite.service';
@@ -50,7 +52,9 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./welcome.page.scss'],
   standalone: true,
   imports: [
-    IonRefresher,
+  IonGrid,
+  IonCol,
+  IonRefresher,
     IonRefresherContent,
     IonThumbnail,
     IonCardTitle,
@@ -91,6 +95,7 @@ export class WelcomePage implements OnInit {
   packageList: [any] = [{}];
   teacherList: [any] = [{}];
   bookList: [any] = [{}];
+  newsList: [any] = [{}];
   session: any;
   userSession: any;
 
@@ -168,6 +173,12 @@ export class WelcomePage implements OnInit {
       if (this.setting.showBooks) {
         this.isite.getBooks().subscribe((books: any) => {
           this.bookList = books;
+        });
+      }
+
+      if (this.setting.showNews) {
+        this.isite.getNews().subscribe((news: any) => {
+          this.newsList = news;
         });
       }
 

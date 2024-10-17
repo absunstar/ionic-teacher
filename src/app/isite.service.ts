@@ -23,7 +23,8 @@ export class IsiteService {
   packageList: [any] | undefined;
   lectureList: [any] | undefined;
   bookList: [any] | undefined;
-  baseURL: string = 'https://teacher.egytag.com';
+  newsList: [any] | undefined;
+  baseURL: string = 'http://professional.localhost';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,
@@ -58,6 +59,9 @@ export class IsiteService {
       banner: '',
       codeCard: '',
       isShared: false,
+      isFaculty: false,
+      newsLimit: 0,
+      showNews: false,
       packagesLimit: 0,
       lecturesLimit: 0,
       booksLimit: 0,
@@ -143,7 +147,7 @@ export class IsiteService {
         body: {},
       }).subscribe((res: any) => {
         this.session = res.session || {};
-        
+
         if (res.done && this.session.user && this.session.user.image) {
           this.session.user.imageUrl =
             this.baseURL + this.session.user.image.url;
@@ -215,7 +219,7 @@ export class IsiteService {
             totalLecturesPrice: 1,
             image: 1,
           },
-          where: {},
+          where: { active: true },
         },
       }).subscribe((res: any) => {
         if (res.done) {
@@ -247,7 +251,7 @@ export class IsiteService {
             price: 1,
             image: 1,
           },
-          where: {},
+          where: { active: true },
         },
       }).subscribe((res: any) => {
         if (res.done) {
@@ -280,7 +284,7 @@ export class IsiteService {
             price: 1,
             image: 1,
           },
-          where: {},
+          where: { active: true },
         },
       }).subscribe((res: any) => {
         if (res.done) {
@@ -298,7 +302,38 @@ export class IsiteService {
     });
   }
 
-  
+  getNews() {
+    return new Observable((observeOn) => {
+      this.bookList = undefined;
+      this.api({
+        url: '/api/news/all',
+        body: {
+          limit: this.setting.newsLimit,
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            image: 1,
+            newsType: 1,
+          },
+          where: { active: true },
+        },
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.newsList = res.list;
+          observeOn.next(this.newsList);
+        }
+      });
+    });
+  }
 
   getTeachersList() {
     return new Observable((observeOn) => {

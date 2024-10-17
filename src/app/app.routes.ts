@@ -78,7 +78,15 @@ export const routes: Routes = [
   {
     path: 'intro',
     loadComponent: () => import('./intro/intro.page').then( m => m.IntroPage)
+  },  {
+    path: 'news-view',
+    loadComponent: () => import('./news-view/news-view.page').then( m => m.NewsViewPage)
   },
+  {
+    path: 'news',
+    loadComponent: () => import('./news/news.page').then( m => m.NewsPage)
+  },
+
 
 
 

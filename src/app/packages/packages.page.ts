@@ -111,7 +111,7 @@ export class PackagesPage implements OnInit {
           image: 1,
         },
         search: this.search,
-        where: {},
+        where: {active:true},
       },
     }).subscribe((res: any) => {
       if (res.done) {

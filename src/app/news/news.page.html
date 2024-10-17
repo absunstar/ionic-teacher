@@ -1,0 +1,50 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <ion-row class="main-row">
+    <ion-row class="full-width">
+      <ion-col size="9">
+        <ion-list>
+          <ion-item>
+            <ion-input
+              label="بحث شامل"
+              labelPlacement="stacked"
+              [clearInput]="true"
+              placeholder="بحث"
+              [(ngModel)]="search"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="2">
+        <br />
+        <ion-button (click)="getNews()" color="secondary">بحث</ion-button>
+      </ion-col>
+    </ion-row>
+
+    <div id="container" class="full-width padding-20">
+      <a
+        *ngFor="let news of newsList"
+        [routerLink]="['/news-view']"
+        [queryParams]="{id: news._id}"
+      >
+        <figure class="image-block">
+          <ion-img [src]="news.imageUrl"> </ion-img>
+
+          <figcaption>
+            <div class="row price-more-card">
+              <span class="more-card"> {{news.name}}</span>
+            </div>
+          </figcaption>
+        </figure>
+      </a>
+    </div>
+  </ion-row>
+</ion-content>

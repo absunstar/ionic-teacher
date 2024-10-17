@@ -31,21 +31,20 @@
         <div class="cbh-ph-img-circle1 whatsappLogo"></div
       ></a>
     </div>
-    <ion-row
-      class=""
-      *ngIf="!userSession || !userSession.id"
-    >
-        <ion-button color="primary" (click)="login()">
-          دخول
-          <ion-icon name="log-in-outline"></ion-icon>
-        </ion-button>
+    <ion-row class="" *ngIf="!userSession || !userSession.id">
+      <ion-button color="primary" (click)="login()">
+        دخول
+        <ion-icon name="log-in-outline"></ion-icon>
+      </ion-button>
 
-        <ion-button color="secondary" [routerLink]="['/register']">
-          تسجيل
-          <ion-icon name="person-add-outline"></ion-icon>
-        </ion-button>
+      <ion-button color="secondary" [routerLink]="['/register']">
+        تسجيل
+        <ion-icon name="person-add-outline"></ion-icon>
+      </ion-button>
     </ion-row>
-    <div *ngIf="setting.isShared && isite.session && !isite.session.selectedTeacherId">
+    <div
+      *ngIf="setting.isShared && isite.session && !isite.session.selectedTeacherId"
+    >
       <div class="banner-word">
         <span> المدرسين </span>
         <a class="banner-viewAll" [routerLink]="['/teachers']">مشاهدة الكل</a>
@@ -77,6 +76,48 @@
       </ion-card>
     </div>
 
+    <ion-card class="card-bg" *ngIf="setting.showNews">
+      <ion-card-header class="bg-card-header">
+        <ion-card-title class="card-title">أحدث الأخبار</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col >
+              <ion-button expand="block" color="secondary" 
+              [routerLink]="['/news']"
+              [queryParams]="{type: 'center'}"
+            >أخبار السنتر <ion-icon name="search-outline"></ion-icon
+          ></ion-button>
+            </ion-col>
+            <ion-col >
+              <ion-button expand="block" color="secondary" 
+              [routerLink]="['/news']"
+              [queryParams]="{type: 'faculty'}"
+              >أخبار الكلية <ion-icon name="search-outline"></ion-icon
+            ></ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      
+        <ion-list class="card-list-style" *ngFor="let news of newsList">
+          <ion-item
+            class="item-bg"
+            [routerLink]="['/news-view']"
+            [queryParams]="{id: news._id}"
+          >
+            <ion-thumbnail slot="start">
+              <img class="radius-15" [src]="news.imageUrl" />
+            </ion-thumbnail>
+            <ion-label>{{news.name}}</ion-label>
+            <p *ngIf="news.newsType && news.newsType.nameAr">
+              أخبار {{news.newsType.nameAr}}
+            </p>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
     <ion-card class="card-bg" *ngIf="setting.showPackages">
       <ion-card-header class="bg-card-header">
         <ion-card-title class="card-title"
@@ -94,7 +135,8 @@
               <img class="radius-15" [src]="package.imageUrl" />
             </ion-thumbnail>
             <ion-label>{{package.name}}</ion-label>
-            <s class="red bold margin m-left">{{package.totalLecturesPrice}}</s> <p>{{package.price}} ج.م </p> 
+            <s class="red bold margin m-left">{{package.totalLecturesPrice}}</s>
+            <p>{{package.price}} ج.م</p>
           </ion-item>
         </ion-list>
       </ion-card-content>

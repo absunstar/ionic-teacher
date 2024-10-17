@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { addIcons } from 'ionicons';
+import * as icons from 'ionicons/icons';
 import {
   IonRefresher,
   IonRefresherContent,
@@ -32,9 +34,9 @@ import {
 import { IsiteService } from '../isite.service';
 
 @Component({
-  selector: 'app-lectures',
-  templateUrl: './lectures.page.html',
-  styleUrls: ['./lectures.page.scss'],
+  selector: 'app-news',
+  templateUrl: './news.page.html',
+  styleUrls: ['./news.page.scss'],
   standalone: true,
   imports: [
     IonRefresher,
@@ -68,49 +70,56 @@ import { IsiteService } from '../isite.service';
     FormsModule,
   ],
 })
-export class LecturesPage implements OnInit {
-  search: String | undefined;
-  lecturesList: [any] | undefined;
+
+export class NewsPage implements OnInit {
+  search : String | undefined ;
+  newsList: [any] | undefined;
   type: string | undefined;
-  constructor(public isite: IsiteService, private route: ActivatedRoute) {}
+   constructor(public isite: IsiteService, private route: ActivatedRoute) {
+    addIcons({ ...icons });
+
+    }
 
   ngOnInit() {
     this.search = '';
-
     this.type = '';
     this.route.queryParams.forEach((p) => {
-      this.type = 'toStudent';
-      if (p && p['id']) {
-        this.type = 'myStudent';
+      if(p && p['type']) {
+        this.type = p['type'];
       }
-      this.getLectures();
+      
+    this.getNews();
+    })
+  }
+
+  async getNews() {
+    
+    this.newsList = undefined;
+    this.isite.api({
+      url: '/api/news/all',
+      body: {
+        type: 'toStudent',
+        select: {
+          id: 1,
+          _id: 1,
+          name: 1,
+          image: 1,
+        },
+        search: this.search,
+        where: {active:true,'newsType.name' : this.type},
+      },
+    }).subscribe((res: any) => {
+      if (res.done) {
+        res.list.forEach(
+          (element: { imageUrl: string; image: { url: string } }) => {
+            element.imageUrl = element.image ? this.isite.baseURL + element.image.url : '';
+          }
+        );
+        this.newsList = res.list;
+      }
     });
   }
-  async getLectures() {
-    this.lecturesList = undefined;
-    this.isite
-      .api({
-        url: '/api/lectures/allToStudent',
-        body: {
-          type: this.type,
-          search: this.search,
-          where: {active:true},
-        },
-      })
-      .subscribe((res: any) => {
-        if (res.done) {
-          res.list.forEach(
-            (element: { imageUrl: string; image: { url: string } }) => {
-              element.imageUrl = element.image
-                ? this.isite.baseURL + element.image.url
-                : '';
-            }
-          );
-          this.lecturesList = res.list;
-        }
-      });
-  }
-  handleRefresh(event: { target: { complete: () => void } }) {
+  handleRefresh(event: { target: { complete: () => void; }; }) {
     setTimeout(() => {
       this.ngOnInit();
       // Any calls to load data go here
