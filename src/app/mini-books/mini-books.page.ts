@@ -5,6 +5,9 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import * as icons from 'ionicons/icons';
 import {
+  IonModal,
+  IonSelect,
+  IonSelectOption,
   IonRefresher,
   IonRefresherContent,
   IonCol,
@@ -39,6 +42,9 @@ import { IsiteService } from '../isite.service';
   styleUrls: ['./mini-books.page.scss'],
   standalone: true,
   imports: [
+    IonModal,
+    IonSelect,
+    IonSelectOption,
     IonRefresher,
     IonRefresherContent,
     IonCol,
@@ -74,21 +80,28 @@ export class MiniBooksPage implements OnInit {
   search: String | undefined;
   miniBookList: [any] | undefined;
   type: string | undefined;
+  educationalLevelsList: [any] | undefined;
+  schoolYearsList: [any] | undefined;
+  subjectsList: [any] | undefined;
   where: any;
+  searchModal: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
+    this.getEducationalLevelsList();
+    this.getSubjectsList();
     addIcons({ ...icons });
   }
 
   ngOnInit() {
     this.search = '';
     this.type = '';
-
+    this.searchModal = false;
+    this.where = {};
     this.getMiniBooks();
   }
 
   async getMiniBooks() {
     this.route.queryParams.forEach((p) => {
-      this.where = { active: true };
+      this.where['active'] = true;
       if (p) {
         if (p['subscription']) {
           this.where['subscriptionList.subscription.id'] = Number(p['subscription']);
@@ -96,7 +109,36 @@ export class MiniBooksPage implements OnInit {
           this.where['myMiniBooks'] = true;
         }
       }
-      
+      if (
+        this.educationalLevelsList &&
+        this.educationalLevelsList.length > 0 &&
+        this.where.$educationalLevel
+      ) {
+        this.where.educationalLevel = this.educationalLevelsList.find(
+          (a: { id: number }) => a.id == Number(this.where.$educationalLevel)
+        );
+        delete this.where.$educationalLevel;
+      }
+      if (
+        this.schoolYearsList &&
+        this.schoolYearsList.length > 0 &&
+        this.where.$schoolYear
+      ) {
+        this.where.schoolYear = this.schoolYearsList.find(
+          (a: { id: number }) => a.id == Number(this.where.$schoolYear)
+        );
+        delete this.where.$educationalLevel;
+      }
+      if (
+        this.subjectsList &&
+        this.subjectsList.length > 0 &&
+        this.where.$subject
+      ) {
+        this.where.subject = this.subjectsList.find(
+          (a: { id: number }) => a.id == Number(this.where.$subject)
+        );
+        delete this.where.$subject;
+      }
       this.miniBookList = undefined;
       this.isite
         .api({
@@ -129,6 +171,76 @@ export class MiniBooksPage implements OnInit {
         });
     });
   }
+  setOpen(type: any, id: string) {
+    if (id == 'searchModal') {
+      this.searchModal = type;
+    }
+
+    // this[id] = type;
+  }
+  getEducationalLevelsList() {
+    this.isite
+      .api({
+        url: '/api/educationalLevels/all',
+        body: {
+          where: {
+            active: true,
+          },
+          select: {
+            id: 1,
+            name: 1,
+          },
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          this.educationalLevelsList = res.list;
+        }
+      });
+  }
+  getSchoolYearsList(educationalLevel: any) {
+    this.isite
+      .api({
+        url: '/api/schoolYears/all',
+        body: {
+          where: {
+            active: true,
+            'educationalLevel.id': Number(educationalLevel),
+          },
+          select: {
+            id: 1,
+            name: 1,
+          },
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          this.schoolYearsList = res.list;
+        }
+      });
+  }
+
+  getSubjectsList() {
+    this.isite
+      .api({
+        url: '/api/subjects/all',
+        body: {
+          where: {
+            active: true,
+          },
+          select: {
+            id: 1,
+            name: 1,
+          },
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          this.subjectsList = res.list;
+        }
+      });
+  }
+
   handleRefresh(event: { target: { complete: () => void } }) {
     setTimeout(() => {
       this.ngOnInit();

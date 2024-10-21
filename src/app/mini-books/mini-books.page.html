@@ -10,24 +10,15 @@
   </ion-refresher>
   <ion-row class="main-row">
     <ion-row class="full-width">
-      <ion-col size="9">
-        <ion-list>
-          <ion-item>
-            <ion-input
-              label="بحث شامل"
-              labelPlacement="stacked"
-              [clearInput]="true"
-              placeholder="بحث"
-              [(ngModel)]="search"
-            ></ion-input>
-          </ion-item>
-        </ion-list>
-      </ion-col>
-      <ion-col size="2">
-        <br />
-        <ion-button (click)="getMiniBooks()" color="secondary">بحث</ion-button>
-      </ion-col>
+      <ion-button
+        (click)="setOpen(true,'searchModal')"
+        size="large"
+        color="secondary"
+      >
+        تصفية &nbsp; <ion-icon name="color-filter-outline"></ion-icon
+      ></ion-button>
     </ion-row>
+
 
     <div id="container" class="full-width padding-20">
       <a
@@ -50,4 +41,82 @@
       </a>
     </div>
   </ion-row>
+  <ion-modal #modal [isOpen]="searchModal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>تصفية</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpen(false,'searchModal')"
+              >إغلاق</ion-button
+            >
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-select
+            interface="action-sheet"
+            [(ngModel)]="where.$educationalLevel"
+            (ionChange)="getSchoolYearsList(where.$educationalLevel)"
+            placeholder="إختر المرحلة الدراسية"
+          >
+            <div slot="label">المرحلة الدراسية</div>
+            <ion-select-option
+              *ngFor="let educationalLevel of educationalLevelsList"
+              value="{{educationalLevel.id}}"
+              >{{educationalLevel.name}}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-select
+            interface="action-sheet"
+            [(ngModel)]="where.$schoolYear"
+            placeholder="إختر العام الدراسي"
+          >
+            <div slot="label">العام الدراسي</div>
+            <ion-select-option
+              *ngFor="let schoolYear of schoolYearsList"
+              value="{{schoolYear.id}}"
+              >{{schoolYear.name}}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-select
+            interface="action-sheet"
+            [(ngModel)]="where.$subject"
+            placeholder="إختر المادة"
+          >
+            <div slot="label">المادة</div>
+            <ion-select-option
+              *ngFor="let subject of subjectsList"
+              value="{{subject.id}}"
+              >{{subject.name}}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="بحث شامل"
+            labelPlacement="stacked"
+            [clearInput]="true"
+            placeholder="بحث"
+            [(ngModel)]="search"
+          ></ion-input>
+        </ion-item>
+        <ion-button
+          (click)="getMiniBooks();setOpen(false,'searchModal')"
+          color="secondary"
+          size="large"
+          expand="block"
+        >
+          <ion-icon name="search-outline"></ion-icon>
+          بحث
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
