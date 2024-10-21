@@ -571,6 +571,9 @@ ion-card-header {
   animation: kmacb__manager-fill-anim 1.5s ease-in-out infinite;
   transform-origin: center;
 }
+.left {
+  float: left;
+}
 .kmacb__manager-circle {
   background: #52aff7;
   position: absolute;

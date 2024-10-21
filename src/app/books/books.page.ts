@@ -68,50 +68,57 @@ import { IsiteService } from '../isite.service';
     FormsModule,
   ],
 })
-
 export class BooksPage implements OnInit {
-  search : String | undefined ;
+  search: String | undefined;
   booksList: [any] | undefined;
   type: string | undefined;
-   constructor(public isite: IsiteService,private route: ActivatedRoute) { }
+  where: any;
+  constructor(public isite: IsiteService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.search = '';
     this.type = '';
-    this.route.queryParams.forEach((p) => {
-      this.type = 'toStudent';
-      if(p && p['id']) {
-        this.type = 'myStudent';
-      }
+
     this.getBooks();
-    })
   }
   async getBooks() {
-    this.booksList = undefined;
-    this.isite.api({
-      url: '/api/books/all',
-      body: {
-        type: this.type,
-        select: {
-          id: 1,
-          _id: 1,
-          name: 1,
-          price: 1,
-          description: 1,
-          image: 1,
-        },
-        search: this.search,
-        where: {},
-      },
-    }).subscribe((res: any) => {
-      if (res.done) {
-        res.list.forEach(
-          (element: { imageUrl: string; image: { url: string } }) => {
-            element.imageUrl = element.image ? this.isite.baseURL + element.image.url : '';
-          }
-        );
-        this.booksList = res.list;
+    this.route.queryParams.forEach((p) => {
+      this.where = { active: true };
+      if (p) {
+        if (p['type'] == 'myLectures') {
+          this.where['myLectures'] = true;
+        }
       }
+      this.booksList = undefined;
+      this.isite
+        .api({
+          url: '/api/books/all',
+          body: {
+            type: 'toStudent',
+            select: {
+              id: 1,
+              _id: 1,
+              name: 1,
+              price: 1,
+              description: 1,
+              image: 1,
+            },
+            search: this.search,
+            where: this.where,
+          },
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            res.list.forEach(
+              (element: { imageUrl: string; image: { url: string } }) => {
+                element.imageUrl = element.image
+                  ? this.isite.baseURL + element.image.url
+                  : '';
+              }
+            );
+            this.booksList = res.list;
+          }
+        });
     });
   }
   handleRefresh(event: { target: { complete: () => void } }) {

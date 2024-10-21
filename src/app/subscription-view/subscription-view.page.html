@@ -14,11 +14,6 @@
         <ion-img [src]="subscription.imageUrl"> </ion-img>
         <ion-text><p class="main-name">{{subscription.name}}</p></ion-text>
         <div class="bg-data">
-          <ion-text
-            ><p class="main-time">
-              <ion-icon name="time-outline"></ion-icon> {{subscription.$time}}
-            </p></ion-text
-          >
           <ion-text class="main-price">
             <span>السعر</span>
             <span class="green"> {{subscription.price}} ج.م</span>
@@ -28,6 +23,25 @@
             <span class="code-text"> {{subscription.code}}</span>
           </ion-text>
         </div>
+        <ion-row class="content-center">
+          <ion-button
+            size="large"
+            [routerLink]="['/lectures']"
+            [queryParams]="{subscription: subscription.id}"
+            class="padding-5"
+            color="light"
+            >المحاضرات</ion-button
+          >
+          <ion-button
+            size="large"
+            [routerLink]="['/mini-books']"
+            [queryParams]="{subscription: subscription.id}"
+            class="padding-5"
+            color="light"
+            >المذكرات</ion-button
+          >
+        </ion-row>
+
         <ion-text>
           <p class="text-description">{{subscription.description}}</p>
         </ion-text>
@@ -35,7 +49,7 @@
     </ion-row>
 
     <ion-button
-    *ngIf="!subscription.$buy && isite.userSession && isite.userSession.type =='student'"
+      *ngIf="!subscription.$buy && isite.userSession && isite.userSession.type =='student'"
       (click)="setOpen(true,'buyModal')"
       size="large"
       expand="block"
@@ -74,8 +88,16 @@
               >
             </ion-select>
           </ion-item>
-          <p class="purchase-text" *ngIf="purchase.purchaseType.accountName">إسم الحساب : <span class="code-text">{{purchase.purchaseType.accountName}}</span></p>
-          <p class="purchase-text" *ngIf="purchase.purchaseType.accountNumber">رقم الحساب : <span class="code-text">{{purchase.purchaseType.accountNumber}}</span></p>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountName">
+            إسم الحساب :
+            <span class="code-text">{{purchase.purchaseType.accountName}}</span>
+          </p>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountNumber">
+            رقم الحساب :
+            <span class="code-text"
+              >{{purchase.purchaseType.accountNumber}}</span
+            >
+          </p>
           <ion-item
             *ngIf="purchase.$purchaseType && purchase.$purchaseType == 'code'"
           >
@@ -103,7 +125,9 @@
               placeholder="الرقم المحول منه"
             ></ion-input>
           </ion-item>
-          <ion-item *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'">
+          <ion-item
+            *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'"
+          >
             <div (click)="selectImage('image')" class="upload-img">
               <p>
                 صورة التحويل

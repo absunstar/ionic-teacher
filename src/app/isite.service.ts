@@ -213,7 +213,7 @@ export class IsiteService {
       this.api({
         url: '/api/packages/all',
         body: {
-          limit: this.setting.packagesLimit,
+          limit: this.setting.packagesLimit || 6,
           type: 'toStudent',
           select: {
             id: 1,
@@ -246,7 +246,7 @@ export class IsiteService {
       this.api({
         url: '/api/lectures/allToStudent',
         body: {
-          limit: this.setting.lecturesLimit,
+          limit: this.setting.lecturesLimit || 6,
           type: 'toStudent',
           select: {
             id: 1,
@@ -277,7 +277,7 @@ export class IsiteService {
       this.api({
         url: '/api/miniBooks/allToStudent',
         body: {
-          limit: this.setting.lecturesLimit,
+          limit: this.setting.miniBooksLimit || 6,
           type: 'toStudent',
           select: {
             id: 1,
@@ -309,7 +309,40 @@ export class IsiteService {
       this.api({
         url: '/api/books/all',
         body: {
-          limit: this.setting.booksLimit,
+          limit: this.setting.booksLimit || 6,
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            price: 1,
+            image: 1,
+          },
+          where: { active: true },
+        },
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.bookList = res.list;
+          observeOn.next(this.bookList);
+        }
+      });
+    });
+  }
+
+  getSubscriptions() {
+    return new Observable((observeOn) => {
+      this.bookList = undefined;
+      this.api({
+        url: '/api/subscriptions/all',
+        body: {
+          limit: this.setting.subscriptionsLimit || 6,
           type: 'toStudent',
           select: {
             id: 1,
@@ -342,7 +375,7 @@ export class IsiteService {
       this.api({
         url: '/api/news/all',
         body: {
-          limit: this.setting.newsLimit,
+          limit: this.setting.newsLimit || 6,
           type: 'toStudent',
           select: {
             id: 1,

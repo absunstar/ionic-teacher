@@ -32,7 +32,7 @@
     <div id="container" class="full-width padding-20">
       <a
         *ngFor="let subscription of subscriptionList"
-        [routerLink]="['/mini-book-view']"
+        [routerLink]="['/subscription-view']"
         [queryParams]="{id: subscription._id}"
       >
         <figure class="image-block">

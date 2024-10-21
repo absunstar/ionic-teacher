@@ -91,12 +91,12 @@ export class MiniBooksPage implements OnInit {
       this.where = { active: true };
       if (p) {
         if (p['subscription']) {
-          this.where['subscriptionList.subscription.id'] = p['subscription'];
+          this.where['subscriptionList.subscription.id'] = Number(p['subscription']);
         } else if (p['type'] == 'myMiniBooks') {
           this.where['myMiniBooks'] = true;
         }
       }
-
+      
       this.miniBookList = undefined;
       this.isite
         .api({

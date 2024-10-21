@@ -72,43 +72,49 @@ export class LecturesPage implements OnInit {
   search: String | undefined;
   lecturesList: [any] | undefined;
   type: string | undefined;
+  where: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.search = '';
 
     this.type = '';
-    this.route.queryParams.forEach((p) => {
-      this.type = 'toStudent';
-      if (p && p['id']) {
-        this.type = 'myStudent';
-      }
-      this.getLectures();
-    });
+
+    this.getLectures();
   }
   async getLectures() {
     this.lecturesList = undefined;
-    this.isite
-      .api({
-        url: '/api/lectures/allToStudent',
-        body: {
-          type: this.type,
-          search: this.search,
-          where: {active:true},
-        },
-      })
-      .subscribe((res: any) => {
-        if (res.done) {
-          res.list.forEach(
-            (element: { imageUrl: string; image: { url: string } }) => {
-              element.imageUrl = element.image
-                ? this.isite.baseURL + element.image.url
-                : '';
-            }
-          );
-          this.lecturesList = res.list;
+    this.route.queryParams.forEach((p) => {
+      this.where = { active: true };
+      if (p) {
+        if (p['subscription']) {
+          this.where['subscriptionList.subscription.id'] = Number(p['subscription']);
+        } else if (p['type'] == 'myLectures') {
+          this.where['myLectures'] = true;
         }
-      });
+      }
+      this.isite
+        .api({
+          url: '/api/lectures/allToStudent',
+          body: {
+            type: 'toStudent',
+            search: this.search,
+            where: this.where,
+          },
+        })
+        .subscribe((res: any) => {
+          if (res.done) {
+            res.list.forEach(
+              (element: { imageUrl: string; image: { url: string } }) => {
+                element.imageUrl = element.image
+                  ? this.isite.baseURL + element.image.url
+                  : '';
+              }
+            );
+            this.lecturesList = res.list;
+          }
+        });
+    });
   }
   handleRefresh(event: { target: { complete: () => void } }) {
     setTimeout(() => {

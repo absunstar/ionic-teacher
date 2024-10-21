@@ -168,7 +168,7 @@ export class SubscriptionViewPage implements OnInit {
     this.subscription = {};
     this.isite
       .api({
-        url: '/api/subscriptions/viewToStudent',
+        url: '/api/subscriptions/view',
         body: {
           _id: _id,
         },

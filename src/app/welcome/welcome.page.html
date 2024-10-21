@@ -140,11 +140,38 @@
       </ion-card-content>
     </ion-card>
 
+    <ion-card class="card-bg" *ngIf="setting.showSubscriptions">
+      <ion-card-header class="bg-card-header">
+        <ion-card-title class="card-title" [routerLink]="['/subscriptions']">
+          <span>أحدث الإشتراكات</span>
+          <span class="left" >الكل</span>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list class="card-list-style" *ngFor="let subscription of subscriptionList">
+          <ion-item
+            class="item-bg"
+            [routerLink]="['/subscription-view']"
+            [queryParams]="{id: subscription._id}"
+          >
+            <ion-thumbnail slot="start">
+              <img class="radius-15" [src]="subscription.imageUrl" />
+            </ion-thumbnail>
+            <ion-label>
+              <span>{{subscription.name}}</span>
+            </ion-label>
+            <p>{{subscription.price}} ج.م</p>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
     <ion-card class="card-bg" *ngIf="setting.showPackages">
       <ion-card-header class="bg-card-header">
-        <ion-card-title class="card-title"
-          >أحدث مجموعات المحاضرات</ion-card-title
-        >
+        <ion-card-title class="card-title" [routerLink]="['/packages']">
+          <span>أحدث مجموعات محاضرات</span>
+          <span class="left" >الكل</span>
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list class="card-list-style" *ngFor="let package of packageList">
@@ -166,7 +193,10 @@
 
     <ion-card class="card-bg" *ngIf="setting.showLectures">
       <ion-card-header class="bg-card-header">
-        <ion-card-title class="card-title">أحدث المحاضرات</ion-card-title>
+        <ion-card-title class="card-title" [routerLink]="['/lectures']">
+          <span>أحدث المحاضرات</span>
+          <span class="left" >الكل</span>
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list class="card-list-style" *ngFor="let lecture of lectureList">
@@ -189,7 +219,10 @@
 
     <ion-card class="card-bg" *ngIf="setting.showMiniBooks">
       <ion-card-header class="bg-card-header">
-        <ion-card-title class="card-title">أحدث المذكرات</ion-card-title>
+        <ion-card-title class="card-title" [routerLink]="['/mini-books']">
+          <span>أحدث المذكرات</span>
+          <span class="left" >الكل</span>
+        </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-list class="card-list-style" *ngFor="let miniBook of miniBookList">
@@ -210,7 +243,12 @@
 
     <ion-card class="card-bg" *ngIf="setting.showBooks">
       <ion-card-header class="bg-card-header">
-        <ion-card-title class="card-title">أحدث الكتب</ion-card-title>
+        <ion-card-title class="card-title" [routerLink]="['/books']">
+          <span>أحدث الكتب</span>
+          <span class="left" >الكل</span>
+
+        </ion-card-title>
+
       </ion-card-header>
       <ion-card-content>
         <ion-list class="card-list-style" *ngFor="let book of bookList">

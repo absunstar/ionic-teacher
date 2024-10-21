@@ -99,6 +99,7 @@ export class WelcomePage implements OnInit {
   teacherList: [any] = [{}];
   bookList: [any] = [{}];
   newsList: [any] = [{}];
+  subscriptionList: [any] = [{}];
   liveBroadcastList: [any] = [{}];
   session: any;
   liveId: any;
@@ -208,6 +209,12 @@ export class WelcomePage implements OnInit {
       if (this.setting.showNews) {
         this.isite.getNews().subscribe((news: any) => {
           this.newsList = news;
+        });
+      }
+
+      if (this.setting.showSubscriptions) {
+        this.isite.getSubscriptions().subscribe((subscriptions: any) => {
+          this.subscriptionList = subscriptions;
         });
       }
 
