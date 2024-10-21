@@ -75,6 +75,24 @@
         </ion-card-header>
       </ion-card>
     </div>
+    <div *ngIf="userSession && userSession.type == 'student'">
+      <ion-card *ngFor="let live of liveBroadcastList">
+        <ion-card-header>
+          <ion-card-title class="center">{{live.name}}</ion-card-title>
+        </ion-card-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col></ion-col>
+            <ion-col class="center">
+              <a class="pulse-button" (click)="openLive(live.id)"
+                ><span class="red-dot"></span
+              ></a>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card>
+    </div>
 
     <ion-card class="card-bg" *ngIf="setting.showNews">
       <ion-card-header class="bg-card-header">
@@ -83,23 +101,27 @@
       <ion-card-content>
         <ion-grid>
           <ion-row>
-            <ion-col >
-              <ion-button expand="block" color="secondary" 
-              [routerLink]="['/news']"
-              [queryParams]="{type: 'center'}"
-            >أخبار السنتر <ion-icon name="search-outline"></ion-icon
-          ></ion-button>
+            <ion-col>
+              <ion-button
+                expand="block"
+                color="secondary"
+                [routerLink]="['/news']"
+                [queryParams]="{type: 'center'}"
+                >أخبار السنتر<ion-icon name="search-outline"></ion-icon
+              ></ion-button>
             </ion-col>
-            <ion-col >
-              <ion-button expand="block" color="secondary" 
-              [routerLink]="['/news']"
-              [queryParams]="{type: 'faculty'}"
-              >أخبار الكلية <ion-icon name="search-outline"></ion-icon
-            ></ion-button>
+            <ion-col>
+              <ion-button
+                expand="block"
+                color="secondary"
+                [routerLink]="['/news']"
+                [queryParams]="{type: 'faculty'}"
+                >أخبار الكلية<ion-icon name="search-outline"></ion-icon
+              ></ion-button>
             </ion-col>
           </ion-row>
         </ion-grid>
-      
+
         <ion-list class="card-list-style" *ngFor="let news of newsList">
           <ion-item
             class="item-bg"
@@ -111,7 +133,7 @@
             </ion-thumbnail>
             <ion-label>{{news.name}}</ion-label>
             <p *ngIf="news.newsType && news.newsType.nameAr">
-              أخبار {{news.newsType.nameAr}}
+              {{news.newsType.nameAr}}
             </p>
           </ion-item>
         </ion-list>
@@ -160,6 +182,27 @@
               <span>{{lecture.name}}</span>
             </ion-label>
             <p>{{lecture.price}} ج.م</p>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="card-bg" *ngIf="setting.showMiniBooks">
+      <ion-card-header class="bg-card-header">
+        <ion-card-title class="card-title">أحدث المذكرات</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list class="card-list-style" *ngFor="let miniBook of miniBookList">
+          <ion-item
+            class="item-bg"
+            [routerLink]="['/mini-book-view']"
+            [queryParams]="{id: miniBook._id}"
+          >
+            <ion-thumbnail slot="start">
+              <img class="radius-15" [src]="miniBook.imageUrl" />
+            </ion-thumbnail>
+            <ion-label>{{miniBook.name}}</ion-label>
+            <p>{{miniBook.price}} ج.م</p>
           </ion-item>
         </ion-list>
       </ion-card-content>
@@ -270,3 +313,25 @@
     </p>
   </div>
 </ion-content>
+<ion-modal [isOpen]="liveModal">
+  <ng-template>
+    <ion-content class="ion-padding">
+      <iframe
+        id="video_{{liveId}}"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        width="100%"
+        height="100%"
+      ></iframe>
+      <!-- <video
+        id="vid1"
+        class="video-js vjs-default-skin"
+        controls
+        autoplay
+        width="100%"
+        height="100%"
+        data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v=B9ufyrmBrQ4"}] }'
+      ></video> -->
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -19,6 +19,7 @@ import {
   IonCardHeader,
   IonCardContent,
   IonCard,
+  IonModal,
   IonRefresher,
   IonRefresherContent,
   IonImg,
@@ -58,6 +59,7 @@ import { IsiteService } from '../isite.service';
     IonRefresherContent,
     IonThumbnail,
     IonCardTitle,
+    IonModal,
     IonCardSubtitle,
     IonCardHeader,
     IonCardContent,
@@ -93,11 +95,15 @@ export class WelcomePage implements OnInit {
   setting: any = {};
   lectureList: [any] = [{}];
   packageList: [any] = [{}];
+  miniBookList: [any] = [{}];
   teacherList: [any] = [{}];
   bookList: [any] = [{}];
   newsList: [any] = [{}];
+  liveBroadcastList: [any] = [{}];
   session: any;
+  liveId: any;
   userSession: any;
+  liveModal: Boolean | undefined;
 
   constructor(
     public isite: IsiteService,
@@ -105,6 +111,7 @@ export class WelcomePage implements OnInit {
     private modalCtrl: ModalController,
     private router: Router
   ) {
+    this.liveModal = false;
     addIcons({ ...icons });
   }
   async login() {
@@ -127,6 +134,22 @@ export class WelcomePage implements OnInit {
   async selectTeacher(id: any) {
     this.isite.api({
       url: '/api/selectTeacher',
+      body: id,
+    }).subscribe((res: any) => {
+      if (res.done) {
+        this.isite.getSession().subscribe((data: any) => {
+          this.session = data.session;
+          this.userSession = data.userSession;
+          
+          this.router.navigateByUrl('/loading');
+        });
+      }
+    });
+  }
+
+  async getLiveLectures(id: any) {
+    this.isite.api({
+      url: '/api/lectures/',
       body: id,
     }).subscribe((res: any) => {
       if (res.done) {
@@ -170,6 +193,12 @@ export class WelcomePage implements OnInit {
         });
       }
 
+      if (this.setting.showMiniBooks) {
+        this.isite.getMiniBooks().subscribe((miniBooks: any) => {
+          this.miniBookList = miniBooks;
+        });
+      }
+
       if (this.setting.showBooks) {
         this.isite.getBooks().subscribe((books: any) => {
           this.bookList = books;
@@ -187,9 +216,26 @@ export class WelcomePage implements OnInit {
           this.teacherList = teachers;
         });
       }
+      this.isite.getLiveBroadcast().subscribe((liveBroadcast: any) => {
+        this.liveBroadcastList = liveBroadcast;
+      });
     });
   }
+  async openLive(id: any) {
+    this.liveModal = true;
+    this.liveId = id;
 
+    setTimeout(() => {
+      let iframe = document.querySelector('#video_' + id);
+
+      if (iframe) {
+        iframe.setAttribute(
+          'src',
+          `${this.isite.baseURL}/view-live?id=${id}`
+        );
+      }
+    }, 1000);
+  }
   ngOnInit() {
     this.start();
   }

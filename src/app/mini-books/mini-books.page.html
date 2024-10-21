@@ -25,24 +25,24 @@
       </ion-col>
       <ion-col size="2">
         <br />
-        <ion-button (click)="getPackages()" color="secondary">بحث</ion-button>
+        <ion-button (click)="getMiniBooks()" color="secondary">بحث</ion-button>
       </ion-col>
     </ion-row>
 
     <div id="container" class="full-width padding-20">
       <a
-        *ngFor="let package of packageList"
-        [routerLink]="['/package-view']"
-        [queryParams]="{id: package._id}"
+        *ngFor="let miniBook of miniBookList"
+        [routerLink]="['/mini-book-view']"
+        [queryParams]="{id: miniBook._id}"
       >
         <figure class="image-block">
-          <p class="name">{{package.name}}</p>
-          <ion-img [src]="package.imageUrl"> </ion-img>
+          <p class="name">{{miniBook.name}}</p>
+          <ion-img [src]="miniBook.imageUrl"> </ion-img>
 
           <figcaption>
-            <p>{{package.description}}</p>
+            <p>{{miniBook.description}}</p>
             <div class="row price-more-card">
-              <i class="price">ج.م {{package.price}} <s class="red">{{package.totalLecturesPrice}}</s> </i>
+              <i class="price">ج.م {{miniBook.price}} </i>
               <span class="more-card"> التفاصيل..</span>
             </div>
           </figcaption>

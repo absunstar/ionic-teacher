@@ -86,6 +86,22 @@ export const routes: Routes = [
     path: 'news',
     loadComponent: () => import('./news/news.page').then( m => m.NewsPage)
   },
+  {
+    path: 'mini-books',
+    loadComponent: () => import('./mini-books/mini-books.page').then( m => m.MiniBooksPage)
+  },
+  {
+    path: 'mini-book-view',
+    loadComponent: () => import('./mini-book-view/mini-book-view.page').then( m => m.MiniBookViewPage)
+  },
+  {
+    path: 'subscriptions',
+    loadComponent: () => import('./subscriptions/subscriptions.page').then( m => m.SubscriptionsPage)
+  },
+  {
+    path: 'subscription-view',
+    loadComponent: () => import('./subscription-view/subscription-view.page').then( m => m.SubscriptionViewPage)
+  },
 
 
 

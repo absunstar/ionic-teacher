@@ -1,0 +1,125 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+  <div class="div-main">
+    <ion-row class="main-row">
+      <div id="container" class="container">
+        <ion-img [src]="subscription.imageUrl"> </ion-img>
+        <ion-text><p class="main-name">{{subscription.name}}</p></ion-text>
+        <div class="bg-data">
+          <ion-text
+            ><p class="main-time">
+              <ion-icon name="time-outline"></ion-icon> {{subscription.$time}}
+            </p></ion-text
+          >
+          <ion-text class="main-price">
+            <span>السعر</span>
+            <span class="green"> {{subscription.price}} ج.م</span>
+          </ion-text>
+          <ion-text class="code">
+            <span>الكود #</span>
+            <span class="code-text"> {{subscription.code}}</span>
+          </ion-text>
+        </div>
+        <ion-text>
+          <p class="text-description">{{subscription.description}}</p>
+        </ion-text>
+      </div>
+    </ion-row>
+
+    <ion-button
+    *ngIf="!subscription.$buy && isite.userSession && isite.userSession.type =='student'"
+      (click)="setOpen(true,'buyModal')"
+      size="large"
+      expand="block"
+      >شراء
+      <ion-icon name="bag-check-outline"></ion-icon>
+    </ion-button>
+  </div>
+
+  <ion-modal #modal [isOpen]="buyModal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>كود الشراء</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpen(false,'buyModal')">إغلاق</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <p class="buy-text">{{isite.setting.textPurchaseByCode}}</p>
+        <ion-list>
+          <ion-item>
+            <ion-select
+              interface="action-sheet"
+              (ionChange)="changePurchaseType(purchase.$purchaseType)"
+              [(ngModel)]="purchase.$purchaseType"
+              placeholder="إختر نوع الشراء"
+            >
+              <div slot="label">
+                نوع الشراء <ion-text color="danger">(مطلوب)</ion-text>
+              </div>
+              <ion-select-option
+                *ngFor="let purchaseType of purchaseTypeList"
+                value="{{purchaseType.name}}"
+                >{{purchaseType.nameAr}}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountName">إسم الحساب : <span class="code-text">{{purchase.purchaseType.accountName}}</span></p>
+          <p class="purchase-text" *ngIf="purchase.purchaseType.accountNumber">رقم الحساب : <span class="code-text">{{purchase.purchaseType.accountNumber}}</span></p>
+          <ion-item
+            *ngIf="purchase.$purchaseType && purchase.$purchaseType == 'code'"
+          >
+            <ion-input
+              label-placement="floating"
+              fill="outline"
+              label="كود الشراء"
+              [(ngModel)]="purchase.code"
+              [clearInput]="true"
+              placeholder="أدخل كود الشراء"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item
+            *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'"
+          >
+            <ion-input
+              class="margin-input"
+              label-placement="floating"
+              fill="outline"
+              type="tel"
+              label="الرقم المحول منه"
+              [(ngModel)]="purchase.numberTransferFrom"
+              [clearInput]="true"
+              placeholder="الرقم المحول منه"
+            ></ion-input>
+          </ion-item>
+          <ion-item *ngIf="purchase.$purchaseType && purchase.$purchaseType != 'code'">
+            <div (click)="selectImage('image')" class="upload-img">
+              <p>
+                صورة التحويل
+                <ion-icon name="camera-outline"></ion-icon>
+              </p>
+              <img class="img-upload" [src]="purchase.$_imageUrl" />
+            </div>
+          </ion-item>
+        </ion-list>
+        <p class="error">{{error}}</p>
+
+        <ion-button (click)="buySubscription()" size="large" expand="block">
+          <ion-icon name="checkmark-done-outline"></ion-icon>
+          تأكيد الشراء
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

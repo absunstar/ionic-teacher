@@ -24,6 +24,7 @@ export class IsiteService {
   lectureList: [any] | undefined;
   bookList: [any] | undefined;
   newsList: [any] | undefined;
+  liveBroadcastList: [any] | undefined;
   baseURL: string = 'http://professional.localhost';
   constructor(
     public http: HttpClient,
@@ -64,6 +65,7 @@ export class IsiteService {
       showNews: false,
       packagesLimit: 0,
       lecturesLimit: 0,
+      miniBooksLimit: 0,
       booksLimit: 0,
       citiesAndAreasShow: false,
       nationalitiesShow: false,
@@ -72,6 +74,8 @@ export class IsiteService {
       showPackages: false,
       showLectures: false,
       showBooks: false,
+      showMiniBooks: false,
+      showSubscriptions: false,
       showBanner: false,
     };
   }
@@ -268,7 +272,37 @@ export class IsiteService {
       });
     });
   }
-
+  getMiniBooks() {
+    return new Observable((observeOn) => {
+      this.api({
+        url: '/api/miniBooks/allToStudent',
+        body: {
+          limit: this.setting.lecturesLimit,
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            price: 1,
+            image: 1,
+          },
+          where: { active: true },
+        },
+      }).subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.lectureList = res.list;
+          observeOn.next(this.lectureList);
+        }
+      });
+    });
+  }
   getBooks() {
     return new Observable((observeOn) => {
       this.bookList = undefined;
@@ -304,7 +338,7 @@ export class IsiteService {
 
   getNews() {
     return new Observable((observeOn) => {
-      this.bookList = undefined;
+      this.newsList = undefined;
       this.api({
         url: '/api/news/all',
         body: {
@@ -334,7 +368,22 @@ export class IsiteService {
       });
     });
   }
-
+  getLiveBroadcast() {
+    return new Observable((observeOn) => {
+      this.liveBroadcastList = undefined;
+      this.api({
+        url: '/api/lectures/allToStudent',
+        body: {
+          where: { active: true,liveBroadcast : true },
+        },
+      }).subscribe((res: any) => {
+        if (res.done) {
+          this.liveBroadcastList = res.list;
+          observeOn.next(this.liveBroadcastList);
+        }
+      });
+    });
+  }
   getTeachersList() {
     return new Observable((observeOn) => {
       this.api({

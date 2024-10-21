@@ -71,7 +71,11 @@
         </ion-row>
 
         <ion-button
-          *ngIf="setting.isShared && isite.session && isite.session.selectedTeacherId > 0"
+          *ngIf="
+            setting.isShared &&
+            isite.session &&
+            isite.session.selectedTeacherId > 0
+          "
           color="dark"
           expand="block"
           (click)="exitTeacher(); hideMenu()"
@@ -80,7 +84,7 @@
           <ion-icon name="log-out-outline"></ion-icon>
         </ion-button>
 
-        <ion-list id="inbox-list" *ngIf="userSession.id">
+        <ion-list id="inbox-list" *ngIf="userSession.id && userSession.type == 'student'">
           <ion-menu-toggle *ngIf="setting.showPackages">
             <ion-item
               routerDirection="root"
@@ -112,6 +116,20 @@
               <ion-icon name="desktop-outline"></ion-icon>
 
               <ion-label class="my-menu">محاضراتي</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle *ngIf="setting.showMiniBooks">
+            <ion-item
+              routerDirection="root"
+              [routerLink]="['/mini-books']"
+              [queryParams]="{ type: 'myMiniBooks' }"
+              lines="none"
+              detail="false"
+              routerLinkActive="selected"
+            >
+              <ion-icon name="layers-outline"></ion-icon>
+
+              <ion-label class="my-menu">مذكراتي</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle *ngIf="setting.showBooks">
@@ -193,12 +211,13 @@
           <ion-icon name="home-outline"></ion-icon>
           الرئيسية
         </ion-tab-button>
+
         <ion-tab-button
           [routerLink]="['/packages']"
           *ngIf="setting.showPackages"
         >
           <ion-icon name="layers-outline"></ion-icon>
-          المجموعات
+          مجموعات
         </ion-tab-button>
         <ion-tab-button
           [routerLink]="['/lectures']"
@@ -208,19 +227,19 @@
           "
         >
           <ion-icon name="desktop-outline"></ion-icon>
-          المحاضرات
+          محاضرات
         </ion-tab-button>
 
         <ion-tab-button [routerLink]="['/books']" *ngIf="setting.showBooks">
           <ion-icon name="library"></ion-icon>
-          الكتب
+          كتب
         </ion-tab-button>
         <ion-tab-button
           [routerLink]="['/notifications']"
           *ngIf="session && userSession.id"
         >
           <ion-icon name="notifications-outline"></ion-icon>
-          الإشعارات
+          إشعارات
         </ion-tab-button>
       </ion-tab-bar>
     </ion-tabs>
