@@ -159,10 +159,10 @@
           <ion-select
             interface="action-sheet"
             [(ngModel)]="user.$center"
-            placeholder="إختر {{isite.words.educationalLevel}} التابع له"
+            placeholder="إختر {{isite.words.center}} التابع له"
           >
             <div slot="label">
-              {{isite.words.educationalLevel}} <ion-text color="danger">(مطلوب)</ion-text>
+              {{isite.words.center}} <ion-text color="danger">(مطلوب)</ion-text>
             </div>
             <ion-select-option
               *ngFor="let center of centersList"

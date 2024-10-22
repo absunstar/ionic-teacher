@@ -9,7 +9,7 @@ import {
   ToastController,
   LoadingController,
 } from '@ionic/angular';
-import { Observable, observeOn } from 'rxjs';
+import { catchError, Observable, observeOn } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -26,7 +26,7 @@ export class IsiteService {
   bookList: [any] | undefined;
   newsList: [any] | undefined;
   liveBroadcastList: [any] | undefined;
-  baseURL: string = 'http://professional.localhost';
+  baseURL: string = 'https://professional.teacher.egytag.com';
   constructor(
     public http: HttpClient,
     public loadingCtrl: LoadingController,
@@ -113,7 +113,9 @@ export class IsiteService {
         this.accessToken = accessToken;
 
         options.headers = options.headers || {};
-        options.headers['Access-Token'] = this.accessToken;
+        if (this.accessToken) {
+          options.headers['Access-Token'] = this.accessToken;
+        }
         options.url = this.baseURL + options.url;
 
         if (options.type == 'get') {
@@ -203,7 +205,7 @@ export class IsiteService {
             session: this.session,
             userSession: this.userSession,
           });
-          if(this.setting.isFaculty) {
+          if (this.setting.isFaculty) {
             this.words.educationalLevel = 'الفرقة';
             this.words.schoolYear = 'الشُعبة';
             this.words.center = 'الكلية';
@@ -211,7 +213,6 @@ export class IsiteService {
             this.words.educationalLevel = 'المرحلة الدراسية';
             this.words.schoolYear = 'العام الدراسي';
             this.words.center = 'السنتر';
-
           }
         });
       }
@@ -418,7 +419,7 @@ export class IsiteService {
       this.api({
         url: '/api/lectures/allToStudent',
         body: {
-          where: { active: true,liveBroadcast : true },
+          where: { active: true, liveBroadcast: true },
         },
       }).subscribe((res: any) => {
         if (res.done) {
