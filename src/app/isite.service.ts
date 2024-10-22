@@ -19,6 +19,7 @@ export class IsiteService {
   accessToken: string = '';
   setting: any;
   userSession: any = {};
+  words: any = {};
   session: any = {};
   packageList: [any] | undefined;
   lectureList: [any] | undefined;
@@ -202,6 +203,16 @@ export class IsiteService {
             session: this.session,
             userSession: this.userSession,
           });
+          if(this.setting.isFaculty) {
+            this.words.educationalLevel = 'الفرقة';
+            this.words.schoolYear = 'الشُعبة';
+            this.words.center = 'الكلية';
+          } else {
+            this.words.educationalLevel = 'المرحلة الدراسية';
+            this.words.schoolYear = 'العام الدراسي';
+            this.words.center = 'السنتر';
+
+          }
         });
       }
     });

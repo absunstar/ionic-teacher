@@ -24,7 +24,7 @@
           class="types-buttons"
           (click)="selectPlaceType('offline')"
         >
-          <p class="xx-large">في المركز</p>
+          <p class="xx-large">في {{isite.words.center}}</p>
           <ion-icon class="xx-large" name="business-outline"></ion-icon>
         </ion-button>
 
@@ -159,10 +159,10 @@
           <ion-select
             interface="action-sheet"
             [(ngModel)]="user.$center"
-            placeholder="إختر المركز التابع له"
+            placeholder="إختر {{isite.words.educationalLevel}} التابع له"
           >
             <div slot="label">
-              المركز (السنتر) <ion-text color="danger">(مطلوب)</ion-text>
+              {{isite.words.educationalLevel}} <ion-text color="danger">(مطلوب)</ion-text>
             </div>
             <ion-select-option
               *ngFor="let center of centersList"
@@ -177,10 +177,10 @@
             interface="action-sheet"
             [(ngModel)]="user.$educationalLevel"
             (ionChange)="getSchoolYearsList(user.$educationalLevel)"
-            placeholder="إختر المرحلة الدراسية"
+            placeholder="إختر {{isite.words.educationalLevel}}"
           >
             <div slot="label">
-              المرحلة الدراسية <ion-text color="danger">(مطلوب)</ion-text>
+              {{isite.words.educationalLevel}} <ion-text color="danger">(مطلوب)</ion-text>
             </div>
             <ion-select-option
               *ngFor="let educationalLevel of educationalLevelsList"
@@ -194,10 +194,10 @@
           <ion-select
             interface="action-sheet"
             [(ngModel)]="user.$schoolYear"
-            placeholder="إختر العام الدراسي"
+            placeholder="إختر {{isite.words.schoolYear}}"
           >
             <div slot="label">
-              العام الدراسي <ion-text color="danger">(مطلوب)</ion-text>
+              {{isite.words.schoolYear}} <ion-text color="danger">(مطلوب)</ion-text>
             </div>
             <ion-select-option
               *ngFor="let schoolYear of schoolYearsList"

@@ -59,9 +59,9 @@
             interface="action-sheet"
             [(ngModel)]="where.$educationalLevel"
             (ionChange)="getSchoolYearsList(where.$educationalLevel)"
-            placeholder="إختر المرحلة الدراسية"
+            placeholder="إختر {{isite.words.educationalLevel}}"
           >
-            <div slot="label">المرحلة الدراسية</div>
+            <div slot="label">{{isite.words.educationalLevel}}</div>
             <ion-select-option
               *ngFor="let educationalLevel of educationalLevelsList"
               value="{{educationalLevel.id}}"
@@ -74,9 +74,9 @@
           <ion-select
             interface="action-sheet"
             [(ngModel)]="where.$schoolYear"
-            placeholder="إختر العام الدراسي"
+            placeholder="إختر {{isite.words.schoolYear}}"
           >
-            <div slot="label">العام الدراسي</div>
+            <div slot="label">{{isite.words.schoolYear}}</div>
             <ion-select-option
               *ngFor="let schoolYear of schoolYearsList"
               value="{{schoolYear.id}}"

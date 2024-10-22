@@ -504,10 +504,22 @@ export class RegisterPage implements OnInit {
       }
       if (user.type == 'student') {
         if (!user.$educationalLevel) {
-          user.$error = 'يجب إختيار المرحلة الدراسية';
+          if(this.isite.setting.isFaculty) {
+
+            user.$error = 'يجب إختيار الفرقة';
+          } else {
+            user.$error = 'يجب إختيار المرحلة الدراسية';
+
+          }
           return;
         } else if (!user.$schoolYear) {
+          if(this.isite.setting.isFaculty) {
+
+          user.$error = 'يجب إختيار الشُعبة';
+          } else {
           user.$error = 'يجب إختيار العام الدراسي';
+
+          }
           return;
         } else if (!user.parentMobile) {
           user.$error = 'يجب إختيار هاتف ولي الأمر';
