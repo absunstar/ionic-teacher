@@ -163,7 +163,7 @@ export class UserManagePage implements OnInit {
           quality: 90,
           allowEditing: false,
           resultType: CameraResultType.DataUrl,
-          source: CameraSource.Prompt, // Camera, Photos or Prompt!
+          source: CameraSource.Photos, // Camera, Photos or Prompt!
         });
         if (image) {
           this.startUpload(image, type);
@@ -397,7 +397,7 @@ export class UserManagePage implements OnInit {
             this.user.$_imageUrl = this.user.image
               ? this.isite.baseURL + this.user.image.url
               : '';
-
+            
             if (this.user.country && this.user.country.id) {
               this.user.$country = this.user.country.id.toString();
               this.getCountriesList();
