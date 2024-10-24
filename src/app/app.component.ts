@@ -44,6 +44,8 @@ import * as icons from 'ionicons/icons';
 
 import { IsiteService } from './isite.service';
 import { Platform } from '@ionic/angular';
+import { App } from '@capacitor/app';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -103,6 +105,14 @@ export class AppComponent {
       this.doLogout();
     });
     this.start();
+    App.addListener('backButton', ({ canGoBack }) => {
+      console.log(canGoBack);
+      if (canGoBack) {
+        window.history.back();
+      } else {
+        App.exitApp();
+      }
+    });
   }
 
   async start() {
