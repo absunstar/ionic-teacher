@@ -24,6 +24,10 @@ export const routes: Routes = [
     loadComponent: () => import('./lectures/lectures.page').then( m => m.LecturesPage)
   },
   {
+    path: 'all-lectures',
+    loadComponent: () => import('./lectures/lectures.page').then( m => m.LecturesPage)
+  },
+  {
     path: 'lecture-view',
     loadComponent: () => import('./lecture-view/lecture-view.page').then( m => m.LectureViewPage)
   },
@@ -32,7 +36,15 @@ export const routes: Routes = [
     loadComponent: () => import('./packages/packages.page').then( m => m.PackagesPage)
   },
   {
+    path: 'all-packages',
+    loadComponent: () => import('./packages/packages.page').then( m => m.PackagesPage)
+  },
+  {
     path: 'books',
+    loadComponent: () => import('./books/books.page').then( m => m.BooksPage)
+  },
+  {
+    path: 'all-books',
     loadComponent: () => import('./books/books.page').then( m => m.BooksPage)
   },
   {
@@ -78,7 +90,8 @@ export const routes: Routes = [
   {
     path: 'intro',
     loadComponent: () => import('./intro/intro.page').then( m => m.IntroPage)
-  },  {
+  },
+  {
     path: 'news-view',
     loadComponent: () => import('./news-view/news-view.page').then( m => m.NewsViewPage)
   },
@@ -91,11 +104,18 @@ export const routes: Routes = [
     loadComponent: () => import('./mini-books/mini-books.page').then( m => m.MiniBooksPage)
   },
   {
+    path: 'all-mini-books',
+    loadComponent: () => import('./mini-books/mini-books.page').then( m => m.MiniBooksPage)
+  },
+  {
     path: 'mini-book-view',
     loadComponent: () => import('./mini-book-view/mini-book-view.page').then( m => m.MiniBookViewPage)
   },
   {
     path: 'subscriptions',
+    loadComponent: () => import('./subscriptions/subscriptions.page').then( m => m.SubscriptionsPage)
+  }, {
+    path: 'all-subscriptions',
     loadComponent: () => import('./subscriptions/subscriptions.page').then( m => m.SubscriptionsPage)
   },
   {

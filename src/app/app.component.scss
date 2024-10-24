@@ -133,6 +133,7 @@ ion-menu::part(container) {
 .blue {
   color: blue;
 }
+
 .list-menu {
   height: 35px;
   color: blue;
@@ -155,12 +156,14 @@ ion-menu::part(container) {
   height: 80px;
   display: inline;
   border-radius: 5px;
-  float: left;
+  float: right;
   max-width: 180px;
 }
+
 .margin-input {
   margin: 10px 0px 10px 0px;
 }
+
 .siteName {
   -webkit-background-clip: text;
   font-size: 20px;
@@ -175,15 +178,17 @@ ion-menu::part(container) {
 .contain-register-login {
   place-content: center;
 }
+
 .user-logo {
   height: 70px;
   width: 70px;
   display: inline-table;
-
 }
+
 .user-logo::part(image) {
 border-radius: 50%;
 }
+
 .user-name {
   bottom: 15px;
   font-size: 23px;

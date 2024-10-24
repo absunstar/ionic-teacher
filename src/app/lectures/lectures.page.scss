@@ -38,9 +38,10 @@ figure {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   overflow: hidden;
   .name {
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
     text-align: center;
     position: absolute;
-    top: 15px;
     margin: 1px;
     padding: 5px;
     color: white;

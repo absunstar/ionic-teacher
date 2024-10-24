@@ -104,6 +104,7 @@ export class LectureViewPage implements OnInit {
   purchase: any;
   purchaseTypeList: any;
   error: string | undefined;
+  alert: string | undefined;
   quizModal: Boolean | undefined;
   buyModal: Boolean;
   videoModal: Boolean | undefined;
@@ -145,7 +146,7 @@ export class LectureViewPage implements OnInit {
 
   async selectImage(type: string) {
     Camera.checkPermissions()
-      .then(async (permissions) => {
+      .then(async (permissions: { photos: string; camera: string; }) => {
         console.log('selectImage ..............', permissions);
 
         if (
@@ -169,7 +170,7 @@ export class LectureViewPage implements OnInit {
           this.startUpload(image, type);
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   }
@@ -224,6 +225,10 @@ export class LectureViewPage implements OnInit {
           this.lecture = res.doc;
           this.quizView(this.lecture.id);
           this.getPurchaseTypeTeacher(this.lecture.teacherId);
+          if(this.lecture.$buy){
+
+            this.alert = "تم الشراء";
+          }
         }
       });
   }
@@ -382,11 +387,14 @@ export class LectureViewPage implements OnInit {
         this.error = 'يجب إختيار نوع الشراء';
         return;
       }
-      if (!this.purchase.code && this.purchase.$purchaseType== 'code') {
+      if (!this.purchase.code && this.purchase.$purchaseType == 'code') {
         this.error = 'يجب إدخال كود الشراء';
         return;
       }
-      if (!this.purchase.numberTransferFrom && this.purchase.$purchaseType != 'code') {
+      if (
+        !this.purchase.numberTransferFrom &&
+        this.purchase.$purchaseType != 'code'
+      ) {
         this.error = 'يجب إدخال الرقم المحول منه';
         return;
       }
@@ -406,6 +414,11 @@ export class LectureViewPage implements OnInit {
           this.route.queryParams.forEach((p) => {
             this.getLecture(p['id']);
           });
+
+          if (!res.isOpen) {
+            this.alert = "يرجى الانتظار حتى تتم مراجعة تفاصيل الدفع وتأكيد عملية الشراء";
+          }
+          
           this.buyModal = false;
         } else {
           this.error = res.error;
@@ -435,13 +448,14 @@ export class LectureViewPage implements OnInit {
   }
   async viewVideo() {
     this.videoModal = true;
+
     setTimeout(() => {
       let iframe = document.querySelector('#video_' + this.videoCode);
 
       if (iframe) {
         iframe.setAttribute(
           'src',
-          `${this.isite.baseURL}/view-video?code=${this.videoCode}&id=${this.lecture._id}`
+          `${this.isite.baseURL}/view-video?code=${this.videoCode}&id=${this.lecture._id}&access-token=${this.isite.accessToken}`
         );
       }
     }, 1000);

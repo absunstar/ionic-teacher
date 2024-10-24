@@ -100,3 +100,13 @@ ion-card-title {
 .ion-valid.sc-ion-input-md-h {
   --highlight-color: blue;
 }
+.alert-green {
+  border: 1px solid;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: larger;
+  color: white;
+  background: green;
+  border-radius: 10px;
+}

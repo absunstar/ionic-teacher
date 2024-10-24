@@ -97,79 +97,84 @@ export class SubscriptionsPage implements OnInit {
     this.searchModal = false;
     this.where = {};
     this.getSubscriptions();
+    
   }
 
   async getSubscriptions() {
+    this.where = {};
     this.where['active'] = true;
+
     this.route.queryParams.forEach((p) => {
       if (p) {
         if (p['type'] == 'mySubscriptions') {
           this.where['mySubscriptions'] = true;
         }
       }
-
-      if (
-        this.educationalLevelsList &&
-        this.educationalLevelsList.length > 0 &&
-        this.where.$educationalLevel
-      ) {
-        this.where.educationalLevel = this.educationalLevelsList.find(
-          (a: { id: number }) => a.id == Number(this.where.$educationalLevel)
-        );
-        delete this.where.$educationalLevel;
-      }
-      if (
-        this.schoolYearsList &&
-        this.schoolYearsList.length > 0 &&
-        this.where.$schoolYear
-      ) {
-        this.where.schoolYear = this.schoolYearsList.find(
-          (a: { id: number }) => a.id == Number(this.where.$schoolYear)
-        );
-        delete this.where.$educationalLevel;
-      }
-      if (
-        this.subjectsList &&
-        this.subjectsList.length > 0 &&
-        this.where.$subject
-      ) {
-        this.where.subject = this.subjectsList.find(
-          (a: { id: number }) => a.id == Number(this.where.$subject)
-        );
-        delete this.where.$subject;
-      }
-
-      this.subscriptionList = undefined;
-      this.isite
-        .api({
-          url: '/api/subscriptions/all',
-          body: {
-            type: 'toStudent',
-            select: {
-              id: 1,
-              _id: 1,
-              name: 1,
-              price: 1,
-              description: 1,
-              image: 1,
-            },
-            search: this.search,
-            where: this.where,
-          },
-        })
-        .subscribe((res: any) => {
-          if (res.done) {
-            res.list.forEach(
-              (element: { imageUrl: string; image: { url: string } }) => {
-                element.imageUrl = element.image
-                  ? this.isite.baseURL + element.image.url
-                  : '';
-              }
-            );
-            this.subscriptionList = res.list;
-          }
-        });
     });
+
+    if (
+      this.educationalLevelsList &&
+      this.educationalLevelsList.length > 0 &&
+      this.where.$educationalLevel
+    ) {
+      this.where.educationalLevel = this.educationalLevelsList.find(
+        (a: { id: number }) => a.id == Number(this.where.$educationalLevel)
+      );
+      delete this.where.$educationalLevel;
+    }
+    if (
+      this.schoolYearsList &&
+      this.schoolYearsList.length > 0 &&
+      this.where.$schoolYear
+    ) {
+      this.where.schoolYear = this.schoolYearsList.find(
+        (a: { id: number }) => a.id == Number(this.where.$schoolYear)
+      );
+      delete this.where.$educationalLevel;
+    }
+    if (
+      this.subjectsList &&
+      this.subjectsList.length > 0 &&
+      this.where.$subject
+    ) {
+      this.where.subject = this.subjectsList.find(
+        (a: { id: number }) => a.id == Number(this.where.$subject)
+      );
+      delete this.where.$subject;
+    }
+
+    this.subscriptionList = [{}];
+    console.log(this.where);
+    
+    this.isite
+      .api({
+        url: '/api/subscriptions/all',
+        body: {
+          type: 'toStudent',
+          select: {
+            id: 1,
+            _id: 1,
+            name: 1,
+            price: 1,
+            description: 1,
+            image: 1,
+          },
+          search: this.search,
+          where: this.where,
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.done) {
+          res.list.forEach(
+            (element: { imageUrl: string; image: { url: string } }) => {
+              element.imageUrl = element.image
+                ? this.isite.baseURL + element.image.url
+                : '';
+            }
+          );
+          this.subscriptionList = res.list;
+        }
+      });
   }
   setOpen(type: any, id: string) {
     if (id == 'searchModal') {

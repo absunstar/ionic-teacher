@@ -26,6 +26,7 @@
         <ion-row class="content-center">
           <ion-button
             size="large"
+            *ngIf="subscription.showLectures"
             [routerLink]="['/lectures']"
             [queryParams]="{subscription: subscription.id}"
             class="padding-5"
@@ -34,6 +35,7 @@
           >
           <ion-button
             size="large"
+            *ngIf="subscription.showMiniBooks"
             [routerLink]="['/mini-books']"
             [queryParams]="{subscription: subscription.id}"
             class="padding-5"
@@ -56,6 +58,8 @@
       >شراء
       <ion-icon name="bag-check-outline"></ion-icon>
     </ion-button>
+    <p class="alert-green" *ngIf="alert">{{alert}}</p>
+
   </div>
 
   <ion-modal #modal [isOpen]="buyModal">

@@ -1,116 +1,125 @@
 .error {
-    text-align: center;
-    color: red;
-    font-weight: bold;
-    font-size: larger;
-  }
-  ion-item {
-    /*  margin: 5%; */
-    ion-img {
-      width: 20vw;
-      height: 20vh;
-      display: block;
-    }
-    ion-label {
-      display: block;
-      width: 100vw;
-      text-align: center;
-      line-height: 1.8;
-    }
-  }
-  ion-content {
-    top: 90px;
-  }
-  
-  .main-name {
-    font-size: 35px;
-    font-weight: bold;
-    color: #2087e7;
-    margin: 10px;
-    margin-right: 20px;
-  }
-  ion-card-title {
-    padding: 10px 10px 0px 0px;
-  }
-  .bg-data {
-    background-color: #fffaed;
-    border-radius: 13px;
-    margin: 10px;
-  }
-  .main-time {
-    color: #919191;
-    font-weight: bold;
-    font-size: 20px;
-    margin-right: 5px;
-    padding: 10px;
-  }
-  .container {
-    width: 100%;
-  }
-  
-  .main-price {
-    font-weight: bold;
-    font-size: 23px;
-    margin-right: 10px;
-    padding: 10px;
-  }
-  .green {
-    color: green;
-  }
-  .red {
-    color: red;
-  }
-  .code {
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  font-size: larger;
+}
+ion-item {
+  /*  margin: 5%; */
+  ion-img {
+    width: 20vw;
+    height: 20vh;
     display: block;
-    font-weight: bold;
-    font-size: 23px;
-    margin-right: 10px;
-    padding: 10px;
   }
-  .code-text {
-    color: gray;
-    user-select: all;
-  }
-  .text-description {
-    color: #5a6257;
-    font-size: 20px;
-    padding: 15px;
-    margin-right: 10px;
-    font-family: cursive;
-    white-space: pre-wrap;
-  }
-  .div-main {
-    margin-bottom: 110px;
-  }
-  
-  .buy-text {
-    background: linear-gradient(to bottom, #70b8fb 0%, #1475cf 100%);
-    color: white;
+  ion-label {
+    display: block;
+    width: 100vw;
     text-align: center;
-    font-size: x-large;
-    padding: 10px;
-    white-space: inherit;
-    border-radius: 10px;
+    line-height: 1.8;
   }
-  .has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
-  .input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
-    --border-color: blue;
-  }
-  
-  .ion-valid.sc-ion-input-md-h {
-    --highlight-color: blue;
-  }
-  .black {
-    color: black !important;
-  }
-  .purchase-text {
-    background: #d8d8d8;
-    color: black;
-    text-align: center;
-    font-size: large;
-    padding: inherit;
-    margin: revert;
-    white-space: pre-line;
-    border-radius: 10px;
-  }
-  
+}
+ion-content {
+  top: 90px;
+}
+
+.main-name {
+  font-size: 35px;
+  font-weight: bold;
+  color: #2087e7;
+  margin: 10px;
+  margin-right: 20px;
+}
+ion-card-title {
+  padding: 10px 10px 0px 0px;
+}
+.bg-data {
+  background-color: #fffaed;
+  border-radius: 13px;
+  margin: 10px;
+}
+.main-time {
+  color: #919191;
+  font-weight: bold;
+  font-size: 20px;
+  margin-right: 5px;
+  padding: 10px;
+}
+.container {
+  width: 100%;
+}
+
+.main-price {
+  font-weight: bold;
+  font-size: 23px;
+  margin-right: 10px;
+  padding: 10px;
+}
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
+.code {
+  display: block;
+  font-weight: bold;
+  font-size: 23px;
+  margin-right: 10px;
+  padding: 10px;
+}
+.code-text {
+  color: gray;
+  user-select: all;
+}
+.text-description {
+  color: #5a6257;
+  font-size: 20px;
+  padding: 15px;
+  margin-right: 10px;
+  font-family: cursive;
+  white-space: pre-wrap;
+}
+.div-main {
+  margin-bottom: 110px;
+}
+
+.buy-text {
+  background: linear-gradient(to bottom, #70b8fb 0%, #1475cf 100%);
+  color: white;
+  text-align: center;
+  font-size: x-large;
+  padding: 10px;
+  white-space: inherit;
+  border-radius: 10px;
+}
+.has-focus.input-fill-outline.ion-valid.sc-ion-input-md-h,
+.input-fill-outline.ion-touched.ion-invalid.sc-ion-input-md-h {
+  --border-color: blue;
+}
+
+.ion-valid.sc-ion-input-md-h {
+  --highlight-color: blue;
+}
+.black {
+  color: black !important;
+}
+.purchase-text {
+  background: #d8d8d8;
+  color: black;
+  text-align: center;
+  font-size: large;
+  padding: inherit;
+  margin: revert;
+  white-space: pre-line;
+  border-radius: 10px;
+}
+.alert-green {
+  border: 1px solid;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: larger;
+  color: white;
+  background: green;
+  border-radius: 10px;
+}

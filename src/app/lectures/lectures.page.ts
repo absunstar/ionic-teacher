@@ -102,7 +102,9 @@ export class LecturesPage implements OnInit {
       this.where['active'] = true;
       if (p) {
         if (p['subscription']) {
-          this.where['subscriptionList.subscription.id'] = Number(p['subscription']);
+          this.where['subscriptionList.subscription.id'] = Number(
+            p['subscription']
+          );
         } else if (p['type'] == 'myLectures') {
           this.where['myLectures'] = true;
         }
@@ -137,6 +139,7 @@ export class LecturesPage implements OnInit {
         );
         delete this.where.$subject;
       }
+      this.where.liveBroadcast = { $ne: true };
       this.isite
         .api({
           url: '/api/lectures/allToStudent',

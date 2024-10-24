@@ -93,6 +93,7 @@ export class BookViewPage implements OnInit {
   book: any;
   address: string | undefined;
   error: string | undefined;
+  alert: string | undefined;
   buyModal: any;
   constructor(public isite: IsiteService, private route: ActivatedRoute) {
   
@@ -123,6 +124,10 @@ export class BookViewPage implements OnInit {
             : '';
 
           this.book = res.doc;
+          if(this.book.$buy){
+
+            this.alert = "تم الشراء";
+          }
         }
       });
   }
@@ -158,6 +163,9 @@ export class BookViewPage implements OnInit {
 
           this.book = res.doc;
           this.buyModal = false;
+          if (!res.isOpen) {
+            this.alert = "يرجى الانتظار حتى تتم مراجعة تفاصيل الدفع وتأكيد عملية الشراء";
+          }
         } else {
           this.error = res.error;
         }

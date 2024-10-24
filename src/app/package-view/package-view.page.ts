@@ -96,6 +96,8 @@ export class PackageViewPage implements OnInit {
   purchaseTypeList: any;
   error: string | undefined;
   buyModal: any;
+  alert: string | undefined;
+
   constructor(
     public isite: IsiteService,
     private route: ActivatedRoute,
@@ -190,6 +192,9 @@ export class PackageViewPage implements OnInit {
             }
           );
           this.package = res.doc;
+          if (this.package.$buy) {
+            this.alert = 'تم الشراء';
+          }
           this.getPurchaseTypeTeacher(this.package.teacherId);
         }
       });
@@ -233,16 +238,19 @@ export class PackageViewPage implements OnInit {
       this.error = 'يجب إختيار نوع الشراء';
       return;
     }
-    if (!this.purchase.code && this.purchase.$purchaseType== 'code') {
+    if (!this.purchase.code && this.purchase.$purchaseType == 'code') {
       this.error = 'يجب إدخال كود الشراء';
       return;
     }
-    if (!this.purchase.numberTransferFrom && this.purchase.$purchaseType != 'code') {
+    if (
+      !this.purchase.numberTransferFrom &&
+      this.purchase.$purchaseType != 'code'
+    ) {
       this.error = 'يجب إدخال الرقم المحول منه';
       return;
     }
     this.purchase.image = { url: this.purchase.$imageTransfer };
-   
+
     this.isite
       .api({
         url: '/api/packages/buyCode',
@@ -257,6 +265,10 @@ export class PackageViewPage implements OnInit {
           this.route.queryParams.forEach((p) => {
             this.getPackage(p['id']);
           });
+          if (!res.isOpen) {
+            this.alert =
+              'يرجى الانتظار حتى تتم مراجعة تفاصيل الدفع وتأكيد عملية الشراء';
+          }
           this.buyModal = false;
         } else {
           this.error = res.error;

@@ -84,79 +84,77 @@
           <ion-icon name="log-out-outline"></ion-icon>
         </ion-button>
 
-        <ion-list id="inbox-list" *ngIf="userSession.id && userSession.type == 'student'">
+        <ion-list
+          id="inbox-list"
+          *ngIf="userSession.id && userSession.type == 'student'"
+        >
           <ion-menu-toggle *ngIf="setting.showSubscriptions">
             <ion-item
               routerDirection="root"
-              [routerLink]="['/subscriptions']"
-              [queryParams]="{ type: 'mySubscriptions' }"
+              [routerLink]="['/all-subscriptions']"
               lines="none"
               detail="false"
               routerLinkActive="selected"
             >
-              <ion-icon name="layers-outline"></ion-icon>
+              <ion-icon name="pricetags-outline"></ion-icon>
 
-              <ion-label class="my-menu">إشتراكاتي</ion-label>
+              <ion-label class="my-menu">الإشتراكات</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle *ngIf="setting.showPackages">
             <ion-item
               routerDirection="root"
-              [routerLink]="['/packages']"
+              [routerLink]="['/all-packages']"
               [queryParams]="{ id: userSession.id }"
               lines="none"
               detail="false"
               routerLinkActive="selected"
             >
               <ion-icon name="layers-outline"></ion-icon>
-
-              <ion-label class="my-menu">مجموعاتي</ion-label>
+              <ion-label class="my-menu">المجموعات</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle
             *ngIf="
               setting.showLectures &&
-              (!session || userSession.placeType == 'offline')
+              (!userSession || userSession.placeType == 'offline')
             "
           >
             <ion-item
               routerDirection="root"
-              [routerLink]="['/lectures']"
-              [queryParams]="{ type: 'myLectures' }"
+              [routerLink]="['/all-lectures']"
               lines="none"
               detail="false"
               routerLinkActive="selected"
             >
               <ion-icon name="desktop-outline"></ion-icon>
 
-              <ion-label class="my-menu">محاضراتي</ion-label>
+              <ion-label class="my-menu">المحاضرات</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle *ngIf="setting.showMiniBooks">
             <ion-item
               routerDirection="root"
-              [routerLink]="['/mini-books']"
-              [queryParams]="{ type: 'myMiniBooks' }"
+              [routerLink]="['/all-mini-books']"
               lines="none"
               detail="false"
               routerLinkActive="selected"
             >
-              <ion-icon name="layers-outline"></ion-icon>
+              <ion-icon name="documents-outline"></ion-icon>
 
-              <ion-label class="my-menu">مذكراتي</ion-label>
+              <ion-label class="my-menu">المذكرات</ion-label>
             </ion-item>
           </ion-menu-toggle>
           <ion-menu-toggle *ngIf="setting.showBooks">
             <ion-item
               routerDirection="root"
-              [routerLink]="['/books']"
-              [queryParams]="{ type: 'myBooks' }"
+              [routerLink]="['/all-books']"
               lines="none"
               detail="false"
               routerLinkActive="selected"
             >
               <ion-icon name="library"></ion-icon>
-              <ion-label class="my-menu">كتبي</ion-label>
+              <ion-label class="my-menu">الكتب</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
@@ -225,32 +223,44 @@
           <ion-icon name="home-outline"></ion-icon>
           الرئيسية
         </ion-tab-button>
-
-     
+        <ion-tab-button
+          [routerLink]="['/subscriptions']"
+          [queryParams]="{ type: 'mySubscriptions' }"
+          *ngIf="setting.showSubscriptions && userSession.id"
+        >
+          <ion-icon name="pricetags-outline"></ion-icon>
+          إشتراكاتي
+        </ion-tab-button>
         <ion-tab-button
           [routerLink]="['/lectures']"
+          [queryParams]="{ type: 'myLectures' }"
           *ngIf="
             setting.showLectures &&
-            (!session || userSession.placeType == 'offline')
+            (!userSession || userSession.placeType == 'offline')
           "
         >
           <ion-icon name="desktop-outline"></ion-icon>
-          محاضرات
+          محاضراتي
         </ion-tab-button>
         <ion-tab-button
-        [routerLink]="['/mini-books']"
-        *ngIf="setting.showMiniBooks"
-      >
-        <ion-icon name="layers-outline"></ion-icon>
-        مذكرات
-      </ion-tab-button>
-        <ion-tab-button [routerLink]="['/books']" *ngIf="setting.showBooks">
+          [routerLink]="['/mini-books']"
+          [queryParams]="{ type: 'myMiniBooks' }"
+          *ngIf="setting.showMiniBooks && userSession.id"
+        >
+          <ion-icon name="documents-outline"></ion-icon>
+          مذكراتي
+        </ion-tab-button>
+        <ion-tab-button
+          [routerLink]="['/books']"
+          [queryParams]="{ type: 'myBooks' }"
+          *ngIf="setting.showBooks && userSession.id"
+        >
           <ion-icon name="library"></ion-icon>
-          كتب
+          كتبي
         </ion-tab-button>
         <ion-tab-button
           [routerLink]="['/notifications']"
-          *ngIf="session && userSession.id"
+          *ngIf="userSession && userSession.id"
         >
           <ion-icon name="notifications-outline"></ion-icon>
           إشعارات

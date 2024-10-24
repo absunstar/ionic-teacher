@@ -184,8 +184,8 @@ a {
 .ion-valid.sc-ion-input-md-h {
   --highlight-color: blue;
 }
-.font-large {
-  font-size: large;
+.font-xlarge {
+  font-size: x-large;
 }
 
 .black {
@@ -199,5 +199,16 @@ a {
   padding: inherit;
   margin: revert;
   white-space: pre-line;
+  border-radius: 10px;
+}
+
+.alert-green {
+  border: 1px solid;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: larger;
+  color: white;
+  background: green;
   border-radius: 10px;
 }

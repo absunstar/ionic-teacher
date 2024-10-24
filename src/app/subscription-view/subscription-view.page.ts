@@ -96,6 +96,7 @@ export class SubscriptionViewPage implements OnInit {
   purchaseTypeList: any;
   error: string | undefined;
   buyModal: any;
+  alert: string | undefined;
   constructor(
     public isite: IsiteService,
     private route: ActivatedRoute,
@@ -179,6 +180,9 @@ export class SubscriptionViewPage implements OnInit {
             ? this.isite.baseURL + res.doc.image.url
             : '';
           this.subscription = res.doc;
+          if (this.subscription.$buy) {
+            this.alert = 'تم الشراء';
+          }
           this.getPurchaseTypeTeacher(this.subscription.teacherId);
         }
       });
@@ -222,11 +226,14 @@ export class SubscriptionViewPage implements OnInit {
       this.error = 'يجب إختيار نوع الشراء';
       return;
     }
-    if (!this.purchase.code && this.purchase.$purchaseType== 'code') {
+    if (!this.purchase.code && this.purchase.$purchaseType == 'code') {
       this.error = 'يجب إدخال كود الشراء';
       return;
     }
-    if (!this.purchase.numberTransferFrom && this.purchase.$purchaseType != 'code') {
+    if (
+      !this.purchase.numberTransferFrom &&
+      this.purchase.$purchaseType != 'code'
+    ) {
       this.error = 'يجب إدخال الرقم المحول منه';
       return;
     }
@@ -246,6 +253,10 @@ export class SubscriptionViewPage implements OnInit {
           this.route.queryParams.forEach((p) => {
             this.getSubscription(p['id']);
           });
+          if (!res.isOpen) {
+            this.alert =
+              'يرجى الانتظار حتى تتم مراجعة تفاصيل الدفع وتأكيد عملية الشراء';
+          }
           this.buyModal = false;
         } else {
           this.error = res.error;

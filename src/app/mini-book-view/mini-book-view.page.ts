@@ -96,6 +96,7 @@ export class MiniBookViewPage implements OnInit {
   purchaseTypeList: any;
   error: string | undefined;
   buyModal: any;
+  alert: string | undefined;
   constructor(
     public isite: IsiteService,
     private route: ActivatedRoute,
@@ -180,6 +181,10 @@ export class MiniBookViewPage implements OnInit {
             : '';
           this.miniBook = res.doc;
           this.getPurchaseTypeTeacher(this.miniBook.teacherId);
+          if(this.miniBook.$buy){
+
+            this.alert = "تم الشراء";
+          }
         }
       });
   }
@@ -247,6 +252,10 @@ export class MiniBookViewPage implements OnInit {
             this.getMiniBook(p['id']);
           });
           this.buyModal = false;
+          if (!res.isOpen) {
+            this.alert = "يرجى الانتظار حتى تتم مراجعة تفاصيل الدفع وتأكيد عملية الشراء";
+          }
+          
         } else {
           this.error = res.error;
         }

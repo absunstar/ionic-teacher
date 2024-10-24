@@ -169,8 +169,15 @@ export class RegisterPage implements OnInit {
     if (this.isite.setting.showParent) {
       this.user.$showUserType = true;
     } else {
+      
       this.user.type = 'student';
-      this.user.$showPlaceType = true;
+      if(this.isite.setting.isOnline) {
+        this.user.$showPlaceType = true;
+      } else {
+        this.user.placeType = 'offline';
+        this.user.$showPlaceType = false;
+        this.user.$showContent = true;
+      }
     }
   }
 
@@ -182,7 +189,13 @@ export class RegisterPage implements OnInit {
     this.user.type = type;
     if (type == 'student') {
       this.user.$showUserType = false;
-      this.user.$showPlaceType = true;
+      if(this.isite.setting.isOnline) {
+        this.user.$showPlaceType = true;
+      } else {
+        this.user.placeType = 'offline';
+        this.user.$showPlaceType = false;
+        this.user.$showContent = true;
+      }
     }
     if (type == 'parent') {
       this.user.$showUserType = false;
@@ -459,10 +472,11 @@ export class RegisterPage implements OnInit {
         user.$error = 'يجب إدخال تاريخ الميلاد';
         return;
       }
-      if (!user.$imageUrl) {
+    /*   if (!user.$imageUrl) {
         user.$error = 'يجب إدخال الصورة الشخصية';
         return;
-      } else if (!user.email) {
+      } else  */
+      if (!user.email) {
         user.$error = 'يجب إدخال البريد';
         return;
       } else if (!user.mobile) {
@@ -585,8 +599,6 @@ export class RegisterPage implements OnInit {
               user.$error = res.error;
             } else if (res.user) {
               this.isite.getSession().subscribe((data: any) => {
-                console.log(data);
-
                 this.router.navigateByUrl('/welcome', { replaceUrl: true });
               });
             }

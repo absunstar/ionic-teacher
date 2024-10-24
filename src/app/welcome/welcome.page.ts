@@ -148,21 +148,6 @@ export class WelcomePage implements OnInit {
     });
   }
 
-  async getLiveLectures(id: any) {
-    this.isite.api({
-      url: '/api/lectures/',
-      body: id,
-    }).subscribe((res: any) => {
-      if (res.done) {
-        this.isite.getSession().subscribe((data: any) => {
-          this.session = data.session;
-          this.userSession = data.userSession;
-          
-          this.router.navigateByUrl('/loading');
-        });
-      }
-    });
-  }
   handleRefresh(event: { target: { complete: () => void } }) {
     setTimeout(() => {
       this.start();
@@ -238,7 +223,7 @@ export class WelcomePage implements OnInit {
       if (iframe) {
         iframe.setAttribute(
           'src',
-          `${this.isite.baseURL}/view-live?id=${id}`
+          `${this.isite.baseURL}/view-live?id=${id}&access-token=${this.isite.accessToken}`
         );
       }
     }, 1000);

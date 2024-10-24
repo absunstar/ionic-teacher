@@ -38,6 +38,8 @@
       >شراء
       <ion-icon name="bag-check-outline"></ion-icon>
     </ion-button>
+    <p class="alert-green" *ngIf="alert">{{alert}}</p>
+
   </div>
 
   <ion-modal #modal [isOpen]="buyModal">

@@ -43,8 +43,10 @@
                 *ngFor="let link of lecture.linksList"
               >
                 <ion-button
-                  expand="block"
-                  class="font-large"
+                shape="round"
+                  
+                  size="large"
+                  class="font-xlarge"
                   (click)="openVideo(link)"
                   >{{link.name}} <ion-icon name="eye-outline"></ion-icon>
                 </ion-button>
@@ -120,6 +122,8 @@
       >شراء
       <ion-icon name="bag-check-outline"></ion-icon>
     </ion-button>
+    <p class="alert-green" *ngIf="alert">{{alert}}</p>
+
   </div>
 </ion-content>
 <ion-modal [isOpen]="videoModal">

@@ -62,6 +62,7 @@ export class IsiteService {
       codeCard: '',
       isShared: false,
       isFaculty: false,
+      isOnline: false,
       newsLimit: 0,
       showNews: false,
       packagesLimit: 0,
@@ -267,7 +268,7 @@ export class IsiteService {
             price: 1,
             image: 1,
           },
-          where: { active: true },
+          where: { active: true, liveBroadcast: { $ne: true } },
         },
       }).subscribe((res: any) => {
         if (res.done) {
