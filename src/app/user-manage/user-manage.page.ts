@@ -163,7 +163,7 @@ export class UserManagePage implements OnInit {
           quality: 90,
           allowEditing: false,
           resultType: CameraResultType.DataUrl,
-          source: CameraSource.Photos, // Camera, Photos or Prompt!
+          source: CameraSource.Prompt, // Camera, Photos or Prompt!
         });
         if (image) {
           this.startUpload(image, type);
